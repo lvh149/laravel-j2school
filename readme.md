@@ -32,6 +32,5 @@
 | Kích hoạt    | Người dùng ấn vào nút “Đặt lịch hẹn” |
 | Đầu vào      | Tên người khám bệnh<br> Giới tính<br> Số điện thoại<br> Năm sinh<br> Địa chỉ<br> Tiền sử bệnh tật<br> Lý do khám<br> Thời gian khám<br> Hình thức thanh toán (trực tuyến hoặc tại nơi khám)|
 | Trình tự xử lý| 1.Hiển thị form đặt lịch hẹn<br> 2. Lấy thông tin từ form, kiểm tra không được để trống<br> 3. Trống: Hiển thị lỗi và yêu cầu người dùng nhập đầy đủ<br> 4. Kiểm tra thông tin<br> - Đúng: Form được gửi đi thành công<br> - Sai: Hiển thị lỗi<br>|
-| Đầu ra | Đúng: Hiển thị thông báo thành công
-Sai: Báo lỗi và hiển thị thông báo thất bại |
+| Đầu ra | Đúng: Hiển thị thông báo thành công<br>Sai: Báo lỗi và hiển thị thông báo thất bại |
 | Lưu ý | Kiểm tra ô nhập không được để trống bằng Javascript |
