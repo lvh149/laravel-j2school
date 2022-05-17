@@ -6,6 +6,7 @@
 -   Khách hàng
 
 2. Chức năng từng đối tượng:
+
   A. Quản trị viên:
    
 -   Quản lý thông tin khách hàng
