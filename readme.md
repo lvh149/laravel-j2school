@@ -6,16 +6,18 @@
 -   Khách hàng
 
 2. Chức năng từng đối tượng:
-    A. Quản trị viên:
+<br>  A. Quản trị viên:
+   
 -   Quản lý thông tin khách hàng
 -   Quản lý thông tin bác sĩ
 -   Quản lý lịch làm việc của bác sĩ
 -   Xét duyệt lịch hẹn (kiểm tra thông tin lịch hẹn, xét duyệt lịch hẹn)
 -   Cấp quyền
 -   Tạo khung giờ cho mỗi cuộc hẹn theo ngày (7h-8h, 8h-9h,…)
-    B. Bác sĩ:
+<br>  B. Bác sĩ:
+  
 -   Xem lịch làm việc, lịch hẹn với khách hàng (thông tin của khách hàng, thời gian,..)
-    C. Khách hàng:
+  C. Khách hàng:
 -   Chỉnh sửa thông tin cá nhân
 -   Đặt lịch hẹn khám sức khoẻ ( khám cái gì, ngày giờ khám)
 -   Xem lịch hẹn đã đặt
