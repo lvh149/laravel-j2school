@@ -14,10 +14,13 @@
 -   Xét duyệt lịch hẹn (kiểm tra thông tin lịch hẹn, xét duyệt lịch hẹn)
 -   Cấp quyền
 -   Tạo khung giờ cho mỗi cuộc hẹn theo ngày (7h-8h, 8h-9h,…)
+
 <br>  B. Bác sĩ:
   
 -   Xem lịch làm việc, lịch hẹn với khách hàng (thông tin của khách hàng, thời gian,..)
+
   C. Khách hàng:
+  
 -   Chỉnh sửa thông tin cá nhân
 -   Đặt lịch hẹn khám sức khoẻ ( khám cái gì, ngày giờ khám)
 -   Xem lịch hẹn đã đặt
