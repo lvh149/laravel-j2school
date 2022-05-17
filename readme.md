@@ -6,8 +6,7 @@
 -   Khách hàng
 
 2. Chức năng từng đối tượng:
-   A. Quản trị viên:
-   
+    A. Quản trị viên:
 -   Quản lý thông tin khách hàng
 -   Quản lý thông tin bác sĩ
 -   Quản lý lịch làm việc của bác sĩ
