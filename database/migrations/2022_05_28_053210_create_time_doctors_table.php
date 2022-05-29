@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTimeDoctorsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('time_doctors', function (Blueprint $table) {
@@ -20,11 +15,6 @@ class CreateTimeDoctorsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('time_doctors');

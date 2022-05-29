@@ -4,15 +4,24 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
-/**
- * @method static static OptionOne()
- * @method static static OptionTwo()
- * @method static static OptionThree()
- */
 final class AppointmentStatusEnum extends Enum
 {
-    public const CHO_PHE_DUYET = 1;
-    public const PHE_DUYET = 2;
-    public const TU_CHOI = 3;
-    //......
+    public const WAITING_FOR_APPROVAL = 1;
+    public const APPROVED = 2;
+    public const REFUSED = 3;
+
+    public static function getArrayView(): array
+    {
+        return [
+            'Chờ phê duyệt'  => self::WAITING_FOR_APPROVAL,
+            'Đã được phê duyệt'  => self::APPROVED,
+            'Đã bị từ chối' => self::REFUSED,
+        ];
+    }
+
+    public static function getKeyByValue($value): string
+    {
+        return array_search($value, self::getArrayView(), true);
+    }
+
 }

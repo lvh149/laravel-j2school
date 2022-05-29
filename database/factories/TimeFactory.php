@@ -14,9 +14,9 @@ class TimeFactory extends Factory
     public function definition()
     {
         return [
-            'date' =>$this->faker->date(),
-            'time_start'=>$this->faker->time(),
-            'time_end'=>$this->faker->time(),
+            'date' => $this->faker->date(),
+            'time_start' => $this->faker->time(),
+            'time_end' => $this->faker->time(),
         ];
     }
 }

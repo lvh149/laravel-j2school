@@ -16,16 +16,16 @@ class DoctorFactory extends Factory
     {
         return [
             'specialist_id' => Specialist::query()->inRandomOrder()->value('id'),
-            'name'=>$this->faker->firstName . ' ' . $this->faker->lastName,
-            'avatar'=>$this->faker->imageUrl(),
-            'email'=>$this->faker->unique()->email,
-            'password'=>$this->faker->password,
-            'phone'=>$this->faker->unique()->phoneNumber,
+            'name' => $this->faker->firstName . ' ' . $this->faker->lastName,
+            'avatar' => $this->faker->imageUrl(),
+            'email' => $this->faker->unique()->email,
+            'password' => $this->faker->password,
+            'phone' => $this->faker->unique()->phoneNumber,
             'gender' => $this->faker->boolean,
             'address' => $this->faker->city,
             'nationality' => $this->faker->country,
-            'degree' => $this->faker->word(),
-            'experience' => $this->faker->word(),
+            'degree' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
+            'experience' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
             'price' => $this->faker->numberBetween($min = 1500, $max = 6000),
 
         ];
