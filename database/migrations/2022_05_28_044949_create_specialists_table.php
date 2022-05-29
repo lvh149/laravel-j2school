@@ -13,7 +13,7 @@ class CreateSpecialistsTable extends Migration
             $table->string('name')->unique();
         });
     }
-
+  
     public function down()
     {
         Schema::dropIfExists('specialists');

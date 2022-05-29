@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTimeDoctorsTable extends Migration
 {
-   
     public function up()
     {
         Schema::create('time_doctors', function (Blueprint $table) {
@@ -15,7 +14,6 @@ class CreateTimeDoctorsTable extends Migration
             $table->foreignId('time_id')->constrained();
         });
     }
-
 
     public function down()
     {

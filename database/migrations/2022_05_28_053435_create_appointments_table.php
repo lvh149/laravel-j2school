@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAppointmentsTable extends Migration
 {
-    
     public function up()
     {
         Schema::create('appointments', function (Blueprint $table) {
@@ -22,6 +21,7 @@ class CreateAppointmentsTable extends Migration
             $table->timestamps();
         });
     }
+
 
     public function down()
     {
