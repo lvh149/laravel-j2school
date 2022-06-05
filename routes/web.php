@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/login',[AuthController::class,'login']);
+Route::get('/appointment',[AppointmentController::class,'index'])->name('appointment.index');
+Route::get('/',  function () {
+    echo view('layout_admin.master');
+})->name('home');
