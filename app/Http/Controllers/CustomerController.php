@@ -8,14 +8,15 @@ use App\Http\Requests\UpdateCustomerRequest;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         //
+    }
+
+    public function booking()
+    {
+        return view('user.booking');
     }
 
     /**
