@@ -2,3 +2,8 @@
 @section('content')
     "abc"
 @endsection
+
+"abc"
+
+@endsection
+
