@@ -23,4 +23,5 @@ final class AppointmentStatusEnum extends Enum
     {
         return array_search($value, self::getArrayView(), true);
     }
+
 }
