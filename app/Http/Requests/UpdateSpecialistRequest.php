@@ -3,28 +3,39 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSpecialistRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'name' => [
+                'bail',
+                'required',
+                'string',
+                Rule::unique(specialists::class)->ignore($this->specialist),
+            ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'required' => ':attribute bắt buộc phải điền',
+            'unique'   => ':attribute đã được dùng',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Tên',
         ];
     }
 }

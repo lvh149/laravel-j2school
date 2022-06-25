@@ -5,82 +5,62 @@ namespace App\Http\Controllers;
 use App\Models\Specialist;
 use App\Http\Requests\StoreSpecialistRequest;
 use App\Http\Requests\UpdateSpecialistRequest;
+use Illuminate\Http\Request;
 
 class SpecialistController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+//        $search="";
+        $specialists = Specialist::query()
+//            ->where('name', 'like','%'.$search."%")
+            ->paginate();
+//        $specialists->appends(['q'=>$search]);
+        return view('admin.specialist.index',[
+            'specialists' => $specialists,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('admin.specialist.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreSpecialistRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreSpecialistRequest $request)
+    public function store(Request $request)
     {
-        //
+        $object = new Specialist();
+        $object->fill($request->except('_token'));
+        $object->save();
+        return redirect()->route('specialist.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Specialist  $specialist
-     * @return \Illuminate\Http\Response
-     */
     public function show(Specialist $specialist)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Specialist  $specialist
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Specialist $specialist)
     {
-        //
+        return view('admin.specialist.edit', [
+            'specialist'=>$specialist,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateSpecialistRequest  $request
-     * @param  \App\Models\Specialist  $specialist
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateSpecialistRequest $request, Specialist $specialist)
+    public function update(Request $request, Specialist $specialist)
     {
-        //
+        $specialist->update(
+            $request->except([
+                '_token',
+                '_method',
+
+            ])
+        );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Specialist  $specialist
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Specialist $specialist)
     {
-        //
+        $specialist->delete();
+        return redirect()->route('specialist.index');
     }
 }
