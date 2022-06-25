@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        Specialist::factory(2)->create();
+        Specialist::factory(30)->create();
         Admin::factory(30)->create();
-        Doctor::factory(10)->create();
-        Customer::factory(10)->create();
-        Time::factory(10)->create();
-        Time_doctor::factory(10)->create();
-        Appointment::factory(10)->create();
+        Doctor::factory(30)->create();
+        Customer::factory(30)->create();
+        Time::factory(30)->create();
+        Time_doctor::factory(30)->create();
+        Appointment::factory(30)->create();
     }
 }

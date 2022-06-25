@@ -17,11 +17,13 @@ class CreateAdminsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('avatar')->nullable();
+            $table->date('birth_date');
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone')->unique();
             $table->boolean('gender')->default(false);
             $table->string('address');
+            $table->tinyInteger('role');
         });
     }
 

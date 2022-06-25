@@ -18,6 +18,7 @@ class DoctorFactory extends Factory
             'specialist_id' => Specialist::query()->inRandomOrder()->value('id'),
             'name' => $this->faker->firstName . ' ' . $this->faker->lastName,
             'avatar' => $this->faker->imageUrl(),
+            'birth_date' => $this->faker->date(),
             'email' => $this->faker->unique()->email,
             'password' => $this->faker->password,
             'phone' => $this->faker->unique()->phoneNumber,

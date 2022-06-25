@@ -18,6 +18,7 @@ class CreateDoctorsTable extends Migration
             $table->foreignId('specialist_id')->constrained();
             $table->string('name');
             $table->string('avatar')->nullable();
+            $table->date('birth_date');
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone')->unique();
