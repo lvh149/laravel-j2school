@@ -42,17 +42,6 @@
                             <div class="card card-login">
                                 <div class="card-header text-center" data-background-color="rose">
                                     <h4 class="card-title">Login</h4>
-                                    <div class="social-line">
-                                        <a href="#pablo" class="btn btn-just-icon btn-simple">
-                                            <i class="fa fa-facebook-square"></i>
-                                        </a>
-                                        <a href="#pablo" class="btn btn-just-icon btn-simple">
-                                            <i class="fa fa-twitter"></i>
-                                        </a>
-                                        <a href="#pablo" class="btn btn-just-icon btn-simple">
-                                            <i class="fa fa-google-plus"></i>
-                                        </a>
-                                    </div>
                                 </div>
 
                                 <div class="card-content">
