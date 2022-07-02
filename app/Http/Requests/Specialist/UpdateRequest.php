@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Specialist;
 
+use App\Models\Specialist;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateSpecialistRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,7 +20,7 @@ class UpdateSpecialistRequest extends FormRequest
                 'bail',
                 'required',
                 'string',
-                Rule::unique(specialists::class)->ignore($this->specialist),
+                Rule::unique(Specialist::class)->ignore($this->specialist),
             ],
         ];
     }
@@ -35,7 +36,7 @@ class UpdateSpecialistRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'Tên',
+            'name' => 'Name',
         ];
     }
 }

@@ -19,16 +19,38 @@
 <body>
 <div class="wrapper">
     @include('admin.layout.sidebar')
-    <div class="main-panel ps-container ps-theme-default" data-ps-id="a8d99105-39af-f045-2e61-b7825ca23b8e">
+    <div class="main-panel">
         @include('admin.layout.topbar')
         <div class="content">
             <div class="container-fluid">
-                @yield('content')
+                <div class="row">
+                    @if ($errors->any())
+                        <div class="col-12">
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
+                    @if (session()->has('success'))
+                        <div class="col-12">
+                            <div class="alert alert-success">
+                                {{ session()->get('success') }}
+                            </div>
+                        </div>
+                    @endif
+                    <div class="col-12">
+                        @yield('content')
+                    </div>
+                </div>
             </div>
         </div>
         @include('admin.layout.footer')
-
-
+    </div>
+</div>
         <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
         <script src="{{ asset('js/material.min.js') }}"></script>
         <script src="{{ asset('js/perfect-scrollbar.jquery.min.js') }}"></script>
@@ -62,9 +84,9 @@
         <script src="{{ asset('js/jquery.tagsinput.js') }}" ></script>
         <!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
         <!-- Material Dashboard javascript methods -->
+
         @stack('js')
-</div>
-</div>
+
 
 </body>
 </html>

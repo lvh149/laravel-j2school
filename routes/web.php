@@ -7,6 +7,8 @@ use App\Http\Controllers\CustomerController;
 
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\SpecialistController;
+use App\Http\Controllers\TimeDoctorController;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 // Route user
 Route::get('/login', [AuthController::class, 'login']);
@@ -26,6 +28,12 @@ Route::resource('/specialist', SpecialistController::class)->except([
     'show',
 ]);
 Route::resource('/doctor', DoctorController::class)->except([
+    'show',
+]);
+Route::resource('/customer', CustomerController::class)->except([
+    'show',
+]);
+Route::resource('/time_doctor', TimeDoctorController::class)->except([
     'show',
 ]);
 });

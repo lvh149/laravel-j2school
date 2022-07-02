@@ -12,47 +12,46 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             {{ config('app.name') }}
         </a>
     </div>
-    <div class="sidebar-wrapper ps-container ps-theme-default" data-ps-id="c6836fab-41c1-cdc4-a720-7a3353d0f263">
-
+    <div class="sidebar-wrapper">
         <ul class="nav">
-            <li>
+            <li id="1">
                 <a href="{{route('home')}}">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard </p>
                 </a>
             </li>
-            <li>
+            <li id="2">
                 <a href="{{route('appointment.index')}}">
                     <i class="material-icons">grid_on</i>
                     <p> Xét duyệt lịch hẹn
                     </p>
                 </a>
             </li>
-            <li>
-                <a href="#">
+            <li id="3">
+                <a href="{{route('customer.index')}}">
                     <i class="material-icons">people</i>
                     <p> Quản lý bệnh nhân </p>
                 </a>
             </li>
-            <li>
+            <li id="4">
                 <a href="{{route('specialist.index')}}">
                     <i class="material-icons">work</i>
                     <p> Quản lý chuyên ngành </p>
                 </a>
             </li>
-            <li>
+            <li id="5">
                 <a href="{{route('doctor.index')}}">
                     <i class="material-icons">people</i>
                     <p> Quản lý bác sĩ </p>
                 </a>
             </li>
-            <li>
-                <a href="#">
+            <li id="6">
+                <a href="{{route('time_doctor.index')}}">
                     <i class="material-icons">event_available</i>
                     <p> Quản lý lịch làm việc </p>
                 </a>
             </li>
-            <li>
+            <li id="7">
                 <a href="#">
                     <i class="material-icons">timeline</i>
                     <p> Thống kê </p>

@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Specialist;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSpecialistRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => [
                 'bail',
                 'required',
                 'string',
-                'unique:App\Models\specialist,name',
+                'unique:App\Models\Specialist,name',
             ],
         ];
     }
+
     public function messages(): array
     {
         return [
@@ -33,7 +34,7 @@ class StoreSpecialistRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'Tên',
+            'name' => 'Tên chuyên ngành',
         ];
     }
 }

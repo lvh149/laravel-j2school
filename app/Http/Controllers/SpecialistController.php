@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Specialist\StoreRequest;
+use App\Http\Requests\Specialist\UpdateRequest;
 use App\Models\Specialist;
-use App\Http\Requests\StoreSpecialistRequest;
-use App\Http\Requests\UpdateSpecialistRequest;
-use Illuminate\Http\Request;
 
 class SpecialistController extends Controller
 {
+    public function __construct()
+    {
+        $this->model = (new Specialist())->query();
+    }
 
     public function index()
     {
 //        $search="";
-        $specialists = Specialist::query()
+        $specialists = $this->model
 //            ->where('name', 'like','%'.$search."%")
             ->paginate();
 //        $specialists->appends(['q'=>$search]);
@@ -27,10 +30,10 @@ class SpecialistController extends Controller
         return view('admin.specialist.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $object = new Specialist();
-        $object->fill($request->except('_token'));
+        $object->fill($request->validated());
         $object->save();
         return redirect()->route('specialist.index');
     }
@@ -47,15 +50,12 @@ class SpecialistController extends Controller
         ]);
     }
 
-    public function update(Request $request, Specialist $specialist)
+    public function update(UpdateRequest $request, Specialist $specialist)
     {
         $specialist->update(
-            $request->except([
-                '_token',
-                '_method',
-
-            ])
+            $request->validated()
         );
+        return redirect()->route('specialist.index');
     }
 
     public function destroy(Specialist $specialist)

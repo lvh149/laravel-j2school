@@ -14,10 +14,12 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "kartik-v/yii2-widget-datetimepicker": "dev-master",
+        "label84/laravel-hours-helper": "^1.2",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
         "facade/ignition": "^2.3.6",
         "fzaninotto/faker": "^1.9.1",
         "mockery/mockery": "^1.3.1",

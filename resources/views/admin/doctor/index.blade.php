@@ -79,3 +79,11 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        $(function (){
+            $("#5").addClass('active');
+        })
+    </script>
+@endpush

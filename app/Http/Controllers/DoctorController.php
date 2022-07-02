@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Doctor\StoreRequest;
+use App\Http\Requests\Doctor\UpdateRequest;
 use App\Models\Doctor;
-use App\Http\Requests\StoreDoctorRequest;
-use App\Http\Requests\UpdateDoctorRequest;
 use App\Models\Specialist;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class DoctorController extends Controller
 {
+    public function __construct()
+    {
+        $this->model = (new Doctor())->query();
+    }
+
     public function index()
     {
 //        $search="";
-        $doctors = doctor::query()
+        $doctors = $this->model
 //            ->where('name', 'like','%'.$search."%")
             ->paginate();
 //        $doctors->appends(['q'=>$search]);
@@ -31,11 +35,11 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $path = Storage::disk('public')->putFile('avatars', $request->file('avatar'));
         $object = new doctor();
-        $object->fill($request->except('_token'));
+        $object->fill($request->validated());
         $object['avatar'] = $path;
 //        dd($object);
         $object->save();
@@ -54,17 +58,12 @@ class DoctorController extends Controller
             'doctor'=>$doctor,
             'specialists'=>$specialists,
         ]);
-        return redirect()->route('doctor.index');
     }
 
-    public function update(Request $request, $doctor)
+    public function update(UpdateRequest $request, $doctor)
     {
         $object = Doctor::query()->find($doctor);
-        $object->fill($request->except([
-            '_token',
-            '_method',
-
-        ]));
+        $object->fill($request->validated());
         if ($request->hasFile('avatar')) {
             $path = Storage::disk('public')->putFile('avatars', $request->file('avatar'));
             $object['avatar'] = $path;
