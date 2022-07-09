@@ -8,7 +8,6 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\SpecialistController;
 use App\Http\Controllers\TimeDoctorController;
-use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 // Route user
 Route::get('/login', [AuthController::class, 'login']);
@@ -21,6 +20,7 @@ Route::get('/',  function () {
 
 
 //Route admin
+
 route::group(['prefix'=>'admin'],function (){
 Route::get('login', [AuthController::class, 'adminLogin'])->name('admin.login');
 Route::get('appointment',[AppointmentController::class,'index'])->name('appointment.index');
@@ -36,6 +36,7 @@ Route::resource('/customer', CustomerController::class)->except([
 Route::resource('/time_doctor', TimeDoctorController::class)->except([
     'show',
 ]);
+
 });
 
 Route::get('/admin', function () {

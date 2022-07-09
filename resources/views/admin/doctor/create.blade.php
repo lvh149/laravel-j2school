@@ -71,7 +71,8 @@
                                            data-dismiss="fileinput"><i class="fa fa-times"></i> Remove
                                             <div class="ripple-container">
                                                 <div class="ripple ripple-on ripple-out"
-                                                     style="left: 69px; top: 12.6875px; background-color: rgb(255, 255, 255); transform: scale(15.5484);"></div>
+                                                     style="left: 69px; top: 12.6875px; background-color: rgb(255, 255, 255); transform: scale(15.5484);">
+                                                </div>
                                             </div>
                                         </a>
                                     </div>
@@ -94,7 +95,8 @@
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
                                     <input type="password" class="form-control" name="password">
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -103,7 +105,8 @@
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
                                     <input type="phone" class="form-control" name="phone">
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -112,7 +115,8 @@
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
                                     <input type="text" class="form-control" name="nationality">
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -121,7 +125,8 @@
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
                                     <input type="text" class="form-control" name="address">
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -130,7 +135,8 @@
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
                                     <input type="text" class="form-control" name="degree">
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -139,7 +145,8 @@
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
                                     <input type="text" class="form-control" name="experience">
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">

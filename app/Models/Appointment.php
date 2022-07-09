@@ -11,8 +11,4 @@ class Appointment extends Model
     use HasFactory;
 
 
-    public function time(): BelongsTo
-    {
-        return $this->belongsTo(Time_doctor::class);
-    }
 }

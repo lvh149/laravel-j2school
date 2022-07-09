@@ -1,5 +1,8 @@
 @extends('admin.layout.master')
 @section('content')
+    <a class="btn btn-success" href="{{route('time_doctor.create')}}">
+        Thêm
+    </a>
     <div class="row">
         <div class="col-md-12">
             <div class="card">

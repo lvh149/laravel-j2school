@@ -12,6 +12,11 @@ class Time_doctor extends Model
 {
     use HasFactory;
 
+    protected $fillable =[
+        'doctor_id',
+        'time_id',
+    ];
+
     public $timestamps = false;
 
     public function doctor(): BelongsTo
@@ -24,8 +29,7 @@ class Time_doctor extends Model
     }
     public function appointment(): HasOne
     {
-        return $this->hasOne(Appointment::class,'time_doctor_id');
-
+        return $this->hasOne(Appointment::class);
     }
 
 

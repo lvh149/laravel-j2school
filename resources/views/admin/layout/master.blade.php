@@ -1,4 +1,4 @@
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}">
@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width">
     <!-- Bootstrap core CSS     -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('/css/material-dashboard.css?v=1.2.1') }}" rel="stylesheet">
+    <link href="{{ asset('/css/material-dashboard.css') }}" rel="stylesheet">
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
@@ -42,51 +42,33 @@
                             </div>
                         </div>
                     @endif
-                    <div class="col-12">
-                        @yield('content')
-                    </div>
                 </div>
+                @yield('content')
             </div>
         </div>
-        @include('admin.layout.footer')
     </div>
+    @include('admin.layout.footer')
 </div>
-        <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
-        <script src="{{ asset('js/material.min.js') }}"></script>
-        <script src="{{ asset('js/perfect-scrollbar.jquery.min.js') }}"></script>
-        <script src="{{ asset('js/material-dashboard.js') }}" ></script>
-        <script src="{{ asset('js/jquery.select-bootstrap.js') }}" ></script>
-        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-        <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-        <!-- Library for adding dinamically elements -->
-        <script src="{{ asset('js/arrive.min.js') }}" ></script>
+<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/material.min.js') }}"></script>
+<script src="{{ asset('js/perfect-scrollbar.jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+<script src="{{ asset('js/arrive.min.js') }}"></script>
+<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('js/moment.min.js') }}"></script>
+<script src="{{ asset('js/chartist.min.js') }}"></script>
+<script src="{{ asset('js/jquery.bootstrap-wizard.js') }}"></script>
+<script src="{{ asset('js/bootstrap-notify.js') }}"></script>
+<script src="{{ asset('js/jquery.select-bootstrap.js') }}"></script>
+<script src="{{ asset('js/sweetalert2.js') }}"></script>
+<script src="{{ asset('js/jasny-bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/fullcalendar.min.js') }}"></script>
+<script src="{{ asset('js/jquery.tagsinput.js') }}"></script>
+<script src="{{ asset('js/material-dashboard.js') }}"></script>
+<script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
 
-        <!-- Forms Validations Plugin -->
-        <script src="{{ asset('js/jquery.validate.min.js') }}" ></script>
-        <!--  Plugin for Date Time Picker and Full Calendar Plugin-->
-        <script src="{{ asset('js/moment.min.js') }}" ></script>
-        <!--  Charts Plugin, full documentation here: https://gionkunz.github.io/chartist-js/ -->
-        <script src="{{ asset('js/chartist.min.js') }}" ></script>
-        <script src="{{ asset('js/jquery.bootstrap-wizard.js') }}" ></script>
-
-        <!--  Notifications Plugin, full documentation here: http://bootstrap-notify.remabledesigns.com/    -->
-        <script src="{{ asset('js/bootstrap-notify.js') }}" ></script>
-        <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-        <script src="{{ asset('js/bootstrap-datetimepicker.js') }}" ></script>
-        <script src="{{ asset('js/sweetalert2.js') }}" ></script>
-        <script src="{{ asset('js/jasny-bootstrap.min.js') }}" ></script>
-        <script src="{{ asset('js/fullcalendar.min.js') }}" ></script>
-
-
-        {{--<!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->--}}
-        {{--<script src="../assets/js/jquery.datatables.js"></script>--}}
-        <script src="{{ asset('js/jquery.tagsinput.js') }}" ></script>
-        <!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
-        <!-- Material Dashboard javascript methods -->
-
-        @stack('js')
-
-
+@stack('js')
 </body>
 </html>
