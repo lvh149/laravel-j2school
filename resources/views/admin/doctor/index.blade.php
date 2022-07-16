@@ -64,7 +64,7 @@
                                         <form action="{{route('doctor.destroy',$doctor)}}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-danger">Xoá</button>
+                                            <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>
                                         </form>
                                     </td>
                                 </tr>

@@ -7,7 +7,7 @@
                     <i class="material-icons">add</i>
                 </div>
                 <div class="card-content">
-                    <h4 class="card-title">Thêm chuyên ngành</h4>
+                    <h4 class="card-title">Sửa tên chuyên ngành</h4>
                     <form method="post" action="{{route('specialist.update',$specialist)}}">
                         @csrf
                         @method('PUT')

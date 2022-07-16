@@ -18,6 +18,8 @@
                                 <th>Khung giờ khám</th>
                                 <th>Thời gian khám</th>
                                 <th>Tình trạng</th>
+                                <th>Sửa</th>
+                                <th>Xoá</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -30,18 +32,30 @@
                                         {{ $time_doctor->doctor->name }}
                                     </td>
                                     <td>
-                                        {{ $time_doctor->time->date}}
+                                        {{ $time_doctor->time->dateformat}}
                                     </td>
                                     <td>
                                         {{ $time_doctor->time->time_start ."-".  $time_doctor->time->time_end}}
                                     </td>
                                     <td>
-                                        {{60}}
+                                        {{$time_doctor->time->time}}
                                     </td>
                                     <td>
                                         @if ($time_doctor->appointment)
                                             {{ \App\Enums\AppointmentStatusEnum::getKeyByValue($time_doctor->appointment->status) }}
                                         @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{route('time_doctor.edit',$time_doctor)}}">
+                                            <button class="btn btn-info">Sửa</button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <form action="{{route('time_doctor.destroy',$time_doctor)}}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -59,7 +73,7 @@
 
 @push('js')
     <script>
-        $(function (){
+        $(function () {
             $("#6").addClass('active');
         })
     </script>
