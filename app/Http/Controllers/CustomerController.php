@@ -2,86 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\customer\StoreRequest;
+use App\Http\Requests\customer\UpdateRequest;
 use App\Models\Customer;
-use App\Http\Requests\StoreCustomerRequest;
-use App\Http\Requests\UpdateCustomerRequest;
+use App\Models\Specialist;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->model = (new Customer())->query();
+    }
+
     public function index()
     {
-        //
+        //        $search="";
+        $customers = $this->model
+            //            ->where('name', 'like','%'.$search."%")
+            ->paginate();
+        //        $customers->appends(['q'=>$search]);
+        return view('admin.customer.index', [
+            'customers' => $customers,
+        ]);
     }
 
     public function booking()
     {
-        return view('user.booking');
+        return view('user.booking.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreCustomerRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreCustomerRequest $request)
+    public function store(StoreRequest $request)
+    {
+    }
+
+    public function show(customer $customer)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Customer $customer)
+    public function edit(customer $customer)
     {
-        //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Customer $customer)
+    public function update(UpdateRequest $request, $customer)
     {
-        //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateCustomerRequest  $request
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateCustomerRequest $request, Customer $customer)
+    public function destroy(customer $customer)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Customer $customer)
-    {
-        //
     }
 }

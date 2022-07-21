@@ -2,85 +2,113 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Doctor\StoreRequest;
+use App\Http\Requests\Doctor\UpdateRequest;
 use App\Models\Doctor;
-use App\Http\Requests\StoreDoctorRequest;
-use App\Http\Requests\UpdateDoctorRequest;
+use App\Models\Specialist;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DoctorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    use ResponseTrait;
+    public function __construct()
+    {
+        $this->model = (new Doctor())->query();
+    }
+
     public function index()
     {
-        //
+        //        $search="";
+        $doctors = $this->model->with('specialist:id,name')
+            //            ->where('name', 'like','%'.$search."%")
+            ->paginate();
+        //        $doctors->appends(['q'=>$search]);
+        return view('admin.doctor.index', [
+            'doctors' => $doctors,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function api(Request $request)
+    {
+
+        $data = $this->model
+            ->select('id', 'name')
+            ->where('specialist_id', '=',  $request->get('id'))
+            ->get();
+        return $this->successResponse($data);
+    }
+
+
     public function create()
     {
-        //
+        $specialists = Specialist::query()->get();
+        return view('admin.doctor.create', [
+            'specialists' => $specialists,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreDoctorRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreDoctorRequest $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $path = Storage::disk('public')->putFile('avatars', $request->file('avatar'));
+        $object = new doctor();
+        $object->fill($request->validated());
+        $object['avatar'] = $path;
+        dd($object);
+        //        dd($object);
+        $object->save();
+        return redirect()->route('doctor.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Doctor $doctor)
+    public function show(doctor $doctor)
     {
-        //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Doctor $doctor)
+    public function edit(doctor $doctor)
     {
-        //
+        $specialists = Specialist::query()->get();
+        return view('admin.doctor.edit', [
+            'doctor' => $doctor,
+            'specialists' => $specialists,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateDoctorRequest  $request
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateDoctorRequest $request, Doctor $doctor)
+    public function update(UpdateRequest $request, $doctor)
     {
-        //
+        $object = Doctor::query()->find($doctor);
+        $object->fill($request->validated());
+        if ($request->hasFile('avatar')) {
+            $path = Storage::disk('public')->putFile('avatars', $request->file('avatar'));
+            $object['avatar'] = $path;
+        }
+        $object->save();
+        return redirect()->route('doctor.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Doctor $doctor)
+    public function destroy(doctor $doctor)
     {
-        //
+        $doctor->delete();
+        return redirect()->route('doctor.index');
     }
+
+    public function doctor() {
+        $doctors = $this->model
+            ->paginate();
+        return view('user.doctor.index', [
+            'doctors' => $doctors,
+        ]);
+    }
+
+
+   public function search(Request $request) {
+        $doctors = $this->model
+                    ->with('specialist:id,name')
+                    ->where('name', 'like','%'.$request->key.'%')
+                    ->orWhere('price', 'like',$request->key)
+                    ->get();
+        // dd($doctors);
+        return view('user.doctor.search', [
+            'doctors' => $doctors,
+        ]);
+   }
 }
