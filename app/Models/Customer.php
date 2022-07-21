@@ -13,8 +13,18 @@ class Customer extends Model
 
     public function getGenderNameAttribute(): string
     {
-        return ($this->gender === 0) ? 'Nữ' : 'Nam';
+        $genderValue = $this->gender;
+        if($genderValue === 0) {
+            $gender = 'Nữ';
+        } else if ($genderValue === 1) {
+            $gender = 'Nam';
+        } else {
+            $gender = 'Khác';
+        }
+
+        return $gender;
     }
+
     public function getAgeAttribute(): int
     {
         return date_diff(date_create($this->birth_date), date_create())->y;
