@@ -19,21 +19,22 @@ class DoctorController extends Controller
 
     public function index()
     {
-//        $search="";
+        //        $search="";
         $doctors = $this->model->with('specialist:id,name')
-//            ->where('name', 'like','%'.$search."%")
+            //            ->where('name', 'like','%'.$search."%")
             ->paginate();
-//        $doctors->appends(['q'=>$search]);
+        //        $doctors->appends(['q'=>$search]);
         return view('admin.doctor.index', [
             'doctors' => $doctors,
         ]);
     }
+
     public function api(Request $request)
     {
-        
+
         $data = $this->model
-            ->select('id','name')
-            ->where('specialist_id', '=',  $request->get('id') )
+            ->select('id', 'name')
+            ->where('specialist_id', '=',  $request->get('id'))
             ->get();
         return $this->successResponse($data);
     }
@@ -54,14 +55,13 @@ class DoctorController extends Controller
         $object->fill($request->validated());
         $object['avatar'] = $path;
         dd($object);
-//        dd($object);
+        //        dd($object);
         $object->save();
         return redirect()->route('doctor.index');
     }
 
     public function show(doctor $doctor)
     {
-
     }
 
     public function edit(doctor $doctor)
@@ -91,5 +91,24 @@ class DoctorController extends Controller
         return redirect()->route('doctor.index');
     }
 
+    public function doctor() {
+        $doctors = $this->model
+            ->paginate();
+        return view('user.doctor.index', [
+            'doctors' => $doctors,
+        ]);
+    }
 
+
+   public function search(Request $request) {
+        $doctors = $this->model
+                    ->with('specialist:id,name')
+                    ->where('name', 'like','%'.$request->key.'%')
+                    ->orWhere('price', 'like',$request->key)
+                    ->get();
+        // dd($doctors);
+        return view('user.doctor.search', [
+            'doctors' => $doctors,
+        ]);
+   }
 }
