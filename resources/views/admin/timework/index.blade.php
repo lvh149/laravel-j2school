@@ -62,7 +62,7 @@
                             </tbody>
 
                         </table>
-                        {{ $time_doctors->links() }}
+                        {{ $time_doctors->links('admin.paginator.index') }}
                     </div>
                 </div>
             </div>

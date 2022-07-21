@@ -51,7 +51,7 @@
                             </tbody>
 
                         </table>
-                        {{ $customers->links() }}
+                        {{ $customers->links('admin.paginator.index') }}
                     </div>
                 </div>
             </div>

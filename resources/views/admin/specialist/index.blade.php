@@ -44,7 +44,7 @@
                             </tbody>
 
                         </table>
-                        {{ $specialists->links() }}
+                        {{ $specialists->links('admin.paginator.index') }}
                     </div>
                 </div>
             </div>

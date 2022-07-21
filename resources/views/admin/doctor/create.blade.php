@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form method="post" action="{{route('doctor.store')}}" class="form-horizontal" enctype="multipart/form-data">
+                <form method="post" action="{{ route('doctor.store') }}" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     <div class="card-header card-header-text" data-background-color="rose">
                         <h4 class="card-title">Thêm bác sĩ</h4>
@@ -16,7 +16,8 @@
                                     <label class="control-label"></label>
                                     <input type="text" class="form-control" name="name">
                                     <span class="help-block">A block of help text that breaks onto a new line.</span>
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -56,22 +57,24 @@
                             <div class="col-md-3 col-sm-4">
                                 <div class="fileinput text-center fileinput-new" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail img-circle">
-                                        <img src="{{asset('/img/apple-icon.png')}}" alt="...">
+                                        <img src="{{ asset('/img/apple-icon.png') }}" alt="...">
                                     </div>
-                                    <div class="fileinput-preview fileinput-exists thumbnail img-circle" style=""></div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail img-circle" style="">
+                                    </div>
                                     <div>
-                                                    <span class="btn btn-round btn-rose btn-file">
-                                                        <span class="fileinput-new">Add Photo</span>
-                                                        <span class="fileinput-exists">Change</span>
-                                                        <input type="hidden" value="" name="">
-                                                        <input type="file" name="avatar">
-                                                    <div class="ripple-container"></div></span>
+                                        <span class="btn btn-round btn-rose btn-file">
+                                            <span class="fileinput-new">Add Photo</span>
+                                            <span class="fileinput-exists">Change</span>
+                                            <input type="hidden" value="" name="">
+                                            <input type="file" name="avatar">
+                                            <div class="ripple-container"></div>
+                                        </span>
                                         <br>
                                         <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
-                                           data-dismiss="fileinput"><i class="fa fa-times"></i> Remove
+                                            data-dismiss="fileinput"><i class="fa fa-times"></i> Remove
                                             <div class="ripple-container">
                                                 <div class="ripple ripple-on ripple-out"
-                                                     style="left: 69px; top: 12.6875px; background-color: rgb(255, 255, 255); transform: scale(15.5484);">
+                                                    style="left: 69px; top: 12.6875px; background-color: rgb(255, 255, 255); transform: scale(15.5484);">
                                                 </div>
                                             </div>
                                         </a>
@@ -86,7 +89,8 @@
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
                                     <input type="email" class="form-control" name="email">
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -154,8 +158,8 @@
 
                             <div class="col-lg-5 col-md-6 col-sm-3">
                                 <select class="selectpicker" data-style="btn btn-primary btn-round"
-                                        title="Chọn chuyên ngành" data-size="7" name="specialist_id">
-                                    @foreach($specialists as $specialist)
+                                    title="Chọn chuyên ngành" data-size="7" name="specialist_id">
+                                    @foreach ($specialists as $specialist)
                                         <option value="{{ $specialist->id }}">
                                             {{ $specialist->name }}
                                         </option>
@@ -173,7 +177,8 @@
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
                                     <input type="text" class="form-control" name="price">
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -185,11 +190,10 @@
             </div>
         </div>
     </div>
-
 @endsection
 @push('js')
     <script>
-        $(function (){
+        $(function() {
             $("#5").addClass('active');
         })
     </script>
