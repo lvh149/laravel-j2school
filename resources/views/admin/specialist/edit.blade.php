@@ -23,11 +23,3 @@
         </div>
     </div>
 @endsection
-
-@push('js')
-    <script>
-        $(function (){
-            $("#4").addClass('active');
-        })
-    </script>
-@endpush

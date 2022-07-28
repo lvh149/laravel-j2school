@@ -58,12 +58,3 @@
         </div>
     </div>
 @endsection
-
-
-@push('js')
-    <script>
-        $(function (){
-            $("#3").addClass('active');
-        })
-    </script>
-@endpush

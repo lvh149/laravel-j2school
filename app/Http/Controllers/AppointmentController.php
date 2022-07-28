@@ -5,78 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
-
-    public function index()
+    public function __construct()
     {
-        return view('admin.appointment.index');
+        $this->model = (new Appointment())->query();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function index(Request $request)
     {
-        //
+        $appointments = $this->model
+            ->with('time_doctor.doctor:id,name')
+            ->with('customer:id,name_patient,phone_patient')
+            ->where('status','=',$request->all())
+            ->latest('id')
+            ->paginate();
+        return view('admin.appointment.index',[
+            'appointments' => $appointments,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreAppointmentRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreAppointmentRequest $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Appointment  $appointment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Appointment $appointment)
+    public function update(Request $request, Appointment $appointment)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Appointment  $appointment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Appointment $appointment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateAppointmentRequest  $request
-     * @param  \App\Models\Appointment  $appointment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Appointment  $appointment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Appointment $appointment)
-    {
-        //
+        $appointment->fill($request->except([
+            '_token',
+            '_method',
+        ]));
+        $appointment->save();
     }
 }

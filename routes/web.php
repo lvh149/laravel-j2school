@@ -26,6 +26,12 @@ Route::get('/', function () {
 //Route admin
 route::group(['prefix' => 'admin'], function () {
     Route::get('login', [AuthController::class, 'adminLogin'])->name('admin.login');
+    Route::resource('/specialist', SpecialistController::class)->except([
+        'show',
+    ]);
+    Route::resource('/appointment', AppointmentController::class)->except([
+        'show',
+    ]);
     Route::get('appointment', [AppointmentController::class, 'index'])->name('appointment.index');
     Route::resource('/specialist', SpecialistController::class)->except([
         'show',

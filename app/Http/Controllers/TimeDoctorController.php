@@ -43,7 +43,6 @@ class TimeDoctorController extends Controller
 
     public function getTime($request)
     {
-        dd($request->all());
         $test = $request->only([
             'date',
             'time_start',

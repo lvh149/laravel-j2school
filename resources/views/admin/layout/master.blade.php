@@ -13,65 +13,75 @@
     <link href="{{ asset('/css/material-dashboard.css') }}" rel="stylesheet">
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     @stack('css')
 </head>
 
 <body>
-    <div class="wrapper">
-        @include('admin.layout.sidebar')
-        <div class="main-panel">
-            @include('admin.layout.topbar')
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        @if ($errors->any())
-                            <div class="col-12">
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+<div class="wrapper">
+    @include('admin.layout.sidebar')
+    <div class="main-panel">
+        @include('admin.layout.topbar')
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    @if ($errors->any())
+                        <div class="col-12">
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
-                        @endif
-                        @if (session()->has('success'))
-                            <div class="col-12">
-                                <div class="alert alert-success">
-                                    {{ session()->get('success') }}
-                                </div>
+                        </div>
+                    @endif
+                    @if (session()->has('success'))
+                        <div class="col-12">
+                            <div class="alert alert-success">
+                                {{ session()->get('success') }}
                             </div>
-                        @endif
-                    </div>
-                    @yield('content')
+                        </div>
+                    @endif
                 </div>
+                @yield('content')
             </div>
         </div>
-        @include('admin.layout.footer')
     </div>
-    <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
-    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/material.min.js') }}"></script>
-    <script src="{{ asset('js/perfect-scrollbar.jquery.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-    <script src="{{ asset('js/arrive.min.js') }}"></script>
-    <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('js/moment.min.js') }}"></script>
-    <script src="{{ asset('js/chartist.min.js') }}"></script>
-    <script src="{{ asset('js/jquery.bootstrap-wizard.js') }}"></script>
-    <script src="{{ asset('js/bootstrap-notify.js') }}"></script>
-    <script src="{{ asset('js/jquery.select-bootstrap.js') }}"></script>
-    <script src="{{ asset('js/sweetalert2.js') }}"></script>
-    <script src="{{ asset('js/jasny-bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/fullcalendar.min.js') }}"></script>
-    <script src="{{ asset('js/jquery.tagsinput.js') }}"></script>
-    <script src="{{ asset('js/material-dashboard.js') }}"></script>
-    <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
+    @include('admin.layout.footer')
+</div>
+<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/material.min.js') }}"></script>
+<script src="{{ asset('js/perfect-scrollbar.jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+<script src="{{ asset('js/arrive.min.js') }}"></script>
+<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('js/moment.min.js') }}"></script>
+<script src="{{ asset('js/chartist.min.js') }}"></script>
+<script src="{{ asset('js/jquery.bootstrap-wizard.js') }}"></script>
+<script src="{{ asset('js/bootstrap-notify.js') }}"></script>
+<script src="{{ asset('js/jquery.select-bootstrap.js') }}"></script>
+<script src="{{ asset('js/sweetalert2.js') }}"></script>
+<script src="{{ asset('js/jasny-bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/fullcalendar.min.js') }}"></script>
+<script src="{{ asset('js/jquery.tagsinput.js') }}"></script>
+<script src="{{ asset('js/material-dashboard.js') }}"></script>
+<script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
+<script>
+    $(function () {
+        let path = window.location.href;
+        $('ul a').each(function () {
+            if (this.href === path) {
+                $(this).parent('li').addClass('active');
+            }
+        });
+    });
+</script>
 
-    @stack('js')
+@stack('js')
 </body>
 
 </html>

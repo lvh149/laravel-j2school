@@ -41,8 +41,10 @@
                                         {{$time_doctor->time->time}}
                                     </td>
                                     <td>
-                                        @if ($time_doctor->appointment)
+                                        @if($time_doctor->appointment)
+                                        @if ($time_doctor->appointment->status===1 || $time_doctor->appointment->status===2)
                                             {{ \App\Enums\AppointmentStatusEnum::getKeyByValue($time_doctor->appointment->status) }}
+                                        @endif
                                         @endif
                                     </td>
                                     <td>
@@ -69,12 +71,3 @@
         </div>
     </div>
 @endsection
-
-
-@push('js')
-    <script>
-        $(function () {
-            $("#6").addClass('active');
-        })
-    </script>
-@endpush

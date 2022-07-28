@@ -20,12 +20,35 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p> Dashboard </p>
                 </a>
             </li>
-            <li id="2">
-                <a href="{{route('appointment.index')}}">
+            <li>
+                <a data-toggle="collapse" href="#componentsExamples">
                     <i class="material-icons">grid_on</i>
                     <p> Xét duyệt lịch hẹn
+                        <b class="caret"></b>
                     </p>
                 </a>
+                <div class="collapse" id="componentsExamples">
+                    <ul class="nav">
+                        <li id="appointment_1">
+                            <a href="{{route('appointment.index',['status' => 1])}}">
+                                <span class="sidebar-mini"> X </span>
+                                <span class="sidebar-normal"> Lịch hẹn chờ xét duyệt </span>
+                            </a>
+                        </li>
+                        <li id="appointment_2">
+                            <a href="{{route('appointment.index',['status' => 2])}}">
+                                <span class="sidebar-mini"> X </span>
+                                <span class="sidebar-normal"> Lịch hẹn đã duyệt </span>
+                            </a>
+                        </li>
+                        <li id="appointment_3">
+                            <a href="{{route('appointment.index',['status' => 3])}}">
+                                <span class="sidebar-mini"> X </span>
+                                <span class="sidebar-normal"> Lịch hẹn đã huỷ </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
             <li id="3">
                 <a href="{{route('customer.index')}}">

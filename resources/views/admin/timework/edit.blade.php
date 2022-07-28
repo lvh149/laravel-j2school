@@ -68,11 +68,6 @@
 
 @push('js')
     <script>
-        $(function (){
-            $("#6").addClass('active');
-        })
-    </script>
-    <script>
         $('.datepicker').datetimepicker({
             format: 'DD/MM/YYYY',
             icons: {

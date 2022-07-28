@@ -91,11 +91,6 @@
 @endsection
 @push('js')
     <script>
-        $(function () {
-            $("#6").addClass('active');
-        })
-    </script>
-    <script>
         $(document).ready(function () {
             $('.datepicker').datetimepicker({
                 format: 'MM/DD/YYYY',
