@@ -44,7 +44,13 @@
                                 <div class="card-header text-center" data-background-color="rose">
                                     <h4 class="card-title">Login</h4>
                                 </div>
-
+                                @if (session()->has('error'))
+                                    <div class="col-12">
+                                        <div class="alert alert-danger">
+                                            {{ session()->get('error') }}
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="card-content">
                                     <div class="input-group">
                                             <span class="input-group-addon">

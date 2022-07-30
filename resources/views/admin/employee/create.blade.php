@@ -3,10 +3,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form method="post" action="{{ route('admin.doctor.store') }}" class="form-horizontal" enctype="multipart/form-data">
+                <form method="post" action="{{ route('admin.employee.store') }}" class="form-horizontal"
+                      enctype="multipart/form-data">
                     @csrf
                     <div class="card-header card-header-text" data-background-color="rose">
-                        <h4 class="card-title">Thêm bác sĩ</h4>
+                        <h4 class="card-title">Thêm nhân viên</h4>
                     </div>
                     <div class="card-content">
                         <div class="row">
@@ -27,7 +28,7 @@
                                     <div class="card-content">
                                         <div class="form-group">
                                             <label class="label-control">Date Picker</label>
-                                            <input type="date" class="form-control datepicker" name="birth_date" />
+                                            <input type="date" class="form-control datepicker" name="birth_date"/>
                                         </div>
                                     </div>
                                 </div>
@@ -71,10 +72,10 @@
                                         </span>
                                         <br>
                                         <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
-                                            data-dismiss="fileinput"><i class="fa fa-times"></i> Remove
+                                           data-dismiss="fileinput"><i class="fa fa-times"></i> Remove
                                             <div class="ripple-container">
                                                 <div class="ripple ripple-on ripple-out"
-                                                    style="left: 69px; top: 12.6875px; background-color: rgb(255, 255, 255); transform: scale(15.5484);">
+                                                     style="left: 69px; top: 12.6875px; background-color: rgb(255, 255, 255); transform: scale(15.5484);">
                                                 </div>
                                             </div>
                                         </a>
@@ -114,16 +115,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-sm-2 label-on-right">Quốc tịch</label>
-                            <div class="col-sm-10">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="text" class="form-control" name="nationality">
-                                    <span class="material-input"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <label class="col-sm-2 label-on-right">Địa chỉ</label>
                             <div class="col-sm-10">
                                 <div class="form-group label-floating is-empty">
@@ -134,50 +125,28 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-sm-2 label-on-right">Bằng cấp</label>
+                            <label class="col-sm-2 label-on-right">Vai trò</label>
                             <div class="col-sm-10">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="text" class="form-control" name="degree">
-                                    <span class="material-input"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-2 label-on-right">Kinh nghiệm</label>
-                            <div class="col-sm-10">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="text" class="form-control" name="experience">
-                                    <span class="material-input"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-2 label-on-right">Chuyên ngành</label>
-
-                            <div class="col-lg-5 col-md-6 col-sm-3">
-                                <select class="selectpicker" data-style="btn btn-primary btn-round"
-                                    title="Chọn chuyên ngành" data-size="7" name="specialist_id">
-                                    @foreach ($specialists as $specialist)
-                                        <option value="{{ $specialist->id }}">
-                                            {{ $specialist->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <br>
+                                @foreach($roles as $role => $val)
+                                    <div class="col-sm-10">
+                                        <input
+                                                type="radio"
+                                                id="{{ $role }}"
+                                                name="role"
+                                                class="custom-control-input"
+                                                value="{{ $val }}"
+                                                checked
+                                        >
+                                        <label class="custom-control-label" for="{{ $role }}">
+                                            {{ \App\Enums\UserRoleEnum::getKeyByValue($val) }}
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
 
-                        <div class="row">
-                            <label class="col-sm-2 label-on-right">Giá khám</label>
-                            <div class="col-sm-10">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="text" class="form-control" name="price">
-                                    <span class="material-input"></span>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
 
                     <div class="card-footer text-center">

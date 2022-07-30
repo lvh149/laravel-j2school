@@ -54,8 +54,6 @@ class DoctorController extends Controller
         $object = new doctor();
         $object->fill($request->validated());
         $object['avatar'] = $path;
-        dd($object);
-        //        dd($object);
         $object->save();
         return redirect()->route('doctor.index');
     }
@@ -82,13 +80,13 @@ class DoctorController extends Controller
             $object['avatar'] = $path;
         }
         $object->save();
-        return redirect()->route('doctor.index');
+        return redirect()->route('admin.doctor.index');
     }
 
     public function destroy(doctor $doctor)
     {
         $doctor->delete();
-        return redirect()->route('doctor.index');
+        return redirect()->route('admin.doctor.index');
     }
 
     public function doctor() {

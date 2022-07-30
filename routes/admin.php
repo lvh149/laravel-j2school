@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DoctorController;
@@ -26,4 +27,7 @@ Route::resource('/customer', CustomerController::class)->except([
 Route::resource('/time_doctor', TimeDoctorController::class)->except([
     'show',
 ]);
+Route::resource('/employee', AdminController::class)->except([
+    'show',
+])->middleware('superadmin');
 

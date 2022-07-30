@@ -14,7 +14,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li id="1">
+            <li>
                 <a href="{{route('admin.home')}}">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard </p>
@@ -50,36 +50,44 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     </ul>
                 </div>
             </li>
-            <li id="3">
+            <li>
                 <a href="{{route('admin.customer.index')}}">
                     <i class="material-icons">people</i>
                     <p> Quản lý bệnh nhân </p>
                 </a>
             </li>
-            <li id="4">
+            <li>
                 <a href="{{route('admin.specialist.index')}}">
                     <i class="material-icons">work</i>
                     <p> Quản lý chuyên ngành </p>
                 </a>
             </li>
-            <li id="5">
+            <li>
                 <a href="{{route('admin.doctor.index')}}">
                     <i class="material-icons">people</i>
                     <p> Quản lý bác sĩ </p>
                 </a>
             </li>
-            <li id="6">
+            <li>
                 <a href="{{route('admin.time_doctor.index')}}">
                     <i class="material-icons">event_available</i>
                     <p> Quản lý lịch làm việc </p>
                 </a>
             </li>
-            <li id="7">
+            @if(isSuperAdmin())
+            <li>
+                <a href="{{route('admin.employee.index')}}">
+                    <i class="material-icons">account_circle</i>
+                    <p> Quản lý nhân viên </p>
+                </a>
+            </li>
+            <li>
                 <a href="#">
                     <i class="material-icons">timeline</i>
                     <p> Thống kê </p>
                 </a>
             </li>
+            @endif
         </ul>
         <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
             <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>

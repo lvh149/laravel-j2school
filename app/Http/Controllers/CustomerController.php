@@ -18,11 +18,8 @@ class CustomerController extends Controller
 
     public function index()
     {
-//        $search="";
         $customers = $this->model
-//            ->where('name', 'like','%'.$search."%")
             ->paginate();
-//        $customers->appends(['q'=>$search]);
         return view('admin.customer.index',[
             'customers' => $customers,
         ]);

@@ -2,80 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRoleEnum;
+use App\Http\Requests\Admin\StoreRequest;
+use App\Http\Requests\Admin\UpdateRequest;
 use App\Models\Admin;
-use App\Http\Requests\StoreAdminRequest;
-use App\Http\Requests\UpdateAdminRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->model = (new Admin())->query();
+        $arrRole = UserRoleEnum::getRole();
+        View::share('roles', $arrRole);
+    }
+
     public function index()
     {
-        //
+        $employee = $this->model
+            ->paginate();
+        return view('admin.employee.index', [
+            'employees' => $employee,
+        ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+
+        return view('admin.employee.create', [
+//            'roles' => $role
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreAdminRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreAdminRequest $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $path = Storage::disk('public')->putFile('avatars', $request->file('avatar'));
+        $object = new Admin();
+        $object->fill($request->validated());
+        $object['avatar'] = $path;
+        $object['password'] = Hash::make($request->password);
+        $object->save();
+        return redirect()->route('admin.employee.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Admin $admin)
+
+    public function edit(Admin $employee)
     {
-        //
+        return view('admin.employee.edit', [
+            'employee' => $employee,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Admin $admin)
+    public function update(UpdateRequest $request, $admin)
     {
-        //
+        $object = Admin::query()->find($admin);
+        $object->fill($request->validated());
+        if ($request->hasFile('avatar')) {
+            $path = Storage::disk('public')->putFile('avatars', $request->file('avatar'));
+            $object['avatar'] = $path;
+        }
+        $object['password'] = Hash::make($request->password);
+        $object->save();
+        return redirect()->route('admin.employee.index')->with('success', 'test');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateAdminRequest  $request
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateAdminRequest $request, Admin $admin)
+    public function destroy(Admin $employee)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Admin $admin)
-    {
-        //
+        $employee->delete();
+        return redirect()->route('admin.employee.index');
     }
 }
