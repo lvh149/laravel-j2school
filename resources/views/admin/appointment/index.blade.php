@@ -55,7 +55,7 @@
                                     </td>
                                     @if($appointments[0]->status===1)
                                         <td>
-                                            <form action="{{route('appointment.update',$appointment)}}" method="post">
+                                            <form action="{{route('admin.appointment.update',$appointment)}}" method="post">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="status" value="2">
@@ -65,7 +65,7 @@
                                     @endif
                                     @if($appointments[0]->status===1 || $appointments[0]->status===2)
                                         <td>
-                                            <form action="{{route('appointment.update',$appointment)}}" method="post">
+                                            <form action="{{route('admin.appointment.update',$appointment)}}" method="post">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="status" value="3">

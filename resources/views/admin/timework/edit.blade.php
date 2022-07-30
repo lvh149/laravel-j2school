@@ -6,7 +6,7 @@
                 <div class="card-header card-header-text" data-background-color="rose">
                     <h4 class="card-title">Sửa giờ làm việc</h4>
                 </div>
-                <form method="post" action="{{route('time_doctor.update',$time_doctor)}}">
+                <form method="post" action="{{route('admin.time_doctor.update',$time_doctor)}}">
                     @csrf
                     @method('PUT')
                 <div class="card-content">

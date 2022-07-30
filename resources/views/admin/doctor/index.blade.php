@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 @section('content')
-    <a class="btn btn-success" href="{{ route('doctor.create') }}">
+    <a class="btn btn-success" href="{{ route('admin.doctor.create') }}">
         Thêm
     </a>
     <div class="row">
@@ -56,12 +56,12 @@
                                             {{ $doctor->price }}
                                         </td>
                                         <td>
-                                            <a href="{{ route('doctor.edit', $doctor) }}">
+                                            <a href="{{ route('admin.doctor.edit', $doctor) }}">
                                                 <button class="btn btn-info">Sửa</button>
                                             </a>
                                         </td>
                                         <td>
-                                            <form action="{{ route('doctor.destroy', $doctor) }}" method="post">
+                                            <form action="{{ route('admin.doctor.destroy', $doctor) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>

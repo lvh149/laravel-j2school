@@ -35,7 +35,7 @@ class SpecialistController extends Controller
         $object = new Specialist();
         $object->fill($request->validated());
         $object->save();
-        return redirect()->route('specialist.index');
+        return redirect()->route('admin.specialist.index');
     }
 
     public function show(Specialist $specialist)
@@ -55,12 +55,12 @@ class SpecialistController extends Controller
         $specialist->update(
             $request->validated()
         );
-        return redirect()->route('specialist.index');
+        return redirect()->route('admin.specialist.index');
     }
 
     public function destroy(Specialist $specialist)
     {
         $specialist->delete();
-        return redirect()->route('specialist.index');
+        return redirect()->route('admin.specialist.index');
     }
 }

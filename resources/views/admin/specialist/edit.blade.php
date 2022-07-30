@@ -8,7 +8,7 @@
                 </div>
                 <div class="card-content">
                     <h4 class="card-title">Sửa tên chuyên ngành</h4>
-                    <form method="post" action="{{route('specialist.update',$specialist)}}">
+                    <form method="post" action="{{route('admin.specialist.update',$specialist)}}">
                         @csrf
                         @method('PUT')
                         <div class="form-group label-floating is-empty">

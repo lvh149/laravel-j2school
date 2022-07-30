@@ -26,27 +26,7 @@ Route::get('/', function () {
 //Route admin
 route::group(['prefix' => 'admin'], function () {
     Route::get('login', [AuthController::class, 'adminLogin'])->name('admin.login');
-    Route::resource('/specialist', SpecialistController::class)->except([
-        'show',
-    ]);
-    Route::resource('/appointment', AppointmentController::class)->except([
-        'show',
-    ]);
-    Route::get('appointment', [AppointmentController::class, 'index'])->name('appointment.index');
-    Route::resource('/specialist', SpecialistController::class)->except([
-        'show',
-    ]);
-    Route::resource('/doctor', DoctorController::class)->except([
-        'show',
-    ]);
-    Route::resource('/customer', CustomerController::class)->except([
-        'show',
-    ]);
-    Route::resource('/time_doctor', TimeDoctorController::class)->except([
-        'show',
-    ]);
-});
+    Route::get('logout', [AuthController::class, 'adminLogout'])->name('admin.logout');
+    Route::POST('auth/logging', [AuthController::class, 'adminLogging'])->name('admin.logging');
 
-Route::get('/admin', function () {
-    return view('admin.layout.master');
-})->name('home');
+});

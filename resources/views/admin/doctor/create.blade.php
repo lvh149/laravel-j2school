@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form method="post" action="{{ route('doctor.store') }}" class="form-horizontal" enctype="multipart/form-data">
+                <form method="post" action="{{ route('admin.doctor.store') }}" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     <div class="card-header card-header-text" data-background-color="rose">
                         <h4 class="card-title">Thêm bác sĩ</h4>

@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form method="post" action="{{route('doctor.update',$doctor)}}" class="form-horizontal" enctype="multipart/form-data">
+                <form method="post" action="{{route('admin.doctor.update',$doctor)}}" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="card-header card-header-text" data-background-color="rose">

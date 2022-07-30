@@ -15,7 +15,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
     <div class="sidebar-wrapper">
         <ul class="nav">
             <li id="1">
-                <a href="{{route('home')}}">
+                <a href="{{route('admin.home')}}">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard </p>
                 </a>
@@ -30,19 +30,19 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 <div class="collapse" id="componentsExamples">
                     <ul class="nav">
                         <li id="appointment_1">
-                            <a href="{{route('appointment.index',['status' => 1])}}">
+                            <a href="{{route('admin.appointment.index',['status' => 1])}}">
                                 <span class="sidebar-mini"> X </span>
                                 <span class="sidebar-normal"> Lịch hẹn chờ xét duyệt </span>
                             </a>
                         </li>
                         <li id="appointment_2">
-                            <a href="{{route('appointment.index',['status' => 2])}}">
+                            <a href="{{route('admin.appointment.index',['status' => 2])}}">
                                 <span class="sidebar-mini"> X </span>
                                 <span class="sidebar-normal"> Lịch hẹn đã duyệt </span>
                             </a>
                         </li>
                         <li id="appointment_3">
-                            <a href="{{route('appointment.index',['status' => 3])}}">
+                            <a href="{{route('admin.appointment.index',['status' => 3])}}">
                                 <span class="sidebar-mini"> X </span>
                                 <span class="sidebar-normal"> Lịch hẹn đã huỷ </span>
                             </a>
@@ -51,25 +51,25 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </div>
             </li>
             <li id="3">
-                <a href="{{route('customer.index')}}">
+                <a href="{{route('admin.customer.index')}}">
                     <i class="material-icons">people</i>
                     <p> Quản lý bệnh nhân </p>
                 </a>
             </li>
             <li id="4">
-                <a href="{{route('specialist.index')}}">
+                <a href="{{route('admin.specialist.index')}}">
                     <i class="material-icons">work</i>
                     <p> Quản lý chuyên ngành </p>
                 </a>
             </li>
             <li id="5">
-                <a href="{{route('doctor.index')}}">
+                <a href="{{route('admin.doctor.index')}}">
                     <i class="material-icons">people</i>
                     <p> Quản lý bác sĩ </p>
                 </a>
             </li>
             <li id="6">
-                <a href="{{route('time_doctor.index')}}">
+                <a href="{{route('admin.time_doctor.index')}}">
                     <i class="material-icons">event_available</i>
                     <p> Quản lý lịch làm việc </p>
                 </a>

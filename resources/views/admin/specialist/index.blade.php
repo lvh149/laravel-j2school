@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 @section('content')
-    <a class="btn btn-success" href="{{route('specialist.create')}}">
+    <a class="btn btn-success" href="{{route('admin.specialist.create')}}">
         Thêm
     </a>
     <div class="row">
@@ -28,12 +28,12 @@
                                         {{ $specialist->name }}
                                     </td>
                                     <td>
-                                        <a href="{{route('specialist.edit',$specialist)}}">
+                                        <a href="{{route('admin.specialist.edit',$specialist)}}">
                                         <button class="btn btn-info">Sửa</button>
                                         </a>
                                     </td>
                                     <td>
-                                        <form action="{{route('specialist.destroy',$specialist)}}" method="post">
+                                        <form action="{{route('admin.specialist.destroy',$specialist)}}" method="post">
                                             @csrf
                                             @method('DELETE')
                                         <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>

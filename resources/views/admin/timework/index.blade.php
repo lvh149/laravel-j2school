@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 @section('content')
-    <a class="btn btn-success" href="{{route('time_doctor.create')}}">
+    <a class="btn btn-success" href="{{route('admin.time_doctor.create')}}">
         Thêm
     </a>
     <div class="row">
@@ -48,12 +48,12 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{route('time_doctor.edit',$time_doctor)}}">
+                                        <a href="{{route('admin.time_doctor.edit',$time_doctor)}}">
                                             <button class="btn btn-info">Sửa</button>
                                         </a>
                                     </td>
                                     <td>
-                                        <form action="{{route('time_doctor.destroy',$time_doctor)}}" method="post">
+                                        <form action="{{route('admin.time_doctor.destroy',$time_doctor)}}" method="post">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>

@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form method="post" action="{{route('time_doctor.store')}}" class="form-horizontal">
+                <form method="post" action="{{route('admin.time_doctor.store')}}" class="form-horizontal">
                     @csrf
                     <div class="card-header card-header-text" data-background-color="rose">
                         <h4 class="card-title">Thêm giờ làm việc</h4>

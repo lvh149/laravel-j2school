@@ -8,7 +8,7 @@
                 </div>
                 <div class="card-content">
                     <h4 class="card-title">Thêm chuyên ngành</h4>
-                    <form method="post" action="{{route('specialist.store')}}">
+                    <form method="post" action="{{route('admin.specialist.store')}}">
                         @csrf
                         <div class="form-group label-floating is-empty">
                             <label class="control-label">Tên chuyên ngành</label>

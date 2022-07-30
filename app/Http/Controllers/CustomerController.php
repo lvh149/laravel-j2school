@@ -30,7 +30,7 @@ class CustomerController extends Controller
 
     public function booking()
     {
-        return view('user.booking');
+        return view('user.booking.index');
     }
 
     public function create()
