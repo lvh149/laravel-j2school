@@ -19,8 +19,8 @@ class AppointmentController extends Controller
         $appointments = $this->model
             ->with('time_doctor.doctor:id,name')
             ->with('customer:id,name_patient,phone_patient')
-            ->where('status','=',$request->all())
-            ->latest('id')
+            ->where('status','=',$request->status)
+            ->latest('updated_at')
             ->paginate();
         return view('admin.appointment.index',[
             'appointments' => $appointments,
