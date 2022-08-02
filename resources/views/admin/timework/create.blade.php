@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <label class="label-control">Chọn Bác sĩ</label>
-                                    <select class="selectpicker select-doctor" name="doctor_id"
+                                    <select class="selectpicker select-doctor" multiple  name="doctor_id[]"
                                             data-style="btn btn-primary btn-round"
                                             id='select-doctor'>
                                     </select>
@@ -40,6 +40,7 @@
                                             <div class="form-group">
                                                 <input type="text" class="form-control datepicker" name="date[]"
                                                        value="now"/>
+
                                             </div>
                                         </div>
                                     </div>
@@ -90,37 +91,34 @@
 
 @endsection
 @push('js')
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <script>
         $(document).ready(function () {
-            $('.datepicker').datetimepicker({
-                format: 'MM/DD/YYYY',
-                icons: {
-                    time: "fa fa-clock-o",
-                    date: "fa fa-calendar",
-                    up: "fa fa-chevron-up",
-                    down: "fa fa-chevron-down",
-                    previous: 'fa fa-chevron-left',
-                    next: 'fa fa-chevron-right',
-                    today: 'fa fa-screenshot',
-                    clear: 'fa fa-trash',
-                    close: 'fa fa-remove'
+            $('input[name="date[]"]').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
                 }
-            });
-            $('.timepicker').datetimepicker({
-                format: 'h:mm A',
-                icons: {
-                    time: "fa fa-clock-o",
-                    date: "fa fa-calendar",
-                    up: "fa fa-chevron-up",
-                    down: "fa fa-chevron-down",
-                    previous: 'fa fa-chevron-left',
-                    next: 'fa fa-chevron-right',
-                    today: 'fa fa-screenshot',
-                    clear: 'fa fa-trash',
-                    close: 'fa fa-remove'
-                }
-            });
+
         });
+
+        $('.timepicker').datetimepicker({
+            format: 'h:mm A',
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+
+        })
+        ;
         $('#select-specialist').change(function () {
             $("#select-doctor option").remove();
             let id = $(this).val();
@@ -133,7 +131,6 @@
                 dataType: 'json',
                 success: function (data) {
                     $.each(data.data, function (index, each) {
-                        console.log(each.name);
                         $('#select-doctor').append($('<option>', {value: each.id, text: each.name}));
                     });
                     $("#select-doctor").selectpicker('refresh')
@@ -187,18 +184,9 @@
                     </div>
                 </div>
             `));
-            $('.datepicker').datetimepicker({
-                format: 'MM/DD/YYYY',
-                icons: {
-                    time: "fa fa-clock-o",
-                    date: "fa fa-calendar",
-                    up: "fa fa-chevron-up",
-                    down: "fa fa-chevron-down",
-                    previous: 'fa fa-chevron-left',
-                    next: 'fa fa-chevron-right',
-                    today: 'fa fa-screenshot',
-                    clear: 'fa fa-trash',
-                    close: 'fa fa-remove'
+            $('input[name="date[]"]').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
                 }
             });
             $('.timepicker').datetimepicker({
