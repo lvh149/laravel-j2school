@@ -71,7 +71,7 @@
                                     <br><br><br>
                                     <div class="form-group label-floating is-empty">
                                         <label class="control-label">Thời gian khám</label>
-                                        <input type="text" class="form-control" name="time[]">
+                                        <input type="text" class="form-control" name="timework[]">
                                         <span class="material-input"></span></div>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@
                         <br><br><br>
                         <div class="form-group label-floating is-empty">
                             <label class="control-label">Thời gian khám</label>
-                            <input type="text" class="form-control" name="time[]">
+                            <input type="text" class="form-control" name="timework[]">
                             <span class="material-input"></span></div>
                     </div>
                 </div>

@@ -47,7 +47,7 @@ class TimeDoctorController extends Controller
             'date',
             'time_start',
             'time_end',
-            'time',
+            'timework',
         ]);
         $array = [];
         $i = 0;
@@ -63,44 +63,34 @@ class TimeDoctorController extends Controller
             $array[] = $object;
             $i++;
         }
-        foreach ($array as $key => $each) {
-            $arrtime = [];
+
+        foreach ($array as $each) {
             $date = Carbon::createFromFormat('d/m/Y', $each->date_start)->format('Y-m-d');
             $date_end = Carbon::createFromFormat('d/m/Y', $each->date_end)->format('Y-m-d');
             while ($date <= $date_end) {
-                $time = HoursHelper::create(
-                    $date.' '.$each->time_start,
-                    $date.' '.$each->time_end,
-                    $each->time,
-                    'Y-m-d H:i');
-                $time = $time->slice(0, -1);
-                $arrtime[] = $time;
+                $time = Carbon::parse($each->time_start)->format('H:i');
+                $time_end = Carbon::parse($each->time_end)->subMinute($each->timework)->format('H:i');
+                while ($time <= $time_end) {
+                    $arrtime = [
+                        'date' => $date,
+                        'time_start' => $time,
+                        'time_end' => Carbon::parse($time)->addMinute($each->timework)->format('H:i'),
+                    ];
+                    $time = Carbon::parse($time)->addMinute($each->timework)->format('H:i');
+                    $times[] = $arrtime;
+                }
                 $date = Carbon::createFromFormat('Y-m-d', $date)->addDays(1)->format('Y-m-d');
             }
-            $times[] = $arrtime;
         }
-        foreach ($times as $key => $value) {
-            foreach ($value as $item) {
-                foreach ($item as $each) {
-                    $time = Carbon::parse($each);
-                    $data = [
-                        'date' => $time->format('Y-m-d'),
-                        'time_start' => $time->format('H:i'),
-                        'time_end' => $time->addMinute($request->time[$key])->format('H:i'),
-                    ];
-                    $datas[] = $data;
-                }
-            }
-        }
-        return $datas;
+        return $times;
     }
 
     public function store(Request $request)
     {
-        $datas = $this->getTime($request);
+        $times = $this->getTime($request);
         $doctor_id = $request->doctor_id;
         foreach ($doctor_id as $doctor) {
-            foreach ($datas as $each) {
+            foreach ($times as $each) {
                 $time_doctor = new Time_doctor();
                 $time = Time::query()->create($each);
                 $time_doctor['time_id'] = $time->id;
