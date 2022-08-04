@@ -22,6 +22,8 @@
                                 <th>Vai trò</th>
                                 <th>Sửa</th>
                                 <th>Xoá</th>
+                                <th>Đặt lại mật khẩu</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -61,6 +63,13 @@
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('admin.employee.resetPassword', $employee) }}" method="post">
+                                            @csrf
+                                            @method('PUT')
+                                            <button class="btn btn-danger" style="margin-top: 25px">Đặt lại mật khẩu</button>
                                         </form>
                                     </td>
                                 </tr>

@@ -17,7 +17,9 @@ class AppointmentController extends Controller
     public function index(Request $request)
     {
         $appointments = $this->model
+            ->with('time_doctor.time:id,date,time_start,time_end')
             ->with('time_doctor.doctor:id,name')
+            ->with('time_doctor.doctor.specialist:id,name')
             ->with('customer:id,name_patient,phone_patient')
             ->where('status','=',$request->status)
             ->latest('updated_at')

@@ -10,6 +10,11 @@
                     <h4 class="card-title">Quản lý chuyên ngành</h4>
                     <div class="table-responsive">
                         <table class="table">
+                            <caption class=" col-md-offset-4">
+                                <form >
+                                    Search: <input type="search" name="q" value="{{$search}}" style="height: 40px; width: 300px">
+                                </form>
+                            </caption>
                             <thead class="text-primary">
                             <tr>
                                 <th>#</th>
@@ -29,14 +34,14 @@
                                     </td>
                                     <td>
                                         <a href="{{route('admin.specialist.edit',$specialist)}}">
-                                        <button class="btn btn-info">Sửa</button>
+                                            <button class="btn btn-info">Sửa</button>
                                         </a>
                                     </td>
                                     <td>
                                         <form action="{{route('admin.specialist.destroy',$specialist)}}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                        <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>
+                                            <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>
                                         </form>
                                     </td>
                                 </tr>

@@ -12,20 +12,24 @@ use Illuminate\Support\Facades\Storage;
 class DoctorController extends Controller
 {
     use ResponseTrait;
+
     public function __construct()
     {
         $this->model = (new Doctor())->query();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        //        $search="";
+        $search = $request->get('q');
         $doctors = $this->model->with('specialist:id,name')
-            //            ->where('name', 'like','%'.$search."%")
+            ->where('name', 'like', '%'.$search."%")
+            ->orwhere('phone', 'like', '%'.$search."%")
+            ->orwhere('email', 'like', '%'.$search."%")
             ->paginate();
-        //        $doctors->appends(['q'=>$search]);
+        $doctors->appends(['q' => $search]);
         return view('admin.doctor.index', [
             'doctors' => $doctors,
+            'search' => $search,
         ]);
     }
 
@@ -34,7 +38,7 @@ class DoctorController extends Controller
 
         $data = $this->model
             ->select('id', 'name')
-            ->where('specialist_id', '=',  $request->get('id'))
+            ->where('specialist_id', '=', $request->get('id'))
             ->get();
         return $this->successResponse($data);
     }
@@ -89,7 +93,8 @@ class DoctorController extends Controller
         return redirect()->route('admin.doctor.index');
     }
 
-    public function doctor() {
+    public function doctor()
+    {
         $doctors = $this->model
             ->paginate();
         return view('user.doctor.index', [
@@ -98,15 +103,16 @@ class DoctorController extends Controller
     }
 
 
-   public function search(Request $request) {
+    public function search(Request $request)
+    {
         $doctors = $this->model
-                    ->with('specialist:id,name')
-                    ->where('name', 'like','%'.$request->key.'%')
-                    ->orWhere('price', 'like',$request->key)
-                    ->get();
+            ->with('specialist:id,name')
+            ->where('name', 'like', '%'.$request->key.'%')
+            ->orWhere('price', 'like', $request->key)
+            ->get();
         // dd($doctors);
         return view('user.doctor.search', [
             'doctors' => $doctors,
         ]);
-   }
+    }
 }

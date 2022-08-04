@@ -10,10 +10,20 @@
                     <h4 class="card-title">Quản lý lịch làm việc</h4>
                     <div class="table-responsive">
                         <table class="table">
+                            <caption class=" col-md-offset-4">
+                                <form action="{{route('admin.time_doctor.index')}}">
+                                    Search: <input type="search" name="q" value="{{$search}}"
+                                                   style="height: 40px; width: 300px">
+                                    <input type="text" class="form-control datepicker" name="date"
+                                           value="{{$date}}"/>
+                                    <button>Tìm kiếm</button>
+                                </form>
+                            </caption>
                             <thead class="text-primary">
                             <tr>
                                 <th>#</th>
                                 <th>Tên bác sĩ</th>
+                                <th>Chuyên ngành</th>
                                 <th>Ngày khám</th>
                                 <th>Khung giờ khám</th>
                                 <th>Thời gian khám</th>
@@ -32,6 +42,9 @@
                                         {{ $time_doctor->doctor->name }}
                                     </td>
                                     <td>
+                                        {{ $time_doctor->doctor->specialist->name }}
+                                    </td>
+                                    <td>
                                         {{ $time_doctor->time->dateformat}}
                                     </td>
                                     <td>
@@ -42,9 +55,9 @@
                                     </td>
                                     <td>
                                         @if($time_doctor->appointment)
-                                        @if ($time_doctor->appointment->status===1 || $time_doctor->appointment->status===2)
-                                            {{ \App\Enums\AppointmentStatusEnum::getKeyByValue($time_doctor->appointment->status) }}
-                                        @endif
+                                            @if ($time_doctor->appointment->status===1 || $time_doctor->appointment->status===2)
+                                                {{ \App\Enums\AppointmentStatusEnum::getKeyByValue($time_doctor->appointment->status) }}
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
@@ -53,7 +66,8 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <form action="{{route('admin.time_doctor.destroy',$time_doctor)}}" method="post">
+                                        <form action="{{route('admin.time_doctor.destroy',$time_doctor)}}"
+                                              method="post">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger" style="margin-top: 25px">Xoá</button>
@@ -71,3 +85,23 @@
         </div>
     </div>
 @endsection
+@push('js')
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datetimepicker({
+                format: 'YYYY-MM-DD',
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-chevron-up",
+                    down: "fa fa-chevron-down",
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-screenshot',
+                    clear: 'fa fa-trash',
+                    close: 'fa fa-remove'
+                }
+            })
+        });
+    </script>
+@endpush

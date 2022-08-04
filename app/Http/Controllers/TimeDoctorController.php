@@ -20,16 +20,25 @@ class TimeDoctorController extends Controller
         $this->model = (new time_doctor())->query();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $time_doctors = $this->model
-            ->with('appointment:time_doctor_id,status')
+        $search = $request->get('q');
+        $date = $request->get('date');
+        $time_doctors= $this->model
+            ->with('appointment:time_doctor_id,status,price')
             ->with('doctor:id,name')
             ->with('time:id,date,time_start,time_end')
+            ->with('doctor.specialist:id,name')
             ->latest('id')
+            ->whereRelation('doctor','name','like', '%'.$search."%")
+            ->whereRelation('time','date','like','%'.$date."%")
             ->paginate();
+        $time_doctors->appends(['q' => $search]);
+        $time_doctors->appends(['date' => $date]);
         return view('admin.timework.index', [
             'time_doctors' => $time_doctors,
+            'search' => $search,
+            'date' => $date,
         ]);
     }
 

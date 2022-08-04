@@ -72,4 +72,10 @@ class AdminController extends Controller
         $employee->delete();
         return redirect()->route('admin.employee.index');
     }
+
+    public function resetPassword(Admin $employee)
+    {
+        $employee['password'] = Hash::make(123456);
+        $employee->save();
+    }
 }

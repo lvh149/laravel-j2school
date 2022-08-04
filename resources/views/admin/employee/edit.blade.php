@@ -103,16 +103,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-sm-2 label-on-right">Mật khẩu</label>
-                            <div class="col-sm-10">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="password" class="form-control" name="password" value="{{$employee->password}}">
-                                    <span class="material-input"></span>
-                                </div>
-                            </div>
-                        </div>
+{{--                        <div class="row">--}}
+{{--                            <label class="col-sm-2 label-on-right">Mật khẩu</label>--}}
+{{--                            <div class="col-sm-10">--}}
+{{--                                <div class="form-group label-floating is-empty">--}}
+{{--                                    <label class="control-label"></label>--}}
+{{--                                    <input type="password" class="form-control" name="password" value="{{$employee->password}}">--}}
+{{--                                    <span class="material-input"></span>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="row">
                             <label class="col-sm-2 label-on-right">Số điện thoại</label>
                             <div class="col-sm-10">

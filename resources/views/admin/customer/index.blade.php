@@ -7,6 +7,11 @@
                     <h4 class="card-title">Quản lý bệnh nhân</h4>
                     <div class="table-responsive">
                         <table class="table">
+                            <caption class=" col-md-offset-4">
+                                <form >
+                                    Search: <input type="search" name="q" value="{{$search}}" style="height: 40px; width: 300px">
+                                </form>
+                            </caption>
                             <thead class="text-primary">
                             <tr>
                                 <th>#</th>
@@ -40,7 +45,7 @@
                                         {{ $customer->email }}
                                     </td>
                                     <td>
-                                        <a href="#">
+                                        <a href="{{route('admin.customer.viewAppointment', $customer)}}">
                                             <button class="btn btn-success">
                                                 Xem cuộc hẹn
                                             </button>

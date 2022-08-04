@@ -72,13 +72,15 @@
 <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
 <script>
     $(function () {
-        let path = window.location.href;
+        let path = window.location.href.split('/').slice(0,5).join('/');
+        path = path.split('?')[0];
+        console.log(path);
         $('ul a').each(function () {
             if (this.href === path) {
                 $(this).parent('li').addClass('active');
             }
         });
-    });
+    })
 </script>
 
 @stack('js')

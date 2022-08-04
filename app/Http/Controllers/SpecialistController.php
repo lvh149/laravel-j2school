@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Specialist\StoreRequest;
 use App\Http\Requests\Specialist\UpdateRequest;
 use App\Models\Specialist;
+use Illuminate\Http\Request;
 
 class SpecialistController extends Controller
 {
@@ -13,15 +14,16 @@ class SpecialistController extends Controller
         $this->model = (new Specialist())->query();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-//        $search="";
+        $search = $request->get('q');
         $specialists = $this->model
-//            ->where('name', 'like','%'.$search."%")
+            ->where('name','like','%'.$search.'%')
             ->paginate();
-//        $specialists->appends(['q'=>$search]);
+        $specialists->appends(['q'=>$search]);
         return view('admin.specialist.index',[
             'specialists' => $specialists,
+            'search' => $search,
         ]);
     }
 
@@ -38,10 +40,6 @@ class SpecialistController extends Controller
         return redirect()->route('admin.specialist.index');
     }
 
-    public function show(Specialist $specialist)
-    {
-        //
-    }
 
     public function edit(Specialist $specialist)
     {
