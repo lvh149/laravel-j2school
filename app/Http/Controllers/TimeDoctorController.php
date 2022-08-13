@@ -20,16 +20,25 @@ class TimeDoctorController extends Controller
         $this->model = (new time_doctor())->query();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $time_doctors = $this->model
-            ->with('appointment:time_doctor_id,status')
+        $search = $request->get('q');
+        $date = $request->get('date');
+        $time_doctors= $this->model
+            ->with('appointment:time_doctor_id,status,price')
             ->with('doctor:id,name')
             ->with('time:id,date,time_start,time_end')
+            ->with('doctor.specialist:id,name')
             ->latest('id')
+            ->whereRelation('doctor','name','like', '%'.$search."%")
+            ->whereRelation('time','date','like','%'.$date."%")
             ->paginate();
+        $time_doctors->appends(['q' => $search]);
+        $time_doctors->appends(['date' => $date]);
         return view('admin.timework.index', [
             'time_doctors' => $time_doctors,
+            'search' => $search,
+            'date' => $date,
         ]);
     }
 
@@ -43,57 +52,60 @@ class TimeDoctorController extends Controller
 
     public function getTime($request)
     {
-        dd($request->all());
-        $test = $request->only([
+        $date_time = $request->only([
             'date',
             'time_start',
             'time_end',
-            'time',
+            'timework',
         ]);
         $array = [];
         $i = 0;
         // array to object
-        while ($i < count($test['date'])) {
+        while ($i < count($date_time['date'])) {
             $object = new stdClass();
-            foreach ($test as $key => $value) {
+            foreach ($date_time as $key => $value) {
                 $object->$key = $value[$i];
             }
+            $dates = explode(' - ', $object->date);
+            $object->date_start = $dates[0];
+            $object->date_end = $dates[1];
             $array[] = $object;
             $i++;
         }
-        $times = [];
+
         foreach ($array as $each) {
-            $time = HoursHelper::create(
-                $each->date . ' ' . $each->time_start,
-                $each->date . ' ' . $each->time_end,
-                $each->time,
-                'Y-m-d H:i'
-            );
-            $time = $time->slice(0, -1);
-            $times[] = $time;
-        }
-        foreach ($times as $key => $value) {
-            foreach ($value as $each) {
-                $time = Carbon::parse($each);
-                $data = [
-                    'date' => $time->format('Y-m-d'),
-                    'time_start' => $time->format('H:i'),
-                    'time_end' => $time->addMinute($request->time[$key])->format('H:i'),
-                ];
-                $datas[] = $data;
+            $date = Carbon::createFromFormat('d/m/Y', $each->date_start)->format('Y-m-d');
+            $date_end = Carbon::createFromFormat('d/m/Y', $each->date_end)->format('Y-m-d');
+            while ($date <= $date_end) {
+                $time = Carbon::parse($each->time_start)->format('H:i');
+                $time_end = Carbon::parse($each->time_end)->subMinute($each->timework)->format('H:i');
+                while ($time <= $time_end) {
+                    $arrtime = [
+                        'date' => $date,
+                        'time_start' => $time,
+                        'time_end' => Carbon::parse($time)->addMinute($each->timework)->format('H:i'),
+                    ];
+                    $time = Carbon::parse($time)->addMinute($each->timework)->format('H:i');
+                    $times[] = $arrtime;
+                }
+                $date = Carbon::createFromFormat('Y-m-d', $date)->addDays(1)->format('Y-m-d');
             }
         }
-        return $datas;
+        return $times;
     }
 
     public function store(Request $request)
     {
-        $datas = $this->getTime($request);
-        foreach ($datas as $each) {
-            //https://stackoverflow.com/a/67335661
-            $time = Time::query()->create($each);
-            $time_doctor = $request->only(['doctor_id']);
-            $time_doctor = $time->Time_doctor()->create($time_doctor);
+        $times = $this->getTime($request);
+        $doctor_id = $request->doctor_id;
+        foreach ($doctor_id as $doctor) {
+            foreach ($times as $each) {
+                $time_doctor = new Time_doctor();
+                $time = Time::query()->create($each);
+                $time_doctor['time_id'] = $time->id;
+                $time_doctor['doctor_id'] = $doctor;
+                $time_doctor->save();
+            }
         }
     }
 
@@ -102,16 +114,16 @@ class TimeDoctorController extends Controller
         return view('admin.timework.edit', [
             'time_doctor' => $time_doctor,
         ]);
+
     }
 
     public function update(Request $request)
     {
         $object = Time::query()->find($request->time_id);
-        $object->fill(
-            $request->except([
-                '_token',
-                '_method',
-            ])
+        $object->fill($request->except([
+            '_token',
+            '_method',
+        ])
         );
         $object['date'] = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
         $object['time_start'] = Carbon::parse($request->time_start)->format('H:i');
@@ -123,4 +135,6 @@ class TimeDoctorController extends Controller
     {
         $time_doctor->delete();
     }
+
+
 }

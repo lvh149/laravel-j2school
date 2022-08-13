@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\customer\StoreRequest;
 use App\Http\Requests\customer\UpdateRequest;
-use App\Models\Customer;
-use App\Models\Time_doctor;
 use App\Models\Appointment;
+use App\Models\Customer;
 use App\Models\Specialist;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
@@ -18,53 +18,36 @@ class CustomerController extends Controller
         $this->model = (new Customer())->query();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        //        $search="";
+        $search = $request->get('q');
         $customers = $this->model
-            //            ->where('name', 'like','%'.$search."%")
+            ->where('name_patient', 'like', '%'.$search."%")
+            ->orwhere('phone_patient', 'like', '%'.$search."%")
+            ->orwhere('email', 'like', '%'.$search."%")
             ->paginate();
-        //        $customers->appends(['q'=>$search]);
-        return view('admin.customer.index', [
+        $customers->appends(['q'=>$search]);
+        return view('admin.customer.index',[
             'customers' => $customers,
+            'search' => $search,
         ]);
     }
 
-    public function create(Time_doctor $time_doctor)
+    public function viewAppointment($customer)
     {
-        return view('user.customer.create', [
-            'time_doctor' => $time_doctor,
+        $appointments = Appointment::query()
+            ->where('customer_id','=',$customer)
+            ->paginate();
+        return view('admin.customer.viewAppointment',[
+            'appointments' => $appointments,
         ]);
     }
 
-    public function store(StoreRequest $request)
+
+    public function booking()
     {
-        $customer = new customer();
-        $customer->fill($request->validated());
-        $customer->save();
-        $appointment = new appointment();
-        $appointment['customer_id'] = $customer->id;
-        $appointment['status'] = 1;
-        $appointment->fill($request->except('name_patient'));
-        // $appointment['description'] = $request->input('description');
-        $appointment->save();
-        return view('user.appointment.success_notify');
+        return view('user.booking.index');
     }
 
-    public function show(customer $customer)
-    {
-        //
-    }
 
-    public function edit(customer $customer)
-    {
-    }
-
-    public function update(StoreRequest $request, $customer)
-    {
-    }
-
-    public function destroy(customer $customer)
-    {
-    }
 }

@@ -12,21 +12,24 @@ use Illuminate\Support\Facades\Storage;
 class DoctorController extends Controller
 {
     use ResponseTrait;
+
     public function __construct()
     {
         $this->model = (new Doctor())->query();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        //        $search="";
+        $search = $request->get('q');
         $doctors = $this->model->with('specialist:id,name')
-            //            ->where('name', 'like','%'.$search."%")
+            ->where('name', 'like', '%'.$search."%")
+            ->orwhere('phone', 'like', '%'.$search."%")
+            ->orwhere('email', 'like', '%'.$search."%")
             ->paginate();
-        //        $doctors->appends(['q'=>$search]);
-
+        $doctors->appends(['q' => $search]);
         return view('admin.doctor.index', [
             'doctors' => $doctors,
+            'search' => $search,
         ]);
     }
 
@@ -35,7 +38,7 @@ class DoctorController extends Controller
 
         $data = $this->model
             ->select('id', 'name')
-            ->where('specialist_id', '=',  $request->get('id'))
+            ->where('specialist_id', '=', $request->get('id'))
             ->get();
         return $this->successResponse($data);
     }
@@ -55,8 +58,6 @@ class DoctorController extends Controller
         $object = new doctor();
         $object->fill($request->validated());
         $object['avatar'] = $path;
-        dd($object);
-        //        dd($object);
         $object->save();
         return redirect()->route('doctor.index');
     }
@@ -83,35 +84,31 @@ class DoctorController extends Controller
             $object['avatar'] = $path;
         }
         $object->save();
-        return redirect()->route('doctor.index');
+        return redirect()->route('admin.doctor.index');
     }
 
     public function destroy(doctor $doctor)
     {
         $doctor->delete();
-        return redirect()->route('doctor.index');
+        return redirect()->route('admin.doctor.index');
     }
 
-    public function doctor(Request $request)
+    public function doctor()
     {
         $doctors = $this->model
-            ->when($request->has('price_sort'), function ($q) {
-                return $q->orderBy('price', request('price_sort'));
-            })
-            ->paginate(10);
-        $doctors->appends(['price_sort' => $request->get('price_sort')]);
-
+            ->paginate();
         return view('user.doctor.index', [
             'doctors' => $doctors,
-            'price_sort' => request('price_sort'),
         ]);
     }
+
 
     public function search(Request $request)
     {
         $doctors = $this->model
             ->with('specialist:id,name')
-            ->where('name', 'like', '%' . $request->key . '%')
+            ->where('name', 'like', '%'.$request->key.'%')
+            ->orWhere('price', 'like', $request->key)
             ->get();
         // dd($doctors);
         return view('user.doctor.search', [
