@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Specialist\StoreRequest;
 use App\Http\Requests\Specialist\UpdateRequest;
 use App\Models\Specialist;
-use Illuminate\Http\Request;
 
 class SpecialistController extends Controller
 {
@@ -14,16 +13,15 @@ class SpecialistController extends Controller
         $this->model = (new Specialist())->query();
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $search = $request->get('q');
+        //        $search="";
         $specialists = $this->model
-            ->where('name','like','%'.$search.'%')
+            //            ->where('name', 'like','%'.$search."%")
             ->paginate();
-        $specialists->appends(['q'=>$search]);
-        return view('admin.specialist.index',[
+        //        $specialists->appends(['q'=>$search]);
+        return view('admin.specialist.index', [
             'specialists' => $specialists,
-            'search' => $search,
         ]);
     }
 
@@ -37,14 +35,18 @@ class SpecialistController extends Controller
         $object = new Specialist();
         $object->fill($request->validated());
         $object->save();
-        return redirect()->route('admin.specialist.index');
+        return redirect()->route('specialist.index');
     }
 
+    public function show(Specialist $specialist)
+    {
+        //
+    }
 
     public function edit(Specialist $specialist)
     {
         return view('admin.specialist.edit', [
-            'specialist'=>$specialist,
+            'specialist' => $specialist,
         ]);
     }
 
@@ -53,12 +55,12 @@ class SpecialistController extends Controller
         $specialist->update(
             $request->validated()
         );
-        return redirect()->route('admin.specialist.index');
+        return redirect()->route('specialist.index');
     }
 
     public function destroy(Specialist $specialist)
     {
         $specialist->delete();
-        return redirect()->route('admin.specialist.index');
+        return redirect()->route('specialist.index');
     }
 }
