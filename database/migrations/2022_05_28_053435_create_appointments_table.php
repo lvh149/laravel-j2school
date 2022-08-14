@@ -13,7 +13,7 @@ class CreateAppointmentsTable extends Migration
             $table->foreignId('customer_id')->constrained();
             $table->foreignId('time_doctor_id')->constrained();
             $table->foreignId('admin_id')->nullable()->constrained();
-            $table->string('comment');
+            $table->string('comment')->nullable();
             $table->string('description');
             $table->string('feedback')->nullable();
             $table->integer('price');
@@ -21,7 +21,6 @@ class CreateAppointmentsTable extends Migration
             $table->timestamps();
         });
     }
-
 
     public function down()
     {
