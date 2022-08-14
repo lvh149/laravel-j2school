@@ -11,18 +11,19 @@ class Customer extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'name_booking',
+        'phone_booking',
+        'name_patient',
+        'phone_patient',
+        'email',
+        'gender',
+        'birth_date',
+    ];
+
     public function getGenderNameAttribute(): string
     {
-        $genderValue = $this->gender;
-        if($genderValue === 0) {
-            $gender = 'Nữ';
-        } else if ($genderValue === 1) {
-            $gender = 'Nam';
-        } else {
-            $gender = 'Khác';
-        }
-
-        return $gender;
+        return ($this->gender === 0) ? 'Nữ' : 'Nam';
     }
 
     public function getAgeAttribute(): int

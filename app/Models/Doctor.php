@@ -32,10 +32,12 @@ class Doctor extends Model
     {
         return ($this->gender === 0) ? 'Nữ' : 'Nam';
     }
+
     public function getAgeAttribute(): int
     {
         return date_diff(date_create($this->birth_date), date_create())->y;
     }
+
     public function specialist(): BelongsTo
     {
         return $this->belongsTo(Specialist::class);
