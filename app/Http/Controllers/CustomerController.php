@@ -33,6 +33,29 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function create($time_doctor)
+    {
+        $time_doctor=Time_doctor::query()
+            ->where('time_id','=',$time_doctor)->get();
+        return view('user.customer.create', [
+            'time_doctor' => $time_doctor,
+        ]);
+    }
+
+    public function store(StoreRequest $request)
+    {
+        $customer = new customer();
+        $customer->fill($request->validated());
+        $customer->save();
+        $appointment = new appointment();
+        $appointment['customer_id'] = $customer->id;
+        $appointment['status'] = 1;
+        $appointment->fill($request->except('name_patient'));
+        // $appointment['description'] = $request->input('description');
+        $appointment->save();
+        return view('user.appointment.success_notify');
+    }
+
     public function viewAppointment($customer)
     {
         $appointments = Appointment::query()
