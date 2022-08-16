@@ -41,7 +41,15 @@
                         @foreach ($doctors as $doctor)
                             <tr>
                                 <td class="col-md-4">
-                                    <img src="{{ asset('storage/' . $doctor->avatar) }}">
+                                    <img src="{{ asset($doctor->avatar) }}"
+                                         style="
+                                        width: 300px;
+                                        height: 250px;
+                                        border-radius: 4px;
+                                        object-fit: cover;
+                                        object-position: top;
+                                        "
+                                    >
                                 </td>
                                 <td class="col-md-8" style="padding-left: 30px; color: #73777B">
                                     <h4 class="title" style="margin-top: 0px;">
@@ -54,9 +62,13 @@
                                                         align-items: center;
                                                         margin-bottom: 20px;
                                                         ">
-                                        <h7 class="info-title">{{ $doctor->specialist->name }}</h7>
+                                        <div class="row" style="margin-left: 1px;">
+                                            <span>Chuyên khoa</span>
+                                            <span style="color: #e91e63">{{ $doctor->specialist->name }}</span>
+                                            <h7 > </h7>
+                                        </div>
                                         <h7 style="font-weight: 600; color: #e91e63;">
-                                            {{ $doctor->experience }}
+                                            {{ $doctor->experience }} năm kinh nghiệm
                                         </h7>
                                     </div>
                                     <div class="row"
@@ -82,10 +94,7 @@
                                     </div>
                                     <div class="row">
                                         <div style="display: flex; align-items: center; margin-bottom: 20px">
-                                            <h6 class="category text-danger" style="margin: 0 12px 0 16.5px">
-                                                25%off
-                                            </h6>
-                                            <h3 class="card-title" style="margin: 0">
+                                            <h3 class="card-title" style="margin: 0 0 0 14px;">
                                                 {{ $doctor->price }}<small>đ</small>
                                             </h3>
                                         </div>

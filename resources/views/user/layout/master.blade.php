@@ -22,7 +22,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/material-kit.css?v=1.2.1') }}" rel="stylesheet">
-    
+
 </head>
 
 <body class="landing-page">
@@ -40,7 +40,6 @@
     <script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/material.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/material-kit.js?v=1.2.1') }}" type="text/javascript"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     @stack('js')
 </body>
