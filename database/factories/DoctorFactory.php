@@ -26,7 +26,7 @@ class DoctorFactory extends Factory
             'address' => $this->faker->city,
             'nationality' => $this->faker->country,
             'degree' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
-            'experience' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
+            'experience' => $this->faker->numberBetween(1, 60),
             'price' => $this->faker->numberBetween($min = 1500, $max = 6000),
 
         ];
