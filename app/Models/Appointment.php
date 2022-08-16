@@ -9,8 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Appointment extends Model
 {
     use HasFactory;
-    protected $fillable =[
-        'status'
+    protected $fillable = [
+        'customer_id',
+        'time_doctor_id',
+        'name_patient',
+        'admin_id',
+        'comment',
+        'description',
+        'feedback',
+        'price',
+        'status',
     ];
 
     public function getDateCreatedAtAttribute()

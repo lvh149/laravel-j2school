@@ -8,7 +8,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
         <a href="#" class="simple-text logo-mini">
 
         </a>
-        <a href="#" class="simple-text logo-normal">
+        <a href="{{route('admin.home')}}" class="simple-text logo-normal">
             {{ config('app.name') }}
         </a>
     </div>

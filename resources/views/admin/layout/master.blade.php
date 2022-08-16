@@ -44,6 +44,13 @@
                             </div>
                         </div>
                     @endif
+                    @if (session()->has('error'))
+                        <div class="col-12">
+                            <div class="alert alert-danger">
+                                {{ session()->get('error') }}
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 @yield('content')
             </div>

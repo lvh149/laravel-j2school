@@ -37,12 +37,6 @@ class UpdateRequest extends FormRequest
                 'string',
                 Rule::unique(Admin::class)->ignore($this->employee),
             ],
-            'password' => [
-                'required',
-                'string',
-                'min:0',
-                'max:255',
-            ],
             'phone' => [
                 'nullable',
                 'string',

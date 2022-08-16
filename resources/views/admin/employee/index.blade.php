@@ -10,6 +10,11 @@
                     <h4 class="card-title">Quản lý bác sĩ</h4>
                     <div class="table-responsive">
                         <table class="table">
+                            <caption class=" col-md-offset-4">
+                                <form >
+                                    Search: <input type="search" name="q" value="{{$search}}" style="height: 40px; width: 300px">
+                                </form>
+                            </caption>
                             <thead class="text-primary">
                             <tr>
                                 <th>#</th>

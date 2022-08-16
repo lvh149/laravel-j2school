@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\customer\StoreRequest;
 use App\Http\Requests\customer\UpdateRequest;
-use App\Models\Appointment;
 use App\Models\Customer;
+use App\Models\Time_doctor;
+use App\Models\Appointment;
 use App\Models\Specialist;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -22,12 +23,12 @@ class CustomerController extends Controller
     {
         $search = $request->get('q');
         $customers = $this->model
-            ->where('name_patient', 'like', '%'.$search."%")
-            ->orwhere('phone_patient', 'like', '%'.$search."%")
-            ->orwhere('email', 'like', '%'.$search."%")
+            ->where('name_patient', 'like', '%' . $search . "%")
+            ->orwhere('phone_patient', 'like', '%' . $search . "%")
+            ->orwhere('email', 'like', '%' . $search . "%")
             ->paginate();
-        $customers->appends(['q'=>$search]);
-        return view('admin.customer.index',[
+        $customers->appends(['q' => $search]);
+        return view('admin.customer.index', [
             'customers' => $customers,
             'search' => $search,
         ]);
@@ -59,18 +60,27 @@ class CustomerController extends Controller
     public function viewAppointment($customer)
     {
         $appointments = Appointment::query()
-            ->where('customer_id','=',$customer)
+            ->where('customer_id', '=', $customer)
             ->paginate();
-        return view('admin.customer.viewAppointment',[
+        return view('admin.customer.viewAppointment', [
             'appointments' => $appointments,
         ]);
     }
 
-
-    public function booking()
+    public function show(customer $customer)
     {
-        return view('user.booking.index');
+        //
     }
 
+    public function edit(customer $customer)
+    {
+    }
 
+    public function update(StoreRequest $request, $customer)
+    {
+    }
+
+    public function destroy(customer $customer)
+    {
+    }
 }

@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 route::group(['prefix' => 'user'], function () {
     Route::get('login', [AuthController::class, 'userLogin'])->name('user.login');
     Route::get('register', [AuthController::class, 'userRegister'])->name('user.register');
-    Route::get('booking', [CustomerController::class, 'booking'])->name('booking.index');
     Route::get('doctor', [DoctorController::class, 'doctor'])->name('doctor');
     Route::get('search', [DoctorController::class, 'search'])->name('doctor.search');
     Route::get('appointment/create/{doctor}', [AppointmentController::class, 'create'])->name('user.appointment.create');
@@ -33,5 +32,4 @@ route::group(['prefix' => 'admin'], function () {
     Route::get('login', [AuthController::class, 'adminLogin'])->name('admin.login');
     Route::get('logout', [AuthController::class, 'adminLogout'])->name('admin.logout');
     Route::POST('auth/logging', [AuthController::class, 'adminLogging'])->name('admin.logging');
-
 });

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
+use App\Models\Specialist;
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Models\Time;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
+
     public function __construct()
     {
         $this->model = (new Appointment())->query();
@@ -26,10 +29,10 @@ class AppointmentController extends Controller
             ->with('time_doctor.doctor:id,name')
             ->with('time_doctor.doctor.specialist:id,name')
             ->with('customer:id,name_patient,phone_patient')
-            ->where('status','=',$request->status)
+            ->where('status', '=', $request->status)
             ->latest('updated_at')
             ->paginate();
-        return view('admin.appointment.index',[
+        return view('admin.appointment.index', [
             'appointments' => $appointments,
         ]);
     }
