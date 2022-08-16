@@ -2,9 +2,9 @@
 @section('content')
     <div class="row" style="display: flex; justify-content: space-between; padding: 20px;">
         <div class="col-sm-5 col-sm-offset-1 text-center" style="margin: 0">
-            <img src="{{ asset('storage/' . $doctor->avatar) }}" alt="Thumbnail Image"
+            <img src="{{ asset($doctor->avatar) }}" alt="Thumbnail Image"
                  class="img-circle img-raised img-responsive center-block"
-                 style="height: 140px; width: 150px; object-fit: cover;">
+                 style="height: 140px; width: 150px; object-fit: cover; object-position: top">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -47,7 +47,7 @@
                 <button type="button" class="btn btn-default"
                         style="width: 28.5%; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #bdbdbd;">
                     <p>Kinh nghiệm</p>
-                    <span> > 15 năm</span>
+                    <span> > {{ $doctor->experience }} năm</span>
                 </button>
 
                 <button type="button" class="btn btn-default"
@@ -76,7 +76,7 @@
         <div class="col-sm-7 col-sm-offset-1 text-center" style="margin: 0">
             <h2 class="title" style="margin-top:0; margin-bottom: 0;">Đăng kí lịch hẹn</h2>
             <input type="date" id="date">
-            <div class="row" id="test">
+            <div class="row" id="time">
                 {{--                @foreach ($time_doctors as $time_doctor)--}}
                 {{--                    <div class="col-md-4">--}}
                 {{--                        <a href={{ route('user.customer.create', $time_doctor) }}--}}
@@ -95,34 +95,57 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $("#date").on('change', function () {
-            const myNode = document.getElementById("test");
+            const myNode = document.getElementById("time");
             myNode.innerHTML = '';
             let date = this.value;
-            let doctor_id = {{$doctor->id}};
+            let doctor_id = {{ $doctor->id }};
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{ url(route('user.appointment.search')) }}",
+                url: "{{ url(route('user.appointment.selectTime')) }}",
                 data: {'date': date, 'doctor_id': doctor_id},
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    var targetDiv = document.getElementById('test');
+                    var targetDiv = document.getElementById('time');
                     $.each(data, function (index, each) {
-
+                        let status = each.status;
                         let url = "{{ route('user.customer.create', ':id') }}";
                         url = url.replace(':id', each.id);
-                        console.log(url);
-                        // $('#select-doctor').append($('<option>', {value: each.id, text: each.name}));
-                        targetDiv.innerHTML += `<div class="col-md-4">
-                        <a href=` + url +
-                            ` class="btn btn-primary btn-square btn-default btn-block">
-                            <i class="material-icons">assignment</i>`
-                            + each.time_start + '-' + each.time_end
-                        targetDiv.innerHTML += `<div class="ripple-container"></div>
-                </a>
-                </div>`
+                        if(status == 1)
+                        {
+                            targetDiv.innerHTML += `
+                            <div class="col-md-4">
+                                <a href=` + url + ` class="btn-select-time btn btn-warning btn-square btn-block">
+                                    <i class="material-icons">assignment</i>`
+                                + each.time_start + '-' + each.time_end +
+                                `<div class="ripple-container"></div>
+                                </a>
+                            </div>`
+                        }
+                        else if(status == 2)
+                        {
+                            targetDiv.innerHTML += `
+                            <div class="col-md-4">
+                                <a class="btn-select-time btn btn-square btn-block" disabled>
+                                    <i class="material-icons">assignment</i>`
+                                + each.time_start + '-' + each.time_end +
+                                `<div class="ripple-container"></div>
+                                </a>
+                            </div>`
+                        }
+                        else
+                        {
+                            targetDiv.innerHTML += `
+                            <div class="col-md-4">
+                                <a href=` + url + ` class="btn-select-time btn btn-primary btn-square btn-block">
+                                    <i class="material-icons">assignment</i>`
+                                    + each.time_start + '-' + each.time_end +
+                                    `<div class="ripple-container"></div>
+                                </a>
+                            </div>`
+                        }
                     });
                 },
             });
