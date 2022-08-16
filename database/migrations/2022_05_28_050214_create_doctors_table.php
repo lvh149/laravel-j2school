@@ -26,7 +26,7 @@ class CreateDoctorsTable extends Migration
             $table->string('address');
             $table->string('nationality');
             $table->string('degree');
-            $table->string('experience');
+            $table->unsignedTinyInteger('experience');
             $table->integer('price');
         });
     }
