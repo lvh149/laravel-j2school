@@ -8,7 +8,7 @@
                     @csrf
                     @method('PUT')
                     <div class="card-header card-header-text" data-background-color="rose">
-                        <h4 class="card-title">Thêm nhân viên</h4>
+                        <h4 class="card-title">Sủa thông tin nhân viên</h4>
                     </div>
                     <div class="card-content">
                         <div class="row">

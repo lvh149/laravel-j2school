@@ -32,6 +32,8 @@ Route::middleware('superadmin')->group(function() {
     Route::resource('/employee', AdminController::class)->except([
         'show',
     ]);
-    Route::PUT('/employee/{employee}',[AdminController::class,'resetPassword'])->name('employee.resetPassword');
+    Route::PUT('/employee/resetPassword/{employee}',[AdminController::class,'resetPassword'])->name('employee.resetPassword');
+    Route::GET('/employee/changePassword',[AdminController::class,'editPassword'])->name('employee.editPassword');
+    Route::PUT('/employee/changePassword/{id}',[AdminController::class,'changePassword'])->name('employee.changePassword');
 });
 

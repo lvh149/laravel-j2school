@@ -5,12 +5,14 @@
             <div class="card">
                 <div class="card-content">
                     <h4 class="card-title">
+                        @if($appointments[0])
                         @if($appointments[0]->status===1)
                             Lịch hẹn cần phê duyệt
                         @elseif($appointments[0]->status===2)
                             Lịch hẹn đã phê duyệt
                         @else
                             Lịch hẹn đã huỷ
+                        @endif
                         @endif
                     </h4>
 
@@ -27,11 +29,13 @@
                                 <th>Mô tả</th>
                                 <th>Tên bệnh nhân</th>
                                 <th>Số điện thoại</th>
+                                @if($appointments[0])
                                 @if($appointments[0]->status===1)
                                     <th>Duyệt</th>
                                 @endif
                                 @if($appointments[0]->status===1 || $appointments[0]->status===2)
                                     <th>Huỷ</th>
+                                @endif
                                 @endif
                             </tr>
                             </thead>

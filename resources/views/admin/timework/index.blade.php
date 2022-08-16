@@ -10,12 +10,14 @@
                     <h4 class="card-title">Quản lý lịch làm việc</h4>
                     <div class="table-responsive">
                         <table class="table">
-                            <caption class=" col-md-offset-4">
+                            <caption class=" col-md-offset-2">
                                 <form action="{{route('admin.time_doctor.index')}}">
-                                    Search: <input type="search" name="q" value="{{$search}}"
-                                                   style="height: 40px; width: 300px">
-                                    <input type="text" class="form-control datepicker" name="date"
-                                           value="{{$date}}"/>
+                                        Tên bác sĩ:
+                                        <input type="search" name="q" value="{{$search}}"
+                                                       style="height: 28px; width: 300px">
+                                        Ngày khám:
+                                        <input type="text" class="datepicker" name="date"
+                                               value="{{$date}}"/>
                                     <button>Tìm kiếm</button>
                                 </form>
                             </caption>
