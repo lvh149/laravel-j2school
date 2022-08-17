@@ -98,12 +98,15 @@ class DoctorController extends Controller
             ->when($request->has('price_sort'), function ($q) {
                 return $q->orderBy('price', request('price_sort'));
             })
-            ->paginate(10);
+            ->paginate(9);
         $doctors->appends(['price_sort' => $request->get('price_sort')]);
-
+        $max_price = $doctors->max('price');
+        $min_price = $doctors->min('price');
         return view('user.doctor.index', [
             'doctors' => $doctors,
             'price_sort' => request('price_sort'),
+            'min_price' => $min_price,
+            'max_price' => $max_price,
         ]);
     }
 
@@ -112,10 +115,13 @@ class DoctorController extends Controller
         $doctors = $this->model
             ->with('specialist:id,name')
             ->where('name', 'like', '%' . $request->key . '%')
-            ->get();
-        // dd($doctors);
+            ->paginate();
+        $max_price = $doctors->max('price');
+        $min_price = $doctors->min('price');
         return view('user.doctor.search', [
             'doctors' => $doctors,
+            'min_price' => $min_price,
+            'max_price' => $max_price,
         ]);
     }
 }
