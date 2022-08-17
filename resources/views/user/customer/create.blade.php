@@ -89,8 +89,8 @@
 
 
 
-            <input type="hidden" name="time_doctor_id" value="{{ $time_doctor[0]->id }}">
-            <input type="hidden" name="price" value="{{ $time_doctor[0]->doctor->price }}">
+            <input type="hidden" name="time_doctor_id" value="{{ $time_doctor->id }}">
+            <input type="hidden" name="price" value="{{ $time_doctor->doctor->price }}">
 
             <button class="col-lg-12 col-sm-12 btn btn-primary btn-square" type="submit">Đăng kí</button>
         </form>
