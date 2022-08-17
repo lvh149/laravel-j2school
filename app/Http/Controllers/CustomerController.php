@@ -34,10 +34,10 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function create($time_doctor)
+    public function create($id)
     {
         $time_doctor=Time_doctor::query()
-            ->where('time_id','=',$time_doctor)->get();
+            ->find($id);
         return view('user.customer.create', [
             'time_doctor' => $time_doctor,
         ]);
