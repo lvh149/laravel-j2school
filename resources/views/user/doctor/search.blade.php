@@ -21,10 +21,9 @@
                 </div>
                 <div class="col-md-7">
                     <form class="navbar-form navbar-right" role="search" method="get" id="search-form"
-                          action="{{ route('doctor.search') }}">
+                        action="{{ route('doctor.search') }}">
                         <div class="form-group form-rose is-empty">
-                            <input type="text" class="form-control" placeholder="Search" value=""
-                                   name="key">
+                            <input type="text" class="form-control" placeholder="Search" value="" name="key">
                             <span class="material-input"></span>
                         </div>
                         <button type="submit" class="btn btn-rose btn-raised btn-fab btn-fab-mini">
@@ -38,7 +37,7 @@
             <div class="col-md-2">
                 <div class="col-md-12 col-lg-12">
                     <form id="form-sort">
-                        <h4 class="card-title">Lọc</h4>
+                        <h4 class="card-title">Sắp xếp</h4>
                         <div class="form-group">
                             <select class="select-sort form-control" name="price_sort">
                                 <option selected>Giá</option>
@@ -46,8 +45,13 @@
                                 <option value="asc">Thấp - Cao</option>
                             </select>
                         </div>
+                    </form>
+                    <h4 class="card-title">Lọc</h4>
+                    {{-- Search Free And Price Doctor --}}
+                    <form action="" method="post">
+                        @csrf
                         <div class="form-group">
-                            <label>Tầm giá</label>
+                            <label style="font-weight: 600;">Tầm giá</label>
                             <div class="panel-body panel-refine">
                                 <span id="price-left" class="pull-left" data-currency="đ"></span>
                                 <span id="price-right" class="pull-right" data-currency="đ"></span>
@@ -57,22 +61,66 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="form-group">
-                                <label class="label-control">Ngày</label>
-                                <input type="date" class="form-control datepicker" value="10/10/2016">
-                            </div>
+                            <label class="label-control" style="font-weight: 600;">Chọn ngày</label>
+                            <input class="form-control datepicker" type="date" name="date" value="{{ date('Y-m-d') }}">
                         </div>
                         <div class="form-group">
-                            <div class="form-group">
-                                <label class="label-control">Giờ</label>
-                                <input type="time" class="form-control datepicker" value="10/10/2016">
-                            </div>
+                            <label class="label-control" style="font-weight: 600;">Chọn giờ</label>
+                            @php
+                                //$now = date('H') + 7;
+                                $now = now();
+                            @endphp
+                            @if($now->format('H') <= 12)
+                                @php
+                                    $startHour = \Carbon\Carbon::createFromTime(8);
+                                    $endHour = $startHour->copy()->addHours(4);
+                                @endphp
+                                <label>Sáng</label>
+                                <br>
+                                @for($startHour; $startHour < $endHour; $startHour->addMinutes(15))
+                                    <label>
+                                        <input
+                                            name="time"
+                                            type="radio"
+                                            value="{{ $startHour->format('H:i') }}"
+                                            style="margin-left: 6px;"
+                                            @if($now->copy()->addHour() >= $startHour)
+                                                disabled
+                                            @endif
+                                        />
+                                        {{ $startHour->format('H:i') }}
+                                    </label>
+                                @endfor
+                            @endif
+                            @if($now->format('H') <= 17)
+                                @php
+                                    $startHour = \Carbon\Carbon::createFromTime(13);
+                                    $endHour = $startHour->copy()->addHours(4);
+                                @endphp
+                                <br>
+                                <label>Chiều</label>
+                                <br>
+                                @for($startHour; $startHour < $endHour; $startHour->addMinutes(15))
+                                    <label>
+                                        <input
+                                            name="time"
+                                            type="radio"
+                                            value="{{ $startHour->format('H:i') }}"
+                                            style="margin-left: 6px;"
+                                            @if($now->copy()->addHour()->format('H') >= $startHour->format('H') - 1)
+                                                disabled
+                                            @endif
+                                        />
+                                        {{ $startHour->format('H:i') }}
+                                    </label>
+                                @endfor
+                            @endif
                         </div>
-                        <button class="btn btn-rose col-md-12">Lọc</button>
+                        <button type="submit" class="btn btn-rose col-md-12">Lọc</button>
                     </form>
                 </div>
             </div>
-            <div class="col-md-10">
+            <div id="show_doctor" class="col-md-10">
                 @foreach ($doctors as $doctor)
                     <div class="col-md-4">
                         <div class="card card-blog">
@@ -126,10 +174,56 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{ asset('js/nouislider.min.js') }}" type="text/javascript"></script>
     <script>
+        function getFreeDoctors() {
+            let date = $('input[name="date"]').val();
+            let time = $('input[name="time"]').val();
+            $.ajax({
+                url: "{{ route('doctor.get_free_doctor }}",
+                type: 'GET',
+                dataType: 'json',
+                data: { date, time },
+                success:function (response) {
+                    let html = '';
+                    response.forEach(function (doctor) {
+
+                    })
+                    $('#show_doctor').html(html);
+                }
+            });
+        }
+
         $(document).ready(function() {
+            getFreeDoctors();
+            $('input[name="date"], input[name="time"]').change(function() {
+                getFreeDoctors();
+            })
+
             $(".select-sort").change(function() {
                 $("#form-sort").submit();
+            });
+
+            //======= Slider =======
+            var slider2 = document.getElementById('sliderRefine');
+            noUiSlider.create(slider2, {
+                start: [{{ $min_price }}, {{ $max_price }}],
+                connect: true,
+                range: {
+                    'min': [{{ $min_price }}],
+                    'max': [{{ $max_price }}]
+                }
+            });
+
+            var limitFieldMin = document.getElementById('price-left');
+            var limitFieldMax = document.getElementById('price-right');
+
+            slider2.noUiSlider.on('update', function( values, handle ){
+                if (handle){
+                    limitFieldMax.innerHTML= $('#price-right').data('currency') + Math.round(values[handle]);
+                } else {
+                    limitFieldMin.innerHTML= $('#price-left').data('currency') + Math.round(values[handle]);
+                }
             });
         });
     </script>
