@@ -29,7 +29,7 @@ class TimeDoctorController extends Controller
             ->with('doctor:id,name')
             ->with('time:id,date,time_start,time_end')
             ->with('doctor.specialist:id,name')
-            ->latest('id')
+            ->orderBy('id')
             ->whereRelation('doctor','name','like', '%'.$search."%")
             ->whereRelation('time','date','like','%'.$date."%")
             ->paginate();

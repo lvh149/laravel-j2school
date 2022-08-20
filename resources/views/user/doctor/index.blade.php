@@ -55,58 +55,60 @@
                                 <label class="label-control" style="font-weight: 600;">Chọn ngày</label>
                                 <input class="form-control datepicker" type="date" name="date" value="{{ date('Y-m-d') }}">
                             </div>
-                            <div class="form-group">
-                                <label class="label-control" style="font-weight: 600;">Chọn giờ</label>
-                                @php
-                                    //$now = date('H') + 7;
-                                    $now = now();
-                                @endphp
-                                @if($now->format('H') <= 12)
-                                    @php
-                                        $startHour = \Carbon\Carbon::createFromTime(8);
-                                        $endHour = $startHour->copy()->addHours(4);
-                                    @endphp
-                                    <label>Sáng</label>
-                                    <br>
-                                    @for($startHour; $startHour < $endHour; $startHour->addMinutes(15))
-                                        <label>
-                                            <input
-                                                name="time"
-                                                type="radio"
-                                                value="{{ $startHour->format('H:i') }}"
-                                                style="margin-left: 6px;"
-                                                @if($now->copy()->addHour() >= $startHour)
-                                                    disabled
-                                                @endif
-                                            />
-                                            {{ $startHour->format('H:i') }}
-                                        </label>
-                                    @endfor
-                                @endif
-                                @if($now->format('H') <= 17)
-                                    @php
-                                        $startHour = \Carbon\Carbon::createFromTime(13);
-                                        $endHour = $startHour->copy()->addHours(4);
-                                    @endphp
-                                    <br>
-                                    <label>Chiều</label>
-                                    <br>
-                                    @for($startHour; $startHour < $endHour; $startHour->addMinutes(15))
-                                        <label>
-                                            <input
-                                                name="time"
-                                                type="radio"
-                                                value="{{ $startHour->format('H:i') }}"
-                                                style="margin-left: 6px;"
-                                                @if($now->copy()->addHour()->format('H') >= $startHour->format('H') - 1)
-                                                    disabled
-                                                @endif
-                                            />
-                                            {{ $startHour->format('H:i') }}
-                                        </label>
-                                    @endfor
-                                @endif
-                            </div>
+{{--                            <div class="form-group">--}}
+{{--                                <label class="label-control" style="font-weight: 600;">Chọn giờ</label>--}}
+{{--                                @php--}}
+{{--                                    //$now = date('H') + 7;--}}
+{{--                                    $now = now();--}}
+{{--                                @endphp--}}
+{{--                                @if($now->format('H') <= 12)--}}
+{{--                                    @php--}}
+{{--                                        $startHour = \Carbon\Carbon::createFromTime(8);--}}
+{{--                                        $endHour = $startHour->copy()->addHours(4);--}}
+{{--                                    @endphp--}}
+{{--                                    <label>Sáng</label>--}}
+{{--                                    <br>--}}
+{{--                                    @for($startHour; $startHour < $endHour; $startHour->addMinutes(15))--}}
+{{--                                        <label>--}}
+{{--                                            <input--}}
+{{--                                                name="time"--}}
+{{--                                                type="radio"--}}
+{{--                                                value="{{ $startHour->format('H:i') }}"--}}
+{{--                                                style="margin-left: 6px;"--}}
+{{--                                                @if($now->copy()->addHour() >= $startHour)--}}
+{{--                                                    disabled--}}
+{{--                                                @endif--}}
+{{--                                            />--}}
+{{--                                            {{ $startHour->format('H:i') }}--}}
+{{--                                        </label>--}}
+{{--                                    @endfor--}}
+{{--                                @endif--}}
+{{--                                @if($now->format('H') <= 17)--}}
+{{--                                    @php--}}
+{{--                                        $startHour = \Carbon\Carbon::createFromTime(13);--}}
+{{--                                        $endHour = $startHour->copy()->addHours(4);--}}
+{{--                                    @endphp--}}
+{{--                                    <br>--}}
+{{--                                    <label>Chiều</label>--}}
+{{--                                    <br>--}}
+{{--                                    @for($startHour; $startHour < $endHour; $startHour->addMinutes(15))--}}
+{{--                                        <label>--}}
+{{--                                            <input--}}
+{{--                                                name="time"--}}
+{{--                                                type="radio"--}}
+{{--                                                value="{{ $startHour->format('H:i') }}"--}}
+{{--                                                style="margin-left: 6px;"--}}
+{{--                                                @if($now->copy()->addHour()->format('H') >= $startHour->format('H') - 1)--}}
+{{--                                                    disabled--}}
+{{--                                                @endif--}}
+{{--                                            />--}}
+{{--                                            {{ $startHour->format('H:i') }}--}}
+{{--                                        </label>--}}
+{{--                                    @endfor--}}
+{{--                                @endif--}}
+{{--                            </div>--}}
+                            <input name="time_start" type="time">
+                            <input name="time_end" type="time">
                             <button type="submit" class="btn btn-rose col-md-12">Lọc</button>
                         </form>
                 </div>
@@ -168,13 +170,15 @@
     <script>
         function getFreeDoctors() {
             let date = $('input[name="date"]').val();
-            let time = $('input[name="time"]').val();
+            let time_start = $('input[name="time_start"]').val();
+            let time_end = $('input[name="time_end"]').val();
             $.ajax({
-                url: "{{ route('doctor.get_free_doctor }}",
+                url: "{{ route('get_free_doctor') }}",
                 type: 'GET',
                 dataType: 'json',
-                data: { date, time },
+                data: { 'date': date, 'time_start': time_start,'time_end': time_end},
                 success:function (response) {
+                    console.log(response);
                     let html = '';
                     response.forEach(function (doctor) {
 
@@ -186,7 +190,7 @@
 
         $(document).ready(function() {
             getFreeDoctors();
-            $('input[name="date"], input[name="time"]').change(function() {
+            $('input[name="date"], input[name="time_start"], input[name="time_end"]').change(function() {
                 getFreeDoctors();
             })
 

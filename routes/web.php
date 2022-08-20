@@ -15,6 +15,7 @@ route::group(['prefix' => 'user'], function () {
     Route::get('login', [AuthController::class, 'userLogin'])->name('user.login');
     Route::get('register', [AuthController::class, 'userRegister'])->name('user.register');
     Route::get('doctor', [DoctorController::class, 'doctor'])->name('doctor');
+    Route::get('doctor/viewDoctor', [DoctorController::class, 'get_free_doctor'])->name('get_free_doctor');
     Route::get('search', [DoctorController::class, 'search'])->name('doctor.search');
     Route::get('appointment/create/{doctor}', [AppointmentController::class, 'create'])->name('user.appointment.create');
     Route::get('customer/create/{time_doctor}', [CustomerController::class, 'create'])->name('user.customer.create');

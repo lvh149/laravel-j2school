@@ -6,12 +6,15 @@ use App\Http\Requests\Doctor\StoreRequest;
 use App\Http\Requests\Doctor\UpdateRequest;
 use App\Models\Doctor;
 use App\Models\Specialist;
+use App\Models\Time_doctor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class DoctorController extends Controller
 {
     use ResponseTrait;
+
     public function __construct()
     {
         $this->model = (new Doctor())->query();
@@ -21,9 +24,9 @@ class DoctorController extends Controller
     {
         $search = $request->get('q');
         $doctors = $this->model->with('specialist:id,name')
-            ->where('name', 'like', '%' . $search . "%")
-            ->orwhere('phone', 'like', '%' . $search . "%")
-            ->orwhere('email', 'like', '%' . $search . "%")
+            ->where('name', 'like', '%'.$search."%")
+            ->orwhere('phone', 'like', '%'.$search."%")
+            ->orwhere('email', 'like', '%'.$search."%")
             ->paginate();
         $doctors->appends(['q' => $search]);
         return view('admin.doctor.index', [
@@ -37,7 +40,7 @@ class DoctorController extends Controller
 
         $data = $this->model
             ->select('id', 'name')
-            ->where('specialist_id', '=',  $request->get('id'))
+            ->where('specialist_id', '=', $request->get('id'))
             ->get();
         return $this->successResponse($data);
     }
@@ -114,7 +117,7 @@ class DoctorController extends Controller
     {
         $doctors = $this->model
             ->with('specialist:id,name')
-            ->where('name', 'like', '%' . $request->key . '%')
+            ->where('name', 'like', '%'.$request->key.'%')
             ->paginate();
         $max_price = $doctors->max('price');
         $min_price = $doctors->min('price');
@@ -123,5 +126,35 @@ class DoctorController extends Controller
             'min_price' => $min_price,
             'max_price' => $max_price,
         ]);
+    }
+
+    public function get_free_doctor(Request $request)
+    {
+        $time_start = Carbon::parse('00:00:00')->format('H:i:s');
+        $time_end = Carbon::parse('23:59:59')->format('H:i:s');
+        if ($request->time_start) {
+            $time_start = Carbon::parse($request->time_start)->format('H:i:s');
+
+        }
+        if ($request->time_end) {
+            $time_end = Carbon::parse($request->time_end)->format('H:i:s');
+
+        }
+        $date = Carbon::parse($request->date)->format('Y-m-d');
+
+
+        $time_doctor= Time_doctor::query()
+            ->with('doctor')
+            ->whereRelation('time', function ($query) use ($date, $time_start, $time_end) {
+                $query->where('date', '=', $date)
+                    ->where('time_start', '>', $time_start)
+                    ->where('time_end', '<', $time_end);
+            })
+            ->whereDoesntHave('appointment',function ($query){
+                $query->where('status','=',2);
+            })
+            ->get()
+            ->pluck('doctor');
+        return $time_doctor;
     }
 }
