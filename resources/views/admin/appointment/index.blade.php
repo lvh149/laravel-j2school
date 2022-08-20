@@ -75,6 +75,7 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="status" value="2">
+                                                <input type="hidden" name="time_doctor_id" value="{{$appointment->time_doctor->id}}">
                                                 <button class="btn btn-success" style="margin-top: 25px">Duyệt</button>
                                             </form>
                                         </td>

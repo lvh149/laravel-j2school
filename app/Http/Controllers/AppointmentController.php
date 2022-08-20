@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Appointment\UpdateRequest;
 use App\Models\Doctor;
 use App\Models\Specialist;
 use App\Models\Appointment;
@@ -30,6 +31,7 @@ class AppointmentController extends Controller
             ->where('status', '=', $request->status)
             ->latest('updated_at')
             ->paginate();
+        $appointments->appends(['status'=>$request->status]);
         return view('admin.appointment.index', [
             'appointments' => $appointments,
         ]);
@@ -71,14 +73,12 @@ class AppointmentController extends Controller
             return $time_doctors;
     }
 
-    public function update(Request $request, Appointment $appointment)
+    public function update(UpdateRequest $request, Appointment $appointment)
     {
         $admin_id = Auth::id();
-        $appointment->fill($request->except([
-            '_token',
-            '_method',
-        ]));
+        $appointment->fill($request->validated());
         $appointment['admin_id'] = $admin_id;
         $appointment->save();
+        return redirect()->back();
     }
 }

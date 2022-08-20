@@ -30,7 +30,7 @@ class StoreRequest extends FormRequest
             'time_doctor_id' => [
                 'required',
             ],
-            'admiin_id' => [
+            'admin_id' => [
                 'required',
             ],
             'description' => [
