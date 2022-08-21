@@ -101,7 +101,7 @@ class TimeDoctorController extends Controller
         foreach ($doctor_id as $doctor) {
             foreach ($times as $each) {
                 $time_doctor = new Time_doctor();
-                $time = Time::query()->create($each);
+                $time = Time::query()->firstOrCreate($each);
                 $time_doctor['time_id'] = $time->id;
                 $time_doctor['doctor_id'] = $doctor;
                 $time_doctor->save();
