@@ -145,6 +145,7 @@ class DoctorController extends Controller
 
         $time_doctor= Time_doctor::query()
             ->with('doctor')
+            ->with('doctor.specialist')
             ->whereRelation('time', function ($query) use ($date, $time_start, $time_end) {
                 $query->where('date', '=', $date)
                     ->where('time_start', '>', $time_start)
@@ -154,7 +155,7 @@ class DoctorController extends Controller
                 $query->where('status','=',2);
             })
             ->get()
-            ->pluck('doctor');
+            ->pluck('doctor')->unique();
         return $time_doctor;
     }
 }
