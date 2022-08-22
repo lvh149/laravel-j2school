@@ -48,8 +48,7 @@
                     </form>
                     <h4 class="card-title">Lọc</h4>
                     {{-- Search Free And Price Doctor --}}
-                    <form action="" method="post">
-                        @csrf
+                    <div class="form-filter">
                         <div class="form-group">
                             <label style="font-weight: 600;">Tầm giá</label>
                             <div class="panel-body panel-refine">
@@ -62,62 +61,13 @@
                         </div>
                         <div class="form-group">
                             <label class="label-control" style="font-weight: 600;">Chọn ngày</label>
-                            <input class="form-control datepicker" type="date" name="date" value="{{ date('Y-m-d') }}">
+                            <input class="form-control datepicker" type="date" name="date"
+                                   value="{{ date('Y-m-d') }}">
                         </div>
-                        <div class="form-group">
-                            <label class="label-control" style="font-weight: 600;">Chọn giờ</label>
-                            @php
-                                //$now = date('H') + 7;
-                                $now = now();
-                            @endphp
-                            @if($now->format('H') <= 12)
-                                @php
-                                    $startHour = \Carbon\Carbon::createFromTime(8);
-                                    $endHour = $startHour->copy()->addHours(4);
-                                @endphp
-                                <label>Sáng</label>
-                                <br>
-                                @for($startHour; $startHour < $endHour; $startHour->addMinutes(15))
-                                    <label>
-                                        <input
-                                            name="time"
-                                            type="radio"
-                                            value="{{ $startHour->format('H:i') }}"
-                                            style="margin-left: 6px;"
-                                            @if($now->copy()->addHour() >= $startHour)
-                                                disabled
-                                            @endif
-                                        />
-                                        {{ $startHour->format('H:i') }}
-                                    </label>
-                                @endfor
-                            @endif
-                            @if($now->format('H') <= 17)
-                                @php
-                                    $startHour = \Carbon\Carbon::createFromTime(13);
-                                    $endHour = $startHour->copy()->addHours(4);
-                                @endphp
-                                <br>
-                                <label>Chiều</label>
-                                <br>
-                                @for($startHour; $startHour < $endHour; $startHour->addMinutes(15))
-                                    <label>
-                                        <input
-                                            name="time"
-                                            type="radio"
-                                            value="{{ $startHour->format('H:i') }}"
-                                            style="margin-left: 6px;"
-                                            @if($now->copy()->addHour()->format('H') >= $startHour->format('H') - 1)
-                                                disabled
-                                            @endif
-                                        />
-                                        {{ $startHour->format('H:i') }}
-                                    </label>
-                                @endfor
-                            @endif
-                        </div>
-                        <button type="submit" class="btn btn-rose col-md-12">Lọc</button>
-                    </form>
+                        <input name="time_start" type="time">
+                        <input name="time_end" type="time">
+                        <button class="btn-filter btn btn-square btn-rose col-md-12">Lọc</button>
+                    </div>
                 </div>
             </div>
             <div id="show_doctor" class="col-md-10">
@@ -127,14 +77,14 @@
                             <div class="card-image" style="height: auto;">
                                 <a href="{{ route('user.appointment.create', $doctor) }}">
                                     <img src="{{ $doctor->avatar }}"
-                                         style="width: 100%; height: 200px; object-fit: cover; object-position: top;">
+                                         style="width: 100%; height: 250px; object-fit: cover; object-position: center;">
                                 </a>
                                 <div class="colored-shadow"
                                      style="
                                     background-image: url('{{ $doctor->avatar }}');
                                     opacity: 1;
                                     width: 103%;
-                                    height: 200px;">
+                                    height: 255px;">
                                 </div>
                             </div>
                             <div class="card-content d-flex flex-column">
@@ -159,7 +109,8 @@
                                 </h3>
                                 <div class="">
                                     <a href="{{ route('user.appointment.create', $doctor) }}"
-                                       class="btn btn-rose btn-raised btn-square m-0 col-md-12" style="margin-bottom: 20px;">
+                                       class="btn btn-rose btn-raised btn-square m-0 col-md-12"
+                                       style="margin-bottom: 20px;">
                                         Đặt hẹn ngay
                                     </a>
                                 </div>
@@ -178,16 +129,68 @@
     <script>
         function getFreeDoctors() {
             let date = $('input[name="date"]').val();
-            let time = $('input[name="time"]').val();
+            let time_start = $('input[name="time_start"]').val();
+            let time_end = $('input[name="time_end"]').val();
             $.ajax({
-                url: "{{ route('doctor.get_free_doctor }}",
+                url: "{{ route('get_free_doctor') }}",
                 type: 'GET',
                 dataType: 'json',
-                data: { date, time },
-                success:function (response) {
+                data: {
+                    'date': date,
+                    'time_start': time_start,
+                    'time_end': time_end
+                },
+                success: function(response) {
                     let html = '';
-                    response.forEach(function (doctor) {
-
+                    response.forEach(function(doctor) {
+                        let url = "{{ route('user.appointment.create', ':id') }}";
+                        url = url.replace(':id', doctor['id']);
+                        html += `
+                                <div class="col-md-4">
+                                    <div class="card card-blog">
+                                        <div class="card-image" style="height: auto;">
+                                            <a href="${url}">
+                                                <img src="${ doctor['avatar'] }"
+                                                    style="width: 100%; height: 250px; object-fit: cover; object-position: center;">
+                                            </a>
+                                            <div class="colored-shadow"
+                                                style="
+                                                background-image: url('${ doctor['avatar'] }');
+                                                opacity: 1;
+                                                width: 103%;
+                                                height: 255px;">
+                                            </div>
+                                    </div>
+                                    <div class="card-content d-flex flex-column">
+                                        <div class="">
+                                            <h6 class="category text-rose">${ doctor['specialist']['name'] }</h6>
+                                        </div>
+                                        <div class="">
+                                            <h4 class="card-title">
+                                                <a href="${url}">${ doctor['name'] }</a>
+                                            </h4>
+                                        </div>
+                                        <div class="" style="display: flex; align-items: center; margin-bottom: 12px;">
+                                            <i class="material-icons" style="font-size: 14px; color: #e91e63;">email</i>
+                                            ${ doctor['email'] }
+                                        </div>
+                                        <div class="" style="display: flex; align-items: center; margin-bottom: 12px;">
+                                            <i class="material-icons" style="font-size: 14px; color: #e91e63;">phone</i>
+                                            ${ doctor['phone'] }
+                                        </div>
+                                        <h3 class="card-title" style="margin: 0;">
+                                            <span class="text-rose">${ doctor['price'] }</span> đ
+                                        </h3>
+                                        <div class="">
+                                            <a href="${url}"
+                                            class="btn btn-rose btn-raised btn-square m-0 col-md-12" style="margin-bottom: 20px;">
+                                                Đặt hẹn ngay
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
                     })
                     $('#show_doctor').html(html);
                 }
@@ -195,8 +198,11 @@
         }
 
         $(document).ready(function() {
-            getFreeDoctors();
-            $('input[name="date"], input[name="time"]').change(function() {
+            // $('input[name="date"], input[name="time_start"], input[name="time_end"]').change(function() {
+            //     getFreeDoctors();
+            // })
+
+            $('.btn-filter').click(function() {
                 getFreeDoctors();
             })
 
@@ -218,11 +224,13 @@
             var limitFieldMin = document.getElementById('price-left');
             var limitFieldMax = document.getElementById('price-right');
 
-            slider2.noUiSlider.on('update', function( values, handle ){
-                if (handle){
-                    limitFieldMax.innerHTML= $('#price-right').data('currency') + Math.round(values[handle]);
+            slider2.noUiSlider.on('update', function(values, handle) {
+                if (handle) {
+                    limitFieldMax.innerHTML = $('#price-right').data('currency') + Math.round(values[
+                        handle]);
                 } else {
-                    limitFieldMin.innerHTML= $('#price-left').data('currency') + Math.round(values[handle]);
+                    limitFieldMin.innerHTML = $('#price-left').data('currency') + Math.round(values[
+                        handle]);
                 }
             });
         });
