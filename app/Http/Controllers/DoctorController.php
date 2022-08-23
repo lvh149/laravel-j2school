@@ -95,21 +95,13 @@ class DoctorController extends Controller
         return redirect()->route('doctor.index');
     }
 
-    public function doctor(Request $request)
+    public function doctor()
     {
         $doctors = $this->model
-            ->when($request->has('price_sort'), function ($q) {
-                return $q->orderBy('price', request('price_sort'));
-            })
+            ->with('specialist:id,name')
             ->paginate(9);
-        $doctors->appends(['price_sort' => $request->get('price_sort')]);
-        $max_price = $doctors->max('price');
-        $min_price = $doctors->min('price');
         return view('user.doctor.index', [
             'doctors' => $doctors,
-            'price_sort' => request('price_sort'),
-            'min_price' => $min_price,
-            'max_price' => $max_price,
         ]);
     }
 
@@ -119,12 +111,19 @@ class DoctorController extends Controller
             ->with('specialist:id,name')
             ->where('name', 'like', '%'.$request->key.'%')
             ->paginate();
-        $max_price = $doctors->max('price');
-        $min_price = $doctors->min('price');
         return view('user.doctor.search', [
             'doctors' => $doctors,
-            'min_price' => $min_price,
-            'max_price' => $max_price,
+        ]);
+    }
+
+    public function order_by_price(Request $request) {
+        $doctors = $this->model
+            ->orderBy('price', request('orderValue'))
+            ->with('specialist:id,name')
+            ->paginate(9);
+        $doctors->appends(['orderValue' => $request->get('orderValue')]);
+        return view('user.doctor.doctor-pagination', [
+            'doctors' => $doctors,
         ]);
     }
 
