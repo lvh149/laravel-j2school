@@ -95,7 +95,7 @@ class DoctorController extends Controller
         return redirect()->route('doctor.index');
     }
 
-    public function doctor()
+    public function doctor(Request $request)
     {
         $doctors = $this->model
             ->with('specialist:id,name')
@@ -116,35 +116,15 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function order_by_price(Request $request) {
-        $doctors = $this->model
-            ->orderBy('price', request('orderValue'))
-            ->with('specialist:id,name')
-            ->paginate(9);
-        $doctors->appends(['orderValue' => $request->get('orderValue')]);
-        return view('user.doctor.doctor-pagination', [
-            'doctors' => $doctors,
-        ]);
-    }
 
     public function get_free_doctor(Request $request)
     {
-        $time_start = Carbon::parse('00:00:00')->format('H:i:s');
-        $time_end = Carbon::parse('23:59:59')->format('H:i:s');
-        if ($request->time_start) {
-            $time_start = Carbon::parse($request->time_start)->format('H:i:s');
-
-        }
-        if ($request->time_end) {
-            $time_end = Carbon::parse($request->time_end)->format('H:i:s');
-
-        }
+        $orderValue = $request->orderValue ?? 'desc';
+        $time_start = Carbon::parse($request->time_start ?? '00:00:00')->format('H:i:s');
+        $time_end = Carbon::parse($request->time_end ?? '23:59:59')->format('H:i:s');
         $date = Carbon::parse($request->date)->format('Y-m-d');
-
-
+        //get free time
         $time_doctor= Time_doctor::query()
-            ->with('doctor')
-            ->with('doctor.specialist')
             ->whereRelation('time', function ($query) use ($date, $time_start, $time_end) {
                 $query->where('date', '=', $date)
                     ->where('time_start', '>', $time_start)
@@ -154,7 +134,14 @@ class DoctorController extends Controller
                 $query->where('status','=',2);
             })
             ->get()
-            ->pluck('doctor')->unique();
-        return $time_doctor;
+            ->unique('doctor_id')
+            ->pluck('doctor_id')->toArray();
+        //get free doctor
+        $doctors = Doctor::query()->whereIn('id', $time_doctor)
+            ->orderBy('price',$orderValue)
+            ->paginate(9);
+        return view('user.doctor.doctor-pagination', [
+            'doctors' => $doctors,
+        ]);
     }
 }

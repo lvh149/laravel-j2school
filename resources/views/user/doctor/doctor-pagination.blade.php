@@ -46,7 +46,7 @@
             </div>
         </div>
     @endforeach
-    <div id="pagination">
+    <div class="pagination">
         {{ $doctors->links('user.paginator.index') }}
     </div>
 
