@@ -140,7 +140,12 @@ class DoctorController extends Controller
         $doctors = Doctor::query()->whereIn('id', $time_doctor)
             ->orderBy('price',$orderValue)
             ->paginate(9);
-        return view('user.doctor.doctor-pagination', [
+        if($request->ajax()){
+            return view('user.doctor.doctor-pagination', [
+                'doctors' => $doctors,
+            ]);
+        }
+        return view('user.doctor.index', [
             'doctors' => $doctors,
         ]);
     }

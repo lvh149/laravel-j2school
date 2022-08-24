@@ -157,7 +157,7 @@
 
                         },
                         complete: function (response) {
-                            var url = '{{url("user/doctor")}}';
+                            var url = '{{url("user/doctor/viewDoctor")}}';
                             var append = url.indexOf("?") == -1 ? "?" : "&";
                             var finalURL = url + append + $(".select-order-by-price").serialize()
                                 + "&" + $('input[name="date"]').serialize()
