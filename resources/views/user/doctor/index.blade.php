@@ -116,9 +116,6 @@
                 </div>
             </div>
         </div>
-        <div id="bs">
-
-        </div>
         @endsection
         @push('js')
             <script src="{{ asset('js/nouislider.min.js') }}" type="text/javascript"></script>
