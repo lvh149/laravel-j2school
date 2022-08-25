@@ -22,3 +22,10 @@ if (!function_exists('isAdmin')) {
         return user() && user()->role === UserRoleEnum::ADMIN;
     }
 }
+
+if (!function_exists('isDoctor')) {
+    function isDoctor(): bool
+    {
+        return user() && user()->role === UserRoleEnum::DOCTOR;
+    }
+}
