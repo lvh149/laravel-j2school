@@ -15,7 +15,7 @@
             <div class="collapse navbar-collapse" id="navigation-example">
                 <ul class="nav navbar-nav navbar-center">
                     <li>
-                        <a href="{{ route('user.homepage') }}">
+                        <a href="{{ route('user.home') }}">
                             Trang chủ
                         </a>
                     </li>
@@ -37,20 +37,23 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#pablo" class="btn btn-just-icon btn-simple btn-white">
-                            <i class="fa-brands fa-facebook-square"></i>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="material-icons">person</i>
+                            <p class="hidden-lg hidden-md">
+                                User
+                                <b class="caret"></b>
+                            </p>
                         </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ route('doctor.info', \Illuminate\Support\Facades\Auth::id()) }}">Thông tin cá nhân</a>
+                            </li>
+                            <li>
+                                <a href="{{route('doctor.logout')}}">Đăng xuất</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li>
-                        <a href="#pablo" class="btn btn-just-icon btn-simple btn-white">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#pablo" class="btn btn-just-icon btn-simple btn-white">
-                            <i class="fa-brands fa-linkedin"></i>
-                        </a>
-                    </li>
+                    <li class="separator hidden-lg hidden-md"></li>
                 </ul>
             </div>
         </div>
