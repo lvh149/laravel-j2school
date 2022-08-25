@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Route;
 
 // Route user
 route::group(['prefix' => 'user'], function () {
-    Route::get('login', [AuthController::class, 'userLogin'])->name('user.login');
-    Route::get('register', [AuthController::class, 'userRegister'])->name('user.register');
     Route::get('doctor', [DoctorController::class, 'doctor'])->name('doctor');
     Route::get('doctor/viewDoctor', [DoctorController::class, 'get_free_doctor'])->name('get_free_doctor');
     Route::get('doctor/orderByPrice', [DoctorController::class, 'order_by_price'])->name('order_by_price');
@@ -27,7 +25,16 @@ route::group(['prefix' => 'user'], function () {
 
 Route::get('/', function () {
     return view('user.layout.homepage');
-})->name('user.homepage');
+})->name('user.home');
+
+//Route doctor
+route::group(['prefix' => 'doctor'], function () {
+    Route::get('login', [AuthController::class, 'doctorLogin'])->name('doctor.login');
+    Route::get('logout', [AuthController::class, 'doctorLogout'])->name('doctor.logout');
+    Route::post('auth/logging', [AuthController::class, 'doctorLogging'])->name('doctor.logging');
+    Route::get('schedule', [DoctorController::class, 'workSchedule'])->name('doctor.schedule')->middleware('doctor');
+    Route::get('info/{doctor}', [DoctorController::class, 'info'])->name('doctor.info')->middleware('doctor');
+});
 
 //Route admin
 route::group(['prefix' => 'admin'], function () {
