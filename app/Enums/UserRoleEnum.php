@@ -8,12 +8,14 @@ final class UserRoleEnum extends Enum
 {
     public const SUPER_ADMIN = 0;
     public const ADMIN = 1;
+    public const DOCTOR = 2;
 
     public static function getRole(): array
     {
         return [
             'Quản lý'  => self::SUPER_ADMIN,
             'Nhân viên'  => self::ADMIN,
+            'Bác sĩ'  => self::DOCTOR,
         ];
     }
 
