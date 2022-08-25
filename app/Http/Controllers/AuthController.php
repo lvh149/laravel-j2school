@@ -3,21 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login()
+    public function doctorLogin()
     {
-        return view('auth.login');
+        return view('user.auth.login');
     }
 
 
-    public function register()
+//    public function userRegister()
+//    {
+//        return view('auth.register');
+//    }
+
+    public function doctorLogging(Request $request)
     {
-        return view('auth.register');
+        $password = Hash::make($request->get('password'));
+        $doctor = Doctor::query()
+            ->where('email', $request->get('email'))
+            ->first();
+//        if (!Hash::check($request->get('password'), $user->password)) {
+//            return redirect()->route("user.login")->with('error', 'Password Are Wrong.');
+//        }
+        if (is_null($doctor)) {
+            return redirect()->route("user.login");
+        }
+        Auth::login($doctor);
+        return redirect()->route("user.home");
+    }
+
+    public function doctorLogout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        return redirect()->route('doctor.login');
     }
 
 
