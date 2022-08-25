@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
-class Doctor extends Model
+class Doctor extends Model implements AuthenticatableContract
 {
+    use Authenticatable;
     use HasFactory;
 
     public $timestamps = false;
@@ -26,7 +29,7 @@ class Doctor extends Model
         'address',
         'degree',
         'experience',
-        'price',
+        'role',
     ];
 
     public function getGenderNameAttribute(): string
