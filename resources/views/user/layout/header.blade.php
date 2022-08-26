@@ -34,6 +34,11 @@
                              Bác sĩ
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('doctor.workSchedule', \Illuminate\Support\Facades\Auth::id()) }}">
+                            Xem lịch làm việc
+                        </a>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
