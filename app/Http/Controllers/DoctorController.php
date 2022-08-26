@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRoleEnum;
 use App\Http\Requests\Doctor\StoreRequest;
 use App\Http\Requests\Doctor\UpdateRequest;
+use App\Models\Admin;
 use App\Models\Doctor;
 use App\Models\Specialist;
 use App\Models\Time_doctor;
+use App\Models\Time;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
 class DoctorController extends Controller
 {
@@ -119,11 +123,15 @@ class DoctorController extends Controller
 
     public function get_free_doctor(Request $request)
     {
+        //Get order value
         $orderValue = $request->orderValue ?? 'desc';
+
+        // Get date and time
         $time_start = Carbon::parse($request->time_start ?? '00:00:00')->format('H:i:s');
         $time_end = Carbon::parse($request->time_end ?? '23:59:59')->format('H:i:s');
         $date = Carbon::parse($request->date)->format('Y-m-d');
-        //get free time
+
+        //Get free time
         $time_doctor= Time_doctor::query()
             ->whereRelation('time', function ($query) use ($date, $time_start, $time_end) {
                 $query->where('date', '=', $date)
@@ -136,7 +144,8 @@ class DoctorController extends Controller
             ->get()
             ->unique('doctor_id')
             ->pluck('doctor_id')->toArray();
-        //get free doctor
+
+        //Get free doctor
         $doctors = Doctor::query()->whereIn('id', $time_doctor)
             ->orderBy('price',$orderValue)
             ->paginate(9);
@@ -148,5 +157,30 @@ class DoctorController extends Controller
         return view('user.doctor.index', [
             'doctors' => $doctors,
         ]);
+    }
+
+    public function info($doctor) {
+        $doctor = Doctor::with('specialist')->find($doctor);
+        return view('user.doctor.info', [
+            'doctor' => $doctor,
+        ]);
+    }
+
+    public function workSchedule($doctor) {
+        return view('user.doctor.workSchedule');
+    }
+
+    public function get_doctor($doctor) {
+        $doctor = Time_doctor::query()
+            ->join('doctors', 'doctors.id', '=', 'time_doctors.doctor_id')
+            ->join('times', 'times.id', '=', 'time_doctors.id')
+            ->select([
+                'name as title',
+                time::raw("CONCAT(times.date,' ',times.time_start) AS start"),
+                time::raw("CONCAT(times.date,' ',times.time_end) AS end"),
+            ])
+            ->where('doctors.id', '=', $doctor)
+            ->get();
+        return response()->json($doctor);
     }
 }
