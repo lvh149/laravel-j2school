@@ -27,7 +27,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="{{ route('admin.employee.edit', \Illuminate\Support\Facades\Auth::id()) }}">Thông tin cá nhân</a>
+                            <a href="{{ route('admin.employee.edit',\Illuminate\Support\Facades\Auth::guard('admin')->id()) }}">Thông tin cá nhân</a>
                         </li>
                         <li>
                             <a href="{{route('admin.employee.editPassword')}}">Đổi mật khẩu</a>

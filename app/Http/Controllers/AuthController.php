@@ -64,7 +64,7 @@ class AuthController extends Controller
         if (is_null($admin)) {
             return redirect()->route("admin.login");
         }
-        Auth::login($admin);
+        Auth::guard('admin')->login($admin,false);
         return redirect()->route("admin.home");
     }
 
