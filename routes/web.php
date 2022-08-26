@@ -34,6 +34,8 @@ route::group(['prefix' => 'doctor'], function () {
     Route::post('auth/logging', [AuthController::class, 'doctorLogging'])->name('doctor.logging');
     Route::get('schedule', [DoctorController::class, 'workSchedule'])->name('doctor.schedule')->middleware('doctor');
     Route::get('info/{doctor}', [DoctorController::class, 'info'])->name('doctor.info')->middleware('doctor');
+    Route::get('workSchedule/{doctor}', [DoctorController::class, 'workSchedule'])->name('doctor.workSchedule')->middleware('doctor');
+    Route::get('doctorSchedule/{doctor}', [DoctorController::class, 'get_doctor'])->name('get_doctor')->middleware('doctor');
 });
 
 //Route admin
