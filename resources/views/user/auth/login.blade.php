@@ -26,7 +26,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href=" {{route('home')}} ">Clinic</a>
+            <a class="navbar-brand" href=" {{route('user.home')}} ">Clinic</a>
         </div>
 
     </div>
@@ -38,7 +38,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                        <form method="#" action="#">
+                        <form method="post" action="{{ route('doctor.logging') }}">
+                            @csrf
                             <div class="card card-login">
                                 <div class="card-header text-center" data-background-color="rose">
                                     <h4 class="card-title">Login</h4>
@@ -55,23 +56,23 @@
                                     </div>
                                 </div>
 
-                                <div class="card-content">
-                                    <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="material-icons">face</i>
-                                            </span>
-                                        <div class="form-group label-floating is-empty">
-                                            <label class="control-label">First Name</label>
-                                            <input type="text" class="form-control">
-                                            <span class="material-input"></span></div>
+                                {{-- Catch error --}}
+                                @if (session()->has('error'))
+                                    <div class="col-12">
+                                        <div class="alert alert-danger">
+                                            {{ session()->get('error') }}
+                                        </div>
                                     </div>
+                                @endif
+
+                                <div class="card-content">
                                     <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">email</i>
                                             </span>
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label">Email address</label>
-                                            <input type="email" class="form-control">
+                                            <input type="email" class="form-control" name="email">
                                             <span class="material-input"></span></div>
                                     </div>
                                     <div class="input-group">
@@ -80,7 +81,7 @@
                                             </span>
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label">Password</label>
-                                            <input type="password" class="form-control">
+                                            <input type="password" class="form-control" name="password">
                                             <span class="material-input"></span></div>
                                     </div>
                                 </div>

@@ -35,7 +35,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('doctor.workSchedule', \Illuminate\Support\Facades\Auth::id()) }}">
+                        <a href="{{ route('doctor.workSchedule')}}">
                             Xem lịch làm việc
                         </a>
                     </li>
@@ -51,7 +51,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="{{ route('doctor.info', \Illuminate\Support\Facades\Auth::id()) }}">Thông tin cá nhân</a>
+                                <a href="{{ route('doctor.info')}}">Thông tin cá nhân</a>
                             </li>
                             <li>
                                 <a href="{{route('doctor.logout')}}">Đăng xuất</a>
