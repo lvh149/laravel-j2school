@@ -29,6 +29,7 @@ class Doctor extends Model implements AuthenticatableContract
         'address',
         'degree',
         'experience',
+        'price',
     ];
 
     public function getGenderNameAttribute(): string
