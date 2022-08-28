@@ -8,6 +8,7 @@ if (!function_exists('user')) {
         return auth()->guard('web')->user();
     }
 }
+
 if (!function_exists('admin')) {
     function admin(): ?object
     {
@@ -32,6 +33,6 @@ if (!function_exists('isAdmin')) {
 if (!function_exists('isDoctor')) {
     function isDoctor(): bool
     {
-        return user() && user()->role === UserRoleEnum::DOCTOR;
+        return auth()->guard('doctor')->check();
     }
 }
