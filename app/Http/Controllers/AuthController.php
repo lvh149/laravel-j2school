@@ -33,7 +33,7 @@ class AuthController extends Controller
         if (is_null($doctor)) {
             return redirect()->route("user.login");
         }
-        Auth::login($doctor);
+        Auth::guard('doctor')->login($doctor);
         return redirect()->route("user.home");
     }
 
@@ -64,7 +64,7 @@ class AuthController extends Controller
         if (is_null($admin)) {
             return redirect()->route("admin.login");
         }
-        Auth::guard('admin')->login($admin,false);
+        Auth::login($admin);
         return redirect()->route("admin.home");
     }
 

@@ -10,8 +10,10 @@ use App\Models\Doctor;
 use App\Models\Specialist;
 use App\Models\Time_doctor;
 use App\Models\Time;
+use App\Models\Config;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
@@ -101,25 +103,56 @@ class DoctorController extends Controller
 
     public function doctor(Request $request)
     {
+        $configs = Config::getAndCache(0);
+        $min_price = $request->get('min_price', $configs['filter_min_price']);
+        $max_price = $request->get('max_price', $configs['filter_max_price']);
+
         $doctors = $this->model
             ->with('specialist:id,name')
             ->paginate(9);
+
+        $specialists = Specialist::query()->get();
+
         return view('user.doctor.index', [
             'doctors' => $doctors,
+            'specialists' => $specialists,
+            'configs' => $configs,
+            'min_price' => $min_price,
+            'max_price' => $max_price,
         ]);
     }
 
     public function search(Request $request)
     {
-        $doctors = $this->model
-            ->with('specialist:id,name')
-            ->where('name', 'like', '%'.$request->key.'%')
-            ->paginate();
-        return view('user.doctor.search', [
+        $doctors= Doctor::query()
+            ->orwhere("name","like","%".$request->name."%")
+            ->paginate(9);
+
+        $specialists = Specialist::query()->get();
+
+        $configs = Config::getAndCache(0);
+        $min_price = $request->get('min_price', $configs['filter_min_price']);
+        $max_price = $request->get('max_price', $configs['filter_max_price']);
+
+        //Check request ajax
+        if($request->ajax()){
+            return view('user.doctor.doctor-pagination', [
+                'doctors' => $doctors,
+                'specialists' => $specialists,
+                'min_price' => $min_price,
+                'max_price' => $max_price,
+                'configs' => $configs,
+            ]);
+        }
+
+        return view('user.doctor.index', [
             'doctors' => $doctors,
+            'specialists' => $specialists,
+            'min_price' => $min_price,
+            'max_price' => $max_price,
+            'configs' => $configs,
         ]);
     }
-
 
     public function get_free_doctor(Request $request)
     {
@@ -146,31 +179,53 @@ class DoctorController extends Controller
             ->pluck('doctor_id')->toArray();
 
         //Get free doctor
-        $doctors = Doctor::query()->whereIn('id', $time_doctor)
+        $doctors = Doctor::query()
+            ->whereIn('id', $time_doctor)
+            ->whereBetween('price', [$request->min_price, $request->max_price])
+            ->where('specialist_id', '=', $request->specialist)
             ->orderBy('price',$orderValue)
             ->paginate(9);
+
+        $specialists = Specialist::query()->get();
+
+        $configs = Config::getAndCache(0);
+        $min_price = $request->get('min_price', $configs['filter_min_price']);
+        $max_price = $request->get('max_price', $configs['filter_max_price']);
+
+        //Check request ajax
         if($request->ajax()){
             return view('user.doctor.doctor-pagination', [
                 'doctors' => $doctors,
+                'specialists' => $specialists,
+                'min_price' => $min_price,
+                'max_price' => $max_price,
+                'configs' => $configs,
             ]);
         }
+
         return view('user.doctor.index', [
             'doctors' => $doctors,
+            'specialists' => $specialists,
+            'min_price' => $min_price,
+            'max_price' => $max_price,
+            'configs' => $configs,
         ]);
     }
 
-    public function info($doctor) {
-        $doctor = Doctor::with('specialist')->find($doctor);
+    public function info() {
+        $doctor_id = Auth::guard('doctor')->id();
+        $doctor = Doctor::with('specialist')->find($doctor_id);
         return view('user.doctor.info', [
             'doctor' => $doctor,
         ]);
     }
 
-    public function workSchedule($doctor) {
+    public function workSchedule() {
         return view('user.doctor.workSchedule');
     }
 
-    public function get_doctor($doctor) {
+    public function get_doctor() {
+        $doctor_id = Auth::guard('doctor')->id();
         $doctor = Time_doctor::query()
             ->join('doctors', 'doctors.id', '=', 'time_doctors.doctor_id')
             ->join('times', 'times.id', '=', 'time_doctors.id')
@@ -179,7 +234,7 @@ class DoctorController extends Controller
                 time::raw("CONCAT(times.date,' ',times.time_start) AS start"),
                 time::raw("CONCAT(times.date,' ',times.time_end) AS end"),
             ])
-            ->where('doctors.id', '=', $doctor)
+            ->where('doctors.id', '=', $doctor_id)
             ->get();
         return response()->json($doctor);
     }
