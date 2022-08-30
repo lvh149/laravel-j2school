@@ -58,11 +58,11 @@ class AuthController extends Controller
         $admin = Admin::query()
             ->where('email', $request->get('email'))
             ->first();
-        if (!Hash::check($request->get('password'), $admin->password)) {
-            return redirect()->route("admin.login")->with('error', 'Email-Address And Password Are Wrong.');
-        }
         if (is_null($admin)) {
             return redirect()->route("admin.login");
+        }
+        if (!Hash::check($request->get('password'), $admin->password)) {
+            return redirect()->route("admin.login")->with('error', 'Email-Address And Password Are Wrong.');
         }
         Auth::guard('admin')->login($admin);
         return redirect()->route("admin.home");

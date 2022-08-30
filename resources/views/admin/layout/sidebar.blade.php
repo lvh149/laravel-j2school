@@ -69,7 +69,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
             <li>
-                <a href="{{route('admin.time_doctor.index')}}">
+                <a href="{{route('admin.timework.workSchedule')}}">
                     <i class="material-icons">event_available</i>
                     <p> Quản lý lịch làm việc </p>
                 </a>
