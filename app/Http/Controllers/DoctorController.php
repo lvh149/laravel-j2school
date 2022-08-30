@@ -14,6 +14,7 @@ use App\Models\Config;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
@@ -99,6 +100,12 @@ class DoctorController extends Controller
     {
         $doctor->delete();
         return redirect()->route('doctor.index');
+    }
+
+    public function resetPassword(Doctor $doctor)
+    {
+        $doctor['password'] = Hash::make(123456);
+        $doctor->save();
     }
 
     public function doctor(Request $request)
