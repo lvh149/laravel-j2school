@@ -45,7 +45,7 @@
         </div>
     </div>
 @endforeach
-<div class="pagination">
+<div class="pagination pull-right">
     {{ $doctors->links('user.paginator.index') }}
 </div>
 

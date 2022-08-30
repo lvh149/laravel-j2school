@@ -34,11 +34,13 @@
                              Bác sĩ
                         </a>
                     </li>
+                    @if(auth()->guard('doctor')->check())
                     <li>
                         <a href="{{ route('doctor.workSchedule')}}">
                             Xem lịch làm việc
                         </a>
                     </li>
+                    @endif
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
@@ -50,12 +52,18 @@
                             </p>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a href="{{ route('doctor.info')}}">Thông tin cá nhân</a>
-                            </li>
-                            <li>
-                                <a href="{{route('doctor.logout')}}">Đăng xuất</a>
-                            </li>
+                            @if(auth()->guard('doctor')->check())
+                                <li>
+                                    <a href="{{ route('doctor.info')}}">Thông tin cá nhân</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('doctor.logout')}}">Đăng xuất</a>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{route('doctor.login')}}">Đăng nhập</a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                     <li class="separator hidden-lg hidden-md"></li>

@@ -3,7 +3,7 @@
         <div class="profile-content">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="profile has-feedback" style="padding-top: 70px;">
+                    <div class="profile has-feedback" style="padding-top: 70px; margin-top: 70px;">
                         <div class="avatar">
                             <img src="{{ $doctor->avatar }}" alt="Circle Image"
                                  class="img-circle img-responsive img-raised"

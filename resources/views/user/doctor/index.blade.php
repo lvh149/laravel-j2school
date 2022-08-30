@@ -134,6 +134,7 @@
                     {{ $doctors->links('user.paginator.index') }}
                 </div>
             </div>
+            <div id="result"></div>
         </div>
         @endsection
         @push('js')
@@ -233,7 +234,7 @@
                         searchDoctor(1);
                     })
 
-                    $(document).on('keypress',function(e) {
+                    $('input[name="name"]').on('keypress',function(e) {
                         if(e.which == 13) {
                             searchDoctor(1);
                         }

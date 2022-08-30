@@ -5,16 +5,27 @@
         <h2 class="title" style="margin-top:0; margin-bottom: 0;">Đăng kí thông tin</h2>
         <form action="{{ route('user.customer.store') }}" method="post" enctype="multipart/form" class="col-lg-8 col-sm-8">
             @csrf
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="row">
                 <div class="col-lg-6 col-sm-6">
                     <div class="form-group is-empty">
-                        <input type="text" name="name_booking" placeholder="Tên người đăng kí" class="form-control">
+                        <input type="text" name="name_booking" placeholder="Tên người đăng kí" class="form-control" value="{{ old('name_booking') }}">
                         <span class="material-input"></span>
                     </div>
                 </div>
                 <div class="col-lg-6 col-sm-6">
                     <div class="form-group is-empty">
-                        <input type="text" name="phone_booking" placeholder="Số điện thoại" class="form-control">
+                        <input type="text" name="phone_booking" placeholder="Số điện thoại" class="form-control" value="{{ old('phone_booking') }}">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -23,13 +34,13 @@
             <div class="row">
                 <div class="col-lg-6 col-sm-6">
                     <div class="form-group is-empty">
-                        <input type="text" name="name_patient" placeholder="Tên người khám" class="form-control">
+                        <input type="text" name="name_patient" placeholder="Tên bệnh nhân" class="form-control" value="{{ old('name_patient') }}">
                         <span class="material-input"></span>
                     </div>
                 </div>
                 <div class="col-lg-6 col-sm-6">
                     <div class="form-group is-empty">
-                        <input type="text" name="phone_patient" placeholder="Số điện thoại" class="form-control">
+                        <input type="text" name="phone_patient" placeholder="Số điện thoại" class="form-control" value="{{ old('phone_patient') }}">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -38,7 +49,7 @@
             <div class="row">
                 <div class="col-lg-12 col-sm-12">
                     <div class="form-group is-empty">
-                        <input type="email" name="email" placeholder="Email" class="form-control">
+                        <input type="email" name="email" placeholder="Email" class="form-control" value="{{ old('email') }}">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -74,7 +85,7 @@
                 <div class="col-lg-6 col-sm-6">
                     <div class="form-group">
                         <label class="pull-left">Ngày sinh</label>
-                        <input type="date" name="birth_date" class="form-control datepicker" value="10/10/2016">
+                        <input type="date" name="birth_date" class="form-control datepicker" value="" value="{{ old('birth_date') }}">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -83,11 +94,9 @@
             <div class="row" style="margin-top: 40px;">
                 <div class="col-lg-12 col-sm-12">
                     <label class="pull-left">Tình trạng sức khỏe</label>
-                    <textarea name="description" class="form-control" rows="5"></textarea>
+                    <textarea name="description" class="form-control" rows="5" value="{{ old('description') }}"></textarea>
                 </div>
             </div>
-
-
 
             <input type="hidden" name="time_doctor_id" value="{{ $time_doctor->id }}">
             <input type="hidden" name="price" value="{{ $time_doctor->doctor->price }}">
@@ -97,5 +106,3 @@
     </div>
     </div>
 @endsection
-@push('js')
-@endpush

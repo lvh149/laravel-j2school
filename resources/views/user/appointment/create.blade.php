@@ -77,16 +77,6 @@
             <h2 class="title" style="margin-top:0; margin-bottom: 0;">Đăng kí lịch hẹn</h2>
             <input type="date" id="date">
             <div class="row" id="time">
-                {{--                @foreach ($time_doctors as $time_doctor)--}}
-                {{--                    <div class="col-md-4">--}}
-                {{--                        <a href={{ route('user.customer.create', $time_doctor) }}--}}
-                {{--                            class="btn btn-primary btn-square btn-default btn-block">--}}
-                {{--                            <i class="material-icons">assignment</i>--}}
-                {{--                            {{ $time_doctor->time->time_start . '-' . $time_doctor->time->time_end }}--}}
-                {{--                            <div class="ripple-container"></div>--}}
-                {{--                        </a>--}}
-                {{--                    </div>--}}
-                {{--                @endforeach--}}
             </div>
         </div>
     </div>
@@ -113,18 +103,7 @@
                         let status = each.status;
                         let url = "{{ route('user.customer.create', ':id') }}";
                         url = url.replace(':id', each.id);
-                        if(status == 1)
-                        {
-                            targetDiv.innerHTML += `
-                            <div class="col-md-4">
-                                <a href=` + url + ` class="btn-select-time btn btn-warning btn-square btn-block">
-                                    <i class="material-icons">assignment</i>`
-                                + each.time_start + '-' + each.time_end +
-                                `<div class="ripple-container"></div>
-                                </a>
-                            </div>`
-                        }
-                        else if(status == 2)
+                         if(status == 2)
                         {
                             targetDiv.innerHTML += `
                             <div class="col-md-4">
