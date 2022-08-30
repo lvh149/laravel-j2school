@@ -24,14 +24,14 @@ class TimeDoctorController extends Controller
     {
         $search = $request->get('q');
         $date = $request->get('date');
-        $time_doctors= $this->model
+        $time_doctors = $this->model
             ->with('appointment:time_doctor_id,status,price')
             ->with('doctor:id,name')
             ->with('time:id,date,time_start,time_end')
             ->with('doctor.specialist:id,name')
             ->orderBy('id')
-            ->whereRelation('doctor','name','like', '%'.$search."%")
-            ->whereRelation('time','date','like','%'.$date."%")
+            ->whereRelation('doctor', 'name', 'like', '%'.$search."%")
+            ->whereRelation('time', 'date', 'like', '%'.$date."%")
             ->paginate();
         $time_doctors->appends(['q' => $search]);
         $time_doctors->appends(['date' => $date]);
@@ -134,6 +134,41 @@ class TimeDoctorController extends Controller
     public function destroy(Time_doctor $time_doctor)
     {
         $time_doctor->delete();
+    }
+
+    public function workSchedule()
+    {
+        $specialists = Specialist::query()->get();
+        return view('admin.timework.workSchedule', [
+            'specialists' => $specialists,
+        ]);
+    }
+
+    public function get_schedule(Request $request)
+    {
+        $doctor_id = $request->doctor_id;
+        $specialist_id = $request->specialist_id;
+
+        $doctor = Time_doctor::query()
+            ->join('doctors', 'doctor_id', '=', 'doctors.id')
+            ->join('specialists', 'doctors.specialist_id', '=', 'specialists.id')
+            ->join('times', 'times.id', '=', 'time_doctors.time_id')
+            ->leftJoin('appointments', 'appointments.time_doctor_id', '=', 'time_doctors.id')
+            ->when($request->has('doctor_id'), function ($doctor) use ($doctor_id) {
+                $doctor->whereIn('doctor_id', $doctor_id);
+            })
+            ->when($request->has('specialist_id'), function ($doctor) use ($specialist_id) {
+                $doctor->where('doctors.specialist_id', '=',$specialist_id);
+            })
+            ->select([
+                'doctors.name as title',
+                time::raw("CONCAT(times.date,' ',times.time_start) AS start"),
+                time::raw("CONCAT(times.date,' ',times.time_end) AS end"),
+                'status',
+            ])
+
+            ->get();
+        return response()->json($doctor);
     }
 
 

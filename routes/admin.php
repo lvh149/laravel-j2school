@@ -21,6 +21,7 @@ Route::resource('/appointment', AppointmentController::class)->except([
 Route::resource('/doctor', DoctorController::class)->except([
     'show',
 ]);
+Route::PUT('/doctor/resetPassword/{doctor}',[DoctorController::class,'resetPassword'])->name('doctor.resetPassword');
 Route::resource('/customer', CustomerController::class)->except([
     'show',
 ]);
@@ -28,6 +29,8 @@ Route::get('/customer/view/{customer}',[CustomerController::class,'viewAppointme
 Route::resource('/time_doctor', TimeDoctorController::class)->except([
     'show',
 ]);
+Route::get('workSchedule', [TimeDoctorController::class, 'workSchedule'])->name('timework.workSchedule');
+Route::get('Schedule', [TimeDoctorController::class, 'get_schedule'])->name('get_schedule');
 Route::middleware('superadmin')->group(function() {
     Route::resource('/employee', AdminController::class)->except([
         'show',
