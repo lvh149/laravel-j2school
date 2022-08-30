@@ -39,9 +39,9 @@ class AuthController extends Controller
 
     public function doctorLogout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('doctor')->logout();
 
-        $request->session()->invalidate();
+//        $request->session()->invalidate();
 
         return redirect()->route('doctor.login');
     }
@@ -64,15 +64,15 @@ class AuthController extends Controller
         if (is_null($admin)) {
             return redirect()->route("admin.login");
         }
-        Auth::login($admin);
+        Auth::guard('admin')->login($admin);
         return redirect()->route("admin.home");
     }
 
     public function adminLogout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
 
-        $request->session()->invalidate();
+//        $request->session()->invalidate();
 
         return redirect()->route('admin.login');
     }

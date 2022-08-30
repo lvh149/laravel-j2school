@@ -99,7 +99,7 @@ class AdminController extends Controller
         }
 
         #Update the new Password
-        Admin::find(auth()->user()->id)->update([
+        Admin::find(auth()->guard('admin')->user()->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
 
