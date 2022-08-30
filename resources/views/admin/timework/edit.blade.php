@@ -9,57 +9,57 @@
                 <form method="post" action="{{route('admin.time_doctor.update',$time_doctor)}}">
                     @csrf
                     @method('PUT')
-                <div class="card-content">
-                    <div id="add_row">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="label-control">Tên Bác sĩ</label>
-                                <input type="text" value="{{$time_doctor->doctor->name}}" readonly="readonly" />
+                    <div class="card-content">
+                        <div id="add_row">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="label-control">Tên Bác sĩ</label>
+                                    <input type="text" value="{{$time_doctor->doctor->name}}" readonly="readonly"/>
+                                </div>
                             </div>
-                        </div>
-                        <br><br>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="card">
-                                    <div class="card-content">
-                                        <h4 class="card-title">Chọn ngày</h4>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control datepicker" name="date"
-                                                   value="{{$time_doctor->time->dateformat}}"/>
+                            <br><br>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <h4 class="card-title">Chọn ngày</h4>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" name="date"
+                                                       value="{{$time_doctor->time->dateformat}}"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card">
-                                    <div class="card-content">
-                                        <h4 class="card-title">Chọn giờ bắt đầu</h4>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control timepicker" name="time_start"
-                                                   value="{{$time_doctor->time->time_start}}"/>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <h4 class="card-title">Chọn giờ bắt đầu</h4>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control timepicker" name="time_start"
+                                                       value="{{$time_doctor->time->time_start}}"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card">
-                                    <div class="card-content">
-                                        <h4 class="card-title">Chọn giờ kết thúc</h4>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control timepicker" name="time_end"
-                                                   value="{{$time_doctor->time->time_end}}"/>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <h4 class="card-title">Chọn giờ kết thúc</h4>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control timepicker" name="time_end"
+                                                       value="{{$time_doctor->time->time_end}}"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <input type="hidden" name="time_id" value="{{$time_doctor->time_id}}">
                             </div>
-                            <input type="hidden" name="time_id" value="{{$time_doctor->time_id}}">
                         </div>
                     </div>
-                </div>
-                <br><br>
-                <div class="card-footer text-center">
-                    <button type="submit" class="btn btn-rose btn-fill">Cập nhật</button>
-                </div>
+                    <br><br>
+                    <div class="card-footer text-center">
+                        <button type="submit" class="btn btn-rose btn-fill">Cập nhật</button>
+                    </div>
                     </form>
                 </div>
             </div>

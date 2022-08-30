@@ -26,11 +26,15 @@ Route::resource('/customer', CustomerController::class)->except([
     'show',
 ]);
 Route::get('/customer/view/{customer}',[CustomerController::class,'viewAppointment'])->name('customer.viewAppointment');
-Route::resource('/time_doctor', TimeDoctorController::class)->except([
-    'show',
-]);
-Route::get('workSchedule', [TimeDoctorController::class, 'workSchedule'])->name('timework.workSchedule');
+Route::get('/time_doctor',[TimeDoctorController::class,'index'])->name('time_doctor.index');
+Route::get('/time_doctor/create',[TimeDoctorController::class,'create'])->name('time_doctor.create');
+Route::post('/time_doctor/store',[TimeDoctorController::class,'store'])->name('time_doctor.store');
+Route::get('/time_doctor/edit/{time_doctor}',[TimeDoctorController::class,'edit'])->name('time_doctor.edit');
+Route::PUT('/time_doctor/update/{time_doctor_id?}',[TimeDoctorController::class,'update'])->name('time_doctor.update');
+Route::delete('/time_doctor/delete/{time_doctor?}',[TimeDoctorController::class,'destroy'])->name('time_doctor.destroy');
+
 Route::get('Schedule', [TimeDoctorController::class, 'get_schedule'])->name('get_schedule');
+Route::any('workSchedule', [TimeDoctorController::class, 'workSchedule'])->name('timework.workSchedule');
 Route::middleware('superadmin')->group(function() {
     Route::resource('/employee', AdminController::class)->except([
         'show',

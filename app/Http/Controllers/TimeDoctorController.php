@@ -119,21 +119,22 @@ class TimeDoctorController extends Controller
 
     public function update(Request $request)
     {
-        $object = Time::query()->find($request->time_id);
-        $object->fill($request->except([
-            '_token',
-            '_method',
-        ])
-        );
-        $object['date'] = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
-        $object['time_start'] = Carbon::parse($request->time_start)->format('H:i');
-        $object['time_end'] = Carbon::parse($request->time_end)->format('H:i');
-        $object->save();
+        $time_doctor = Time_doctor::query()->find($request->time_doctor_id);
+        $arr = [
+            'date' => $request->date,
+            'time_start' => $request->time_start,
+            'time_end' => $request->time_end,
+        ];
+        $time = Time::query()->firstOrCreate($arr);
+        $time_doctor['time_id'] = $time->id;
+        $time_doctor->save();
+
+
     }
 
-    public function destroy(Time_doctor $time_doctor)
+    public function destroy(Request $request)
     {
-        $time_doctor->delete();
+        time_doctor::query()->find($request->time_doctor_id)->delete();
     }
 
     public function workSchedule()
@@ -157,7 +158,7 @@ class TimeDoctorController extends Controller
             ->when($request->has('doctor_id'), function ($doctor) use ($doctor_id) {
                 $doctor->whereIn('doctor_id', $doctor_id);
             })
-            ->when($request->has('specialist_id'), function ($doctor) use ($specialist_id) {
+            ->when($specialist_id!="", function ($doctor) use ($specialist_id) {
                 $doctor->where('doctors.specialist_id', '=',$specialist_id);
             })
             ->select([
@@ -165,6 +166,10 @@ class TimeDoctorController extends Controller
                 time::raw("CONCAT(times.date,' ',times.time_start) AS start"),
                 time::raw("CONCAT(times.date,' ',times.time_end) AS end"),
                 'status',
+                'time_doctors.id as time_doctor',
+                'times.date as time_date',
+                'times.time_start as time_start',
+                'times.time_end as time_end',
             ])
 
             ->get();
