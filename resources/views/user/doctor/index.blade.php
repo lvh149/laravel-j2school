@@ -148,7 +148,7 @@
                     var date = window.location.href.indexOf("date=") === -1 ? $('input[name="date"]').val() : window.location.href.split('date=').pop().split('&')[0];
                     var time_start = window.location.href.indexOf("time_start=") === -1 ? "08:00:00" : window.location.href.split('time_start=').pop().split('&')[0].replaceAll('%3A',':');
                     var time_end = window.location.href.indexOf("time_end=") === -1 ? "20:00:00" : window.location.href.split('time_end=').pop().split('&')[0].replaceAll('%3A',':');
-                    var specialist = window.location.href.indexOf("specialist=") === -1 ? $("#select-specialist").val() : window.location.href.split('time_end=').pop().split('&')[0].replaceAll('%3A',':');
+                    var specialist = window.location.href.indexOf("specialist=") === -1 ? "" : window.location.href.split('time_end=').pop().split('&')[0].replaceAll('%3A',':');
                     var name = window.location.href.indexOf("name=") === -1 ? $('input[name="name"]').val() : window.location.href.split('name=').pop().split('&')[0];
 
                     $('.select-order-by-price').val(orderValue).change();
