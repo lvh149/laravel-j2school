@@ -165,6 +165,8 @@ class DoctorController extends Controller
     {
         //Get order value
         $orderValue = $request->orderValue ?? 'desc';
+        //Get specialist value
+        $specialist = $request->get('specialist');
 
         // Get date and time
         $time_start = Carbon::parse($request->time_start ?? '00:00:00')->format('H:i:s');
@@ -186,12 +188,17 @@ class DoctorController extends Controller
             ->pluck('doctor_id')->toArray();
 
         //Get free doctor
-        $doctors = Doctor::query()
-            ->whereIn('id', $time_doctor)
-            ->whereBetween('price', [$request->min_price, $request->max_price])
-            ->where('specialist_id', '=', $request->specialist)
+        $doctors = $this->model->whereIn('id', $time_doctor)
+            ->whereBetween('price', [$request->min_price, $request->max_price]);
+
+        if(!empty($specialist)) {
+            $doctors->where('specialist_id', '=', $request->specialist);
+        }
+
+        $doctors = $this->model
             ->orderBy('price',$orderValue)
             ->paginate(9);
+
 
         $specialists = Specialist::query()->get();
 
@@ -235,7 +242,7 @@ class DoctorController extends Controller
         $doctor_id = Auth::guard('doctor')->id();
         $doctor = Time_doctor::query()
             ->join('doctors', 'doctors.id', '=', 'time_doctors.doctor_id')
-            ->join('times', 'times.id', '=', 'time_doctors.id')
+            ->join('times', 'times.id', '=', 'time_doctors.time_id')
             ->select([
                 'name as title',
                 time::raw("CONCAT(times.date,' ',times.time_start) AS start"),
