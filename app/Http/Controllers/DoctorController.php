@@ -243,10 +243,19 @@ class DoctorController extends Controller
         $doctor = Time_doctor::query()
             ->join('doctors', 'doctors.id', '=', 'time_doctors.doctor_id')
             ->join('times', 'times.id', '=', 'time_doctors.time_id')
+            ->leftjoin('appointments', 'appointments.time_doctor_id', '=', 'time_doctors.id')
+            ->leftjoin('customers', 'customers.id', '=', 'appointments.customer_id')
             ->select([
                 'name as title',
                 time::raw("CONCAT(times.date,' ',times.time_start) AS start"),
                 time::raw("CONCAT(times.date,' ',times.time_end) AS end"),
+                'customers.name_patient',
+                'customers.phone_patient',
+                'customers.email',
+                'customers.gender',
+                'customers.birth_date',
+                'appointments.description',
+                'appointments.status',
             ])
             ->where('doctors.id', '=', $doctor_id)
             ->get();
