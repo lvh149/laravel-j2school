@@ -7,11 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AppointmentApprovedNotificationMail extends Notification
+class AppointmentApprovedNotificationMail extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    private $customer;
+    protected $customer;
 
     public function __construct($customer)
     {
