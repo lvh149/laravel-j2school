@@ -54,7 +54,6 @@ class AppointmentController extends Controller
             'specialists' => $specialists,
             'time_doctors' => $time_doctors,
         ]);
-
     }
 
     public function selectTime(Request $request)
@@ -64,7 +63,7 @@ class AppointmentController extends Controller
                 ->join('times', 'time_doctors.time_id', '=', 'times.id')
                 ->where('date', '=', $request->date)
                 ->leftJoin('appointments', 'time_doctors.id', '=', 'appointments.time_doctor_id')
-                ->select('time_doctors.id','status', 'time_start', 'time_end')
+                ->select('time_doctors.id','status', 'date', 'time_start', 'time_end')
                 ->orderBy('time_start')
                 ->get();
 
