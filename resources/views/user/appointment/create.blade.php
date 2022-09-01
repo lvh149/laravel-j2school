@@ -75,7 +75,7 @@
         </div>
         <div class="col-sm-7 col-sm-offset-1 text-center" style="margin: 0">
             <h2 class="title" style="margin-top:0; margin-bottom: 0;">Đăng kí lịch hẹn</h2>
-            <input type="date" id="date">
+            <input type="date" id="date" value="">
             <div class="row" id="time">
             </div>
         </div>

@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="row text-center">
-            <a href="{{ route('doctor') }}" class="btn btn-primary btn-round">
+            <a href="{{ route('doctor') }}" class="btn btn-rose btn-round">
                 <i class="material-icons">explore</i> Quay lại
             </a>
         </div>
