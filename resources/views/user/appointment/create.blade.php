@@ -75,13 +75,14 @@
         </div>
         <div class="col-sm-7 col-sm-offset-1 text-center" style="margin: 0">
             <h2 class="title" style="margin-top:0; margin-bottom: 0;">Đăng kí lịch hẹn</h2>
-            <input type="date" id="date" value="">
+            <input type="date" id="date">
             <div class="row" id="time">
             </div>
         </div>
     </div>
 @endsection
 @push('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $("#date").on('change', function () {
@@ -89,6 +90,8 @@
             myNode.innerHTML = '';
             let date = this.value;
             let doctor_id = {{ $doctor->id }};
+            let current_date =  moment(new Date()).format('YYYY-MM-DD');
+            let current_time =  moment(new Date()).add(1, 'hours').format('HH:mm:ss');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -103,8 +106,7 @@
                         let status = each.status;
                         let url = "{{ route('user.customer.create', ':id') }}";
                         url = url.replace(':id', each.id);
-                         if(status == 2)
-                        {
+                        if (status == 2 || current_date > each.date || current_time > each.time_start) {
                             targetDiv.innerHTML += `
                             <div class="col-md-4">
                                 <a class="btn-select-time btn btn-square btn-block" disabled>
@@ -123,7 +125,8 @@
                                     + each.time_start + '-' + each.time_end +
                                     `<div class="ripple-container"></div>
                                 </a>
-                            </div>`
+                            </div>
+                            `
                         }
                     });
                 },
