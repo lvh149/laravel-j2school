@@ -17,10 +17,11 @@ route::group(['prefix' => 'user'], function () {
     Route::get('doctor/orderByPrice', [DoctorController::class, 'order_by_price'])->name('order_by_price');
     Route::get('doctor/search', [DoctorController::class, 'search'])->name('doctor.search');
     Route::get('appointment/create/{doctor}', [AppointmentController::class, 'create'])->name('user.appointment.create');
-    Route::get('customer/create/{time_doctor}', [CustomerController::class, 'create'])->name('user.customer.create');
+    Route::get('customer/create', [CustomerController::class, 'create'])->name('user.customer.create');
     Route::post('customer/', [CustomerController::class, 'store'])->name('user.customer.store');
     Route::get('appoinment/success', [AppointmentController::class, 'success'])->name('user.appointment.success');
     Route::get('appoinment/selectTime', [AppointmentController::class, 'selectTime'])->name('user.appointment.selectTime');
+
 });
 
 Route::get('/', function () {
