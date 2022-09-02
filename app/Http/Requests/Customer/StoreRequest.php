@@ -33,13 +33,11 @@ class StoreRequest extends FormRequest
                 'bail',
                 'required',
                 'numeric',
-                'unique:customers,phone_patient'
             ],
             'email' => [
                 'bail',
                 'required',
                 'email',
-                'unique:customers,email'
             ],
             'gender' => [
                 'required',
@@ -52,18 +50,12 @@ class StoreRequest extends FormRequest
                 'before:today',
             ],
             'description' => [
-                'bail',
                 'required',
-                'max:500',
-            ],
-            'time_doctor_id' => [
-                'required',
-                'numeric',
             ],
             'price' => [
                 'required',
                 'numeric',
-    ]
+            ],
         ];
     }
 
@@ -71,7 +63,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'required' => ':attribute bắt buộc phải điền',
-            'unique' => ':attribute đã được dùng',
+            'unique' => ':attribute đã được đăng kí',
             'numeric' => ':attribute phải là số',
             'max: 500' => ':attribute tối đa 500 kí tự',
             'before:today' => ':attribute không hợp lệ',
@@ -85,6 +77,7 @@ class StoreRequest extends FormRequest
             'phone_patient' => 'Số điện thoại',
             'birth_date' => 'Ngày sinh',
             'description' => 'Tình trạng bệnh nhân',
+            'time_doctor_id' => 'Khung giờ này'
         ];
     }
 }
