@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Time_doctor;
 use App\Models\Appointment;
 use App\Models\Specialist;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -34,24 +35,44 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function create($id)
+    public function create(Request $request)
     {
-        $time_doctor=Time_doctor::query()
-            ->find($id);
-        return view('user.customer.create', [
-            'time_doctor' => $time_doctor,
-        ]);
+        $time_doctors = (new time_doctor())->query()
+            ->join('doctors', 'doctor_id', '=', 'doctors.id')
+            ->where('time_doctors.id', '=', $request->doctor_id)
+            ->select('time_doctors.id', 'doctors.price')
+            ->get();
+
+        return $time_doctors;
     }
 
     public function store(StoreRequest $request)
     {
         $customer = new customer();
+
+        //Validate appointment
+        if (Appointment::where('time_doctor_id', '=', $request->get('time_doctor_id'))->count() > 0) {
+            return back()->withInput();
+        }
+
+        //Check exited customer
+        $customer = Customer::firstOrCreate([
+            'email' =>  request('email'),
+            'phone_patient' => request('phone_patient'),
+        ], [
+            'name_patient' => request('name_patient'),
+            'birth_date' => request('birth_date'),
+        ]);
+
         $customer->fill($request->validated());
         $customer->save();
+
+        //Create new appointment
         $appointment = new appointment();
         $appointment['customer_id'] = $customer->id;
         $appointment['status'] = 1;
         $appointment->fill($request->except('name_patient'));
+
         // $appointment['description'] = $request->input('description');
         $appointment->save();
         return view('user.appointment.success_notify');

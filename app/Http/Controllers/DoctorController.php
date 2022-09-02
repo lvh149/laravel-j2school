@@ -31,9 +31,9 @@ class DoctorController extends Controller
     {
         $search = $request->get('q');
         $doctors = $this->model->with('specialist:id,name')
-            ->where('name', 'like', '%'.$search."%")
-            ->orwhere('phone', 'like', '%'.$search."%")
-            ->orwhere('email', 'like', '%'.$search."%")
+            ->where('name', 'like', '%' . $search . "%")
+            ->orwhere('phone', 'like', '%' . $search . "%")
+            ->orwhere('email', 'like', '%' . $search . "%")
             ->paginate();
         $doctors->appends(['q' => $search]);
         return view('admin.doctor.index', [
@@ -131,8 +131,8 @@ class DoctorController extends Controller
 
     public function search(Request $request)
     {
-        $doctors= Doctor::query()
-            ->orwhere("name","like","%".$request->name."%")
+        $doctors = Doctor::query()
+            ->orwhere("name", "like", "%" . $request->name . "%")
             ->paginate(9);
 
         $specialists = Specialist::query()->get();
@@ -142,7 +142,7 @@ class DoctorController extends Controller
         $max_price = $request->get('max_price', $configs['filter_max_price']);
 
         //Check request ajax
-        if($request->ajax()){
+        if ($request->ajax()) {
             return view('user.doctor.doctor-pagination', [
                 'doctors' => $doctors,
                 'specialists' => $specialists,
@@ -174,14 +174,14 @@ class DoctorController extends Controller
         $date = Carbon::parse($request->date)->format('Y-m-d');
 
         //Get free time
-        $time_doctor= Time_doctor::query()
+        $time_doctor = Time_doctor::query()
             ->whereRelation('time', function ($query) use ($date, $time_start, $time_end) {
                 $query->where('date', '=', $date)
                     ->where('time_start', '>', $time_start)
                     ->where('time_end', '<', $time_end);
             })
-            ->whereDoesntHave('appointment',function ($query){
-                $query->where('status','=',2);
+            ->whereDoesntHave('appointment', function ($query) {
+                $query->where('status', '=', 2);
             })
             ->get()
             ->unique('doctor_id')
@@ -191,12 +191,12 @@ class DoctorController extends Controller
         $doctors = $this->model->whereIn('id', $time_doctor)
             ->whereBetween('price', [$request->min_price, $request->max_price]);
 
-        if(!empty($specialist)) {
+        if (!empty($specialist)) {
             $doctors->where('specialist_id', '=', $request->specialist);
         }
 
         $doctors = $this->model
-            ->orderBy('price',$orderValue)
+            ->orderBy('price', $orderValue)
             ->paginate(9);
 
 
@@ -207,7 +207,7 @@ class DoctorController extends Controller
         $max_price = $request->get('max_price', $configs['filter_max_price']);
 
         //Check request ajax
-        if($request->ajax()){
+        if ($request->ajax()) {
             return view('user.doctor.doctor-pagination', [
                 'doctors' => $doctors,
                 'specialists' => $specialists,
@@ -226,7 +226,8 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function info() {
+    public function info()
+    {
         $doctor_id = Auth::guard('doctor')->id();
         $doctor = Doctor::with('specialist')->find($doctor_id);
         return view('user.doctor.info', [
@@ -234,11 +235,13 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function workSchedule() {
+    public function workSchedule()
+    {
         return view('user.doctor.workSchedule');
     }
 
-    public function get_doctor() {
+    public function get_doctor()
+    {
         $doctor_id = Auth::guard('doctor')->id();
         $doctor = Time_doctor::query()
             ->join('doctors', 'doctors.id', '=', 'time_doctors.doctor_id')

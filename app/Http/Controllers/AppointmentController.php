@@ -37,14 +37,8 @@ class AppointmentController extends Controller
         ]);
     }
 
-
     public function create($doctor_id)
     {
-        $time_doctors = (new time_doctor())->query()
-            ->with('time:id,date,time_start,time_end')
-            ->with('appointment:time_doctor_id,status')
-            ->where('doctor_id','=',$doctor_id)
-            ->get();
         $doctor= doctor::query()
             ->with('specialist')
             ->find($doctor_id);
@@ -52,7 +46,6 @@ class AppointmentController extends Controller
         return view('user.appointment.create', [
             'doctor' => $doctor,
             'specialists' => $specialists,
-            'time_doctors' => $time_doctors,
         ]);
     }
 
