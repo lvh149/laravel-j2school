@@ -46,7 +46,6 @@
 </div>
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-
 <script>
     $( document ).ready(function() {
         $(document).keydown(function(e) {

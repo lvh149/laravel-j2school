@@ -81,17 +81,137 @@
         </div>
     </div>
 @endsection
+
+{{-- Modal create customer --}}
+<div class="modal fade in" id="modal-create-customer" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto">
+            <div class="modal-header" style="background-color: #e91e63; color: #fff; padding-bottom: 24px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color: #fff">
+                    <i class="material-icons">clear</i>
+                </button>
+                <h4 class="modal-title text-center text-uppercase" style="letter-spacing: 4px;">Nhập thông tin</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('user.customer.store') }}" method="post" enctype="multipart/form" id="form-create-customer">
+                    @csrf
+
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="form-group is-empty">
+                                <input type="text" name="name_booking" placeholder="Tên người đăng kí"
+                                       class="form-control" value="{{ old('name_booking') }}">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="form-group is-empty">
+                                <input type="text" name="phone_booking" placeholder="Số điện thoại" class="form-control"
+                                       value="{{ old('phone_booking') }}">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="form-group is-empty">
+                                <input type="text" name="name_patient" placeholder="Tên bệnh nhân" class="form-control"
+                                       value="{{ old('name_patient') }}">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="form-group is-empty">
+                                <input type="text" name="phone_patient" placeholder="Số điện thoại" class="form-control"
+                                       value="{{ old('phone_patient') }}">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="form-group is-empty">
+                                <input type="email" name="email" placeholder="Email" class="form-control"
+                                       value="{{ old('email') }}">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="form-group is-empty" style="display: flex; align-items: center;">
+                                <label class="pull-left" style="margin-bottom: 0">Giới tính</label>
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-4 checkbox-radios" style="margin-right: 20px;">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="gender" checked="true" value="1">
+                                                <span class="circle"></span><span class="check"></span> Nam
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-4 checkbox-radios">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="gender" value="0">
+                                                <span class="circle"></span><span class="check"></span> Nữ
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="form-group">
+                                <label class="pull-left">Ngày sinh</label>
+                                <input id="datepicker" type="text" name="birth_date" class="form-control datepicker"
+                                       value="{{ old('birth_date') }}">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 40px;">
+                        <div class="form-group col-lg-12 col-sm-12">
+                            <label class="pull-left">Tình trạng sức khỏe</label>
+                            <textarea name="description" class="form-control" rows="3"
+                                      value="{{ old('description') }}"></textarea>
+                        </div>
+                    </div>
+
+                    <div id="input-hidden-container"></div>
+                    {{-- <input type="hidden" name="time_doctor_id" value="{{ $time_doctor->id }}"> --}}
+                    {{-- <input type="hidden" name="price" value="{{ $time_doctor->doctor->price }}"> --}}
+
+                    <input class="col-lg-12 col-sm-12 btn btn-rose btn-square" type="submit" value="Đăng kí" style="margin-top: 26px;"/>
+                </form>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script>
-        $("#date").on('change', function () {
+        //Render dates available to booking
+        function renderDateAvailable() {
             const myNode = document.getElementById("time");
             myNode.innerHTML = '';
-            let date = this.value;
+            let date = $("#date").val();
             let doctor_id = {{ $doctor->id }};
-            let current_date =  moment(new Date()).format('YYYY-MM-DD');
-            let current_time =  moment(new Date()).add(1, 'hours').format('HH:mm:ss');
+            let current_date = moment(new Date()).format('YYYY-MM-DD');
+            let current_time = moment(new Date()).add(1, 'hours').format('HH:mm:ss');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -101,36 +221,130 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    var targetDiv = document.getElementById('time');
+                    let timeDiv = document.getElementById('time');
                     $.each(data, function (index, each) {
                         let status = each.status;
-                        let url = "{{ route('user.customer.create', ':id') }}";
-                        url = url.replace(':id', each.id);
-                        if (status == 2 || current_date > each.date || current_time > each.time_start) {
-                            targetDiv.innerHTML += `
+                        if (status == 2 || status == 1 || (current_time > each.time_start && current_date >= each.date)) {
+                            timeDiv.innerHTML += `
                             <div class="col-md-4">
-                                <a class="btn-select-time btn btn-square btn-block" disabled>
+                                <a class="btn btn-square btn-block" disabled>
                                     <i class="material-icons">assignment</i>`
                                 + each.time_start + '-' + each.time_end +
                                 `<div class="ripple-container"></div>
                                 </a>
                             </div>`
-                        }
-                        else
-                        {
-                            targetDiv.innerHTML += `
+                        } else {
+                            timeDiv.innerHTML += `
                             <div class="col-md-4">
-                                <a href=` + url + ` class="btn-select-time btn btn-primary btn-square btn-block">
+                                <button
+                                    id="btn-select-time"
+                                    class="btn btn-primary btn-square btn-block"
+                                    onclick="customerCreateModal(`+each.id+`)"
+                                >
                                     <i class="material-icons">assignment</i>`
                                     + each.time_start + '-' + each.time_end +
                                     `<div class="ripple-container"></div>
-                                </a>
+                                </button>
                             </div>
                             `
                         }
                     });
                 },
             });
-        });
+        }
+
+        //Open modal create customer
+        function customerCreateModal(id) {
+            let doctor_id = id;
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ url(route('user.customer.create')) }}",
+                data: { 'doctor_id': doctor_id},
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    let inputContainer = document.getElementById('input-hidden-container');
+                    inputContainer.innerHTML += `
+                         <input type="hidden" name="time_doctor_id" value="`+ data[0].id +`">
+                         <input type="hidden" name="price" value="`+ data[0].price +`">
+                    `;
+
+                },
+            });
+            $('#modal-create-customer').modal('show');
+        }
+
+        $( document ).ready(function() {
+            //On change input date
+            $("#date").on('change', function () {
+                renderDateAvailable();
+            });
+
+            //Close modal create customer
+            $(document).keydown(function(e) {
+                let code = e.keyCode || e.which;
+                if (code == 27) $("#modal-create-customer").modal('hide');
+            });
+
+            //Validate form create customer
+            let olddate =  new Date('1/1/1900');
+            let currentdate =  new Date();
+            $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: olddate, maxDate: currentdate });
+            $("#form-create-customer").validate({
+                rules: {
+                    name_patient: "required",
+                    phone_patient: {
+                        required: true,
+                        number: true,
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    description: "required",
+                    birth_date: "required"
+                },
+                messages: {
+                    name_patient: "Vui lòng nhập tên",
+                    email: {
+                        required: "Vui lòng nhập email",
+                        email: "Email của bạn chưa đúng",
+                    },
+                    phone_patient: {
+                        required: "Vui lòng nhập số điện thoại",
+                        number: "Trường này phải là số",
+                    },
+                    description: "Vui lòng nhập tình trạng sức khỏe",
+                    birth_date: "Vui lòng chọn ngày sinh",
+                },
+                errorElement: "em",
+                errorPlacement: function ( error, element ) {
+                    error.addClass( "help-block" );
+
+                    element.parents( ".form-group" ).addClass( "has-feedback" );
+
+                    if ( element.prop( "type" ) === "checkbox" ) {
+                        error.insertAfter( element.parent( "label" ) );
+                    } else {
+                        error.insertAfter( element );
+                    }
+
+                    if ( !element.next( "span" )[ 0 ] ) {
+                        $( "<span class='fa-sharp fa-solid fa-check form-control-feedback'></span>" ).insertAfter( element );
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).parents( ".form-group" ).addClass( "has-error" ).removeClass( "has-success" );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).parents( ".form-group" ).addClass( "has-success" ).removeClass( "has-error" );
+                },
+                submitHandler: function () {
+                    $('#form-create-customer').submit();
+                }
+            });
+        })
     </script>
 @endpush
