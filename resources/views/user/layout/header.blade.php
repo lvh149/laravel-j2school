@@ -52,7 +52,7 @@
                             </p>
                         </a>
                         <ul class="dropdown-menu">
-                            @if(auth()->guard('doctor')->check())
+                            @if( auth()->guard('doctor')->check() )
                                 <li>
                                     <a href="{{ route('doctor.info')}}">Thông tin cá nhân</a>
                                 </li>

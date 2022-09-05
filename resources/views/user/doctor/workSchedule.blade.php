@@ -54,8 +54,8 @@
         });
     });
     document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        let calendarEl = document.getElementById('calendar');
+        let calendar = new FullCalendar.Calendar(calendarEl, {
             events: '{{ route('get_doctor', Auth()->guard('doctor')->id()) }}',
             initialView: 'dayGridMonth',
             headerToolbar: {
@@ -63,20 +63,35 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,listWeek'
             },
+            eventDidMount: function (info) {
+                info.el.style.cursor = 'pointer';
+                info.el.style.color = '#F9F9F9';
+                info.el.style.boxShadow = 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px';
+                info.el.style.marginBottom = '6px';
+                info.el.style.padding = '4px 8px';
+                info.el.children[0]["style"].borderColor = "#fff";
+                if (info.event.extendedProps.status === 1 || info.event.extendedProps.status === 2) {
+                    info.el.style.backgroundColor = '#e91e63';
+                    info.el.children[0]["style"].borderColor = "#59CE8F";
+                } else {
+                    info.el.style.backgroundColor = '#9c27b0';
+                }
+            },
             eventClick: function(info) {
+                console.log(info.el.style);
                 let date = info.event.start.getDate() +'/' + info.event.start.getMonth() + '/' + info.event.start.getFullYear();
                 let timeStart = info.event.start.getHours() + ':' + info.event.start.getMinutes();
                 let timeEnd = info.event.end.getHours() + ':' + info.event.end.getMinutes();
-                let name_patient = info.event._def.extendedProps.name_patient ?? 'Chưa có';
-                let gender = info.event._def.extendedProps.gender ?? 'Chưa có';
+                let name_patient = info.event.extendedProps.name_patient ?? 'Chưa có';
+                let gender = info.event.extendedProps.gender ?? 'Chưa có';
                 let genderName = gender;
                 if(gender !== 'Chưa có') genderName = gender === 0 ? 'Nam' : 'Nữ';
-                let checkDate = info.event._def.extendedProps.birth_date;
+                let checkDate = info.event.extendedProps.birth_date;
                 let birthdate = checkDate ? (new Date(checkDate).toLocaleDateString('en-GB')) : 'Chưa có';
-                let email = info.event._def.extendedProps.email ?? 'Chưa có';
-                let phone = info.event._def.extendedProps.phone_patient ?? 'Chưa có';
-                let desc = info.event._def.extendedProps.description ?? 'Chưa có';
-                let status = info.event._def.extendedProps.status == 2 ? 'Đã duyệt' : 'Chưa duyệt';
+                let email = info.event.extendedProps.email ?? 'Chưa có';
+                let phone = info.event.extendedProps.phone_patient ?? 'Chưa có';
+                let desc = info.event.extendedProps.description ?? 'Chưa có';
+                let status = info.event.extendedProps.status == 2 ? 'Đã duyệt' : 'Chưa duyệt';
 
                 document.querySelector('.modal-body_content').innerHTML = `
                     <div>
@@ -113,7 +128,7 @@
                     </div>
                 `;
                 $('#modal-info').modal('show');
-            }
+            },
         });
         calendar.render();
     });

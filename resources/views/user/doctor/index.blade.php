@@ -75,8 +75,8 @@
                         </div>
                         <div class="form-group">
                             <label class="label-control" style="font-weight: 600;">Chọn giở</label>
-                            <input name="time_start" type="time" value="08:00:00">
-                            <input name="time_end" type="time" value="22:00:00">
+                            <input class="form-control timepicker" name="time_start" type="time" value="08:00:00">
+                            <input class="form-control timepicker" name="time_end" type="time" value="22:00:00">
                         </div>
                         <button id="filter" class="btn-filter btn btn-square btn-rose col-md-12">Lọc</button>
                     </div>

@@ -73,10 +73,20 @@
                 </blockquote>
             </h4>
         </div>
-        <div class="col-sm-7 col-sm-offset-1 text-center" style="margin: 0">
-            <h2 class="title" style="margin-top:0; margin-bottom: 0;">Đăng kí lịch hẹn</h2>
-            <input type="date" id="date">
-            <div class="row" id="time">
+        <div class="col-sm-7 col-sm-offset-1" style="margin: 0;">
+            <h2 class="title text-center" style="margin-top:0; margin-bottom: 0;">Đăng kí lịch hẹn</h2>
+
+            {{-- Pick time booking appointment --}}
+            <div class="form-group col-md-4">
+                    <label class="label-control">Chọn ngày</label>
+                    <input type="text" class="form-control" id="date"/>
+            </div>
+
+            <div class="form-group col-md-12">
+                <div class="form-group">
+                    <label class="label-control">Chọn giờ</label>
+                    <div class="row" id="time">
+                </div>
             </div>
         </div>
     </div>
@@ -203,6 +213,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+{{--    <script src="{{ asset('/js/bootstrap-datetimepicker.js') }}" type="text/javascript"></script>--}}
     <script>
         //Render dates available to booking
         function renderDateAvailable() {
@@ -224,7 +235,7 @@
                     let timeDiv = document.getElementById('time');
                     $.each(data, function (index, each) {
                         let status = each.status;
-                        if (status == 2 || status == 1 || (current_time > each.time_start && current_date >= each.date)) {
+                        if (status == 2 || status == 1 || current_time > each.time_start || current_date > each.date) {
                             timeDiv.innerHTML += `
                             <div class="col-md-4">
                                 <a class="btn btn-square btn-block" disabled>
@@ -276,9 +287,11 @@
             $('#modal-create-customer').modal('show');
         }
 
+
         $( document ).ready(function() {
+
             //On change input date
-            $("#date").on('change', function () {
+            $('#date').on('change', function () {
                 renderDateAvailable();
             });
 
@@ -289,9 +302,16 @@
             });
 
             //Validate form create customer
-            let olddate =  new Date('1/1/1900');
-            let currentdate =  new Date();
-            $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: olddate, maxDate: currentdate });
+            let dateOffset = (24*60*60*1000) * 5; //5 days
+            let currentDate = new Date();
+            currentDate.setTime(currentDate.getTime() - dateOffset);
+            $( "#date" ).datepicker({
+                dateFormat: 'yy-mm-dd',
+                minDate: currentDate,
+                showAnim: "fold",
+            });
+
+            //Validate form create customer
             $("#form-create-customer").validate({
                 rules: {
                     name_patient: "required",
