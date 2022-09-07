@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Time_doctor;
 use App\Models\Appointment;
 use App\Models\Specialist;
+use Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
@@ -48,10 +49,11 @@ class CustomerController extends Controller
 
     public function store(StoreRequest $request)
     {
+
         $customer = new customer();
 
         //Validate appointment
-        if (Appointment::where('time_doctor_id', '=', $request->get('time_doctor_id'))->count() > 0) {
+        if (Appointment::where('time_doctor_id', '=', $request->time_doctor_id)->count() > 0) {
             return back()->withInput();
         }
 
@@ -75,7 +77,9 @@ class CustomerController extends Controller
 
         // $appointment['description'] = $request->input('description');
         $appointment->save();
-        return view('user.appointment.success_notify');
+        return Response::json([
+            'success' => true,
+        ], 200);
     }
 
     public function viewAppointment($customer)
