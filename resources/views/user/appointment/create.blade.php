@@ -103,9 +103,7 @@
                 <h4 class="modal-title text-center text-uppercase" style="letter-spacing: 4px;">Nhập thông tin</h4>
             </div>
             <div class="modal-body">
-                <form action="{{ route('user.customer.store') }}" method="post" enctype="multipart/form" id="form-create-customer">
-                    @csrf
-
+                <form id="form-create-customer">
                     <div class="row">
                         <div class="col-lg-6 col-sm-6">
                             <div class="form-group is-empty">
@@ -191,14 +189,12 @@
                     <div class="row" style="margin-top: 40px;">
                         <div class="form-group col-lg-12 col-sm-12">
                             <label class="pull-left">Tình trạng sức khỏe</label>
-                            <textarea name="description" class="form-control" rows="3"
+                            <textarea id="description" name="description" class="form-control" rows="3"
                                       value="{{ old('description') }}"></textarea>
                         </div>
                     </div>
 
                     <div id="input-hidden-container"></div>
-                    {{-- <input type="hidden" name="time_doctor_id" value="{{ $time_doctor->id }}"> --}}
-                    {{-- <input type="hidden" name="price" value="{{ $time_doctor->doctor->price }}"> --}}
 
                     <input class="col-lg-12 col-sm-12 btn btn-rose btn-square" type="submit" value="Đăng kí" style="margin-top: 26px;"/>
                 </form>
@@ -213,7 +209,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
-{{--    <script src="{{ asset('/js/bootstrap-datetimepicker.js') }}" type="text/javascript"></script>--}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{--    <script src="{{ asset('/js/bootstrap-datetimepicker.js') }}" type="text/javascript"></script>--}}
     <script>
         //Render dates available to booking
         function renderDateAvailable() {
@@ -235,7 +232,8 @@
                     let timeDiv = document.getElementById('time');
                     $.each(data, function (index, each) {
                         let status = each.status;
-                        if (status == 2 || status == 1 || current_time > each.time_start || current_date > each.date) {
+
+                        if (status == 2 || status == 1 || current_date > each.date) {
                             timeDiv.innerHTML += `
                             <div class="col-md-4">
                                 <a class="btn btn-square btn-block" disabled>
@@ -250,7 +248,7 @@
                                 <button
                                     id="btn-select-time"
                                     class="btn btn-primary btn-square btn-block"
-                                    onclick="customerCreateModal(`+each.id+`)"
+                                    onclick="openCustomerCreateModal(`+each.id+`)"
                                 >
                                     <i class="material-icons">assignment</i>`
                                     + each.time_start + '-' + each.time_end +
@@ -265,7 +263,7 @@
         }
 
         //Open modal create customer
-        function customerCreateModal(id) {
+        function openCustomerCreateModal(id) {
             let doctor_id = id;
             $.ajax({
                 headers: {
@@ -281,15 +279,58 @@
                          <input type="hidden" name="time_doctor_id" value="`+ data[0].id +`">
                          <input type="hidden" name="price" value="`+ data[0].price +`">
                     `;
-
                 },
             });
             $('#modal-create-customer').modal('show');
         }
 
+        //Create appointment
+        function createAppointment() {
+            let name_booking = $('input[name=name_booking]').val();
+            let phone_booking = $('input[name=phone_booking]').val();
+            let name_patient = $('input[name=name_patient]').val();
+            let phone_patient = $('input[name=phone_patient]').val();
+            let email = $('input[name=email]').val();
+            let gender = $('input[name=gender]:checked', '#form-create-customer').val();
+            let birth_date = $('input[name=birth_date]').val();
+            let description = $('#description').val();
+            let time_doctor_id = $('input[name=time_doctor_id]').val();
+            let price = $('input[name=price]').val();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ url(route('user.customer.store')) }}",
+                data: {
+                    'name_booking': name_booking,
+                    'phone_booking': phone_booking,
+                    'name_patient': name_patient,
+                    'phone_patient': phone_patient,
+                    'email': email,
+                    'birth_date': birth_date,
+                    'description': description,
+                    'gender': gender,
+                    'time_doctor_id': time_doctor_id,
+                    'price': price,
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    $('#modal-create-customer').modal('hide');
+                    console.log(data);
+                    //Notification
+                    $.toast({
+                        heading: 'Chúc mừng',
+                        text: 'Bạn đã đăng kí thành công!',
+                        showHideTransition: 'slide',
+                        icon: 'success'
+                    })
+                    renderDateAvailable();
+                },
+            });
+        }
 
         $( document ).ready(function() {
-
             //On change input date
             $('#date').on('change', function () {
                 renderDateAvailable();
@@ -301,13 +342,21 @@
                 if (code == 27) $("#modal-create-customer").modal('hide');
             });
 
-            //Validate form create customer
+            //Date picker
             let dateOffset = (24*60*60*1000) * 5; //5 days
             let currentDate = new Date();
             currentDate.setTime(currentDate.getTime() - dateOffset);
             $( "#date" ).datepicker({
                 dateFormat: 'yy-mm-dd',
                 minDate: currentDate,
+                showAnim: "fold",
+            });
+
+            //Validate birth_date
+            let now = new Date();
+            $( "#datepicker" ).datepicker({
+                dateFormat: 'yy-mm-dd',
+                maxDate: now,
                 showAnim: "fold",
             });
 
@@ -362,7 +411,7 @@
                     $( element ).parents( ".form-group" ).addClass( "has-success" ).removeClass( "has-error" );
                 },
                 submitHandler: function () {
-                    $('#form-create-customer').submit();
+                    createAppointment();
                 }
             });
         })
