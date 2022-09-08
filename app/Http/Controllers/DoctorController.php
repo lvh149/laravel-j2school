@@ -168,9 +168,9 @@ class DoctorController extends Controller
         $doctors = $this->model;
         $time_doctor = Time_doctor::query();
 
-        if(!empty($request->orderValue)) {
+        if($request->has('orderValue')) {
             //Get order value
-            $orderValue = $request->orderValue;
+            $orderValue = $request->orderValue ?? 'desc';
             //Get specialist value
             $specialist = $request->get('specialist');
 
