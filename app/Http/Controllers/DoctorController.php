@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserRoleEnum;
 use App\Http\Requests\Doctor\StoreRequest;
 use App\Http\Requests\Doctor\UpdateRequest;
-use App\Models\Admin;
 use App\Models\Doctor;
 use App\Models\Specialist;
 use App\Models\Time_doctor;
@@ -16,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\View;
 
 class DoctorController extends Controller
 {
@@ -44,7 +41,6 @@ class DoctorController extends Controller
 
     public function api(Request $request)
     {
-
         $data = $this->model
             ->select('id', 'name')
             ->where('specialist_id', '=', $request->get('id'))
@@ -129,103 +125,6 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function search(Request $request)
-    {
-        $doctors = Doctor::query()
-            ->orwhere("name", "like", "%" . $request->name . "%")
-            ->paginate(9);
-
-        $specialists = Specialist::query()->get();
-
-        $configs = Config::getAndCache(0);
-        $min_price = $request->get('min_price', $configs['filter_min_price']);
-        $max_price = $request->get('max_price', $configs['filter_max_price']);
-
-        //Check request ajax
-        if ($request->ajax()) {
-            return view('user.doctor.doctor-pagination', [
-                'doctors' => $doctors,
-                'specialists' => $specialists,
-                'min_price' => $min_price,
-                'max_price' => $max_price,
-                'configs' => $configs,
-            ]);
-        }
-
-        return view('user.doctor.index', [
-            'doctors' => $doctors,
-            'specialists' => $specialists,
-            'min_price' => $min_price,
-            'max_price' => $max_price,
-            'configs' => $configs,
-        ]);
-    }
-
-    public function get_free_doctor(Request $request)
-    {
-        //Get order value
-        $orderValue = $request->orderValue ?? 'desc';
-        //Get specialist value
-        $specialist = $request->get('specialist');
-
-        // Get date and time
-        $time_start = Carbon::parse($request->time_start ?? '00:00:00')->format('H:i:s');
-        $time_end = Carbon::parse($request->time_end ?? '23:59:59')->format('H:i:s');
-        $date = Carbon::parse($request->date)->format('Y-m-d');
-
-        //Get free time
-        $time_doctor = Time_doctor::query()
-            ->whereRelation('time', function ($query) use ($date, $time_start, $time_end) {
-                $query->where('date', '=', $date)
-                    ->where('time_start', '>', $time_start)
-                    ->where('time_end', '<', $time_end);
-            })
-            ->whereDoesntHave('appointment', function ($query) {
-                $query->where('status', '=', 2);
-            })
-            ->get()
-            ->unique('doctor_id')
-            ->pluck('doctor_id')->toArray();
-
-        //Get free doctor
-        $doctors = $this->model->whereIn('id', $time_doctor)
-            ->whereBetween('price', [$request->min_price, $request->max_price]);
-
-        if (!empty($specialist)) {
-            $doctors->where('specialist_id', '=', $request->specialist);
-        }
-
-        $doctors = $this->model
-            ->orderBy('price', $orderValue)
-            ->paginate(9);
-
-
-        $specialists = Specialist::query()->get();
-
-        $configs = Config::getAndCache(0);
-        $min_price = $request->get('min_price', $configs['filter_min_price']);
-        $max_price = $request->get('max_price', $configs['filter_max_price']);
-
-        //Check request ajax
-        if ($request->ajax()) {
-            return view('user.doctor.doctor-pagination', [
-                'doctors' => $doctors,
-                'specialists' => $specialists,
-                'min_price' => $min_price,
-                'max_price' => $max_price,
-                'configs' => $configs,
-            ]);
-        }
-
-        return view('user.doctor.index', [
-            'doctors' => $doctors,
-            'specialists' => $specialists,
-            'min_price' => $min_price,
-            'max_price' => $max_price,
-            'configs' => $configs,
-        ]);
-    }
-
     public function info()
     {
         $doctor_id = Auth::guard('doctor')->id();
@@ -263,5 +162,61 @@ class DoctorController extends Controller
             ->where('doctors.id', '=', $doctor_id)
             ->get();
         return response()->json($doctor);
+    }
+
+    public function getMoreDoctors(Request $request) {
+        $doctors = $this->model;
+        $time_doctor = Time_doctor::query();
+
+        if(!empty($request->orderValue)) {
+            //Get order value
+            $orderValue = $request->orderValue;
+            //Get specialist value
+            $specialist = $request->get('specialist');
+
+            if (!empty($request->date)) {
+                // Get date and time
+                $time_start = Carbon::parse($request->time_start ?? '00:00:00')->format('H:i:s');
+                $time_end = Carbon::parse($request->time_end ?? '23:59:59')->format('H:i:s');
+                $date = Carbon::parse($request->date)->format('Y-m-d');
+
+                //Get free time
+                $time_doctor->whereRelation('time', function ($query) use ($date, $time_start, $time_end) {
+                    $query->where('date', '=', $date)
+                        ->where('time_start', '>', $time_start)
+                        ->where('time_end', '<', $time_end);
+                })
+                    ->whereDoesntHave('appointment', function ($query) {
+                        $query->where('status', '=', 2);
+                    })
+                    ->get()
+                    ->unique('doctor_id')
+                    ->pluck('doctor_id')->toArray();
+
+                $doctors->whereIn('id', $time_doctor);
+            }
+
+            //Get free doctor
+            $doctors ->whereBetween('price', [$request->min_price, $request->max_price])
+                ->orderBy('price', $orderValue);
+
+            //Check if specialist exit
+            if (!empty($specialist)) {
+                $doctors->where('specialist_id', '=', $request->specialist);
+            }
+        }
+
+        if($request->has('name')) {
+            $doctors ->where("name", "like", "%" . $request->name . "%");
+        }
+
+        $doctors = $this->model->paginate(9);
+
+        //Check request ajax
+        if ($request->ajax()) {
+            return view('user.doctor.doctor-pagination', [
+                'doctors' => $doctors,
+            ]);
+        }
     }
 }
