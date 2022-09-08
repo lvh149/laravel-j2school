@@ -13,13 +13,10 @@ use Illuminate\Support\Facades\Route;
 // Route user
 route::group(['prefix' => 'user'], function () {
     Route::get('doctor', [DoctorController::class, 'doctor'])->name('doctor');
-    Route::get('doctor/viewDoctor', [DoctorController::class, 'get_free_doctor'])->name('get_free_doctor');
-    Route::get('doctor/orderByPrice', [DoctorController::class, 'order_by_price'])->name('order_by_price');
-    Route::get('doctor/search', [DoctorController::class, 'search'])->name('doctor.search');
     Route::get('appointment/create/{doctor}', [AppointmentController::class, 'create'])->name('user.appointment.create');
     Route::get('customer/create', [CustomerController::class, 'create'])->name('user.customer.create');
+    Route::get('customer/getMoreDoctors', [DoctorController::class, 'getMoreDoctors'])->name('doctor.get_more_doctors');
     Route::post('customer/', [CustomerController::class, 'store'])->name('user.customer.store');
-    Route::get('appoinment/success', [AppointmentController::class, 'success'])->name('user.appointment.success');
     Route::get('appoinment/selectTime', [AppointmentController::class, 'selectTime'])->name('user.appointment.selectTime');
 
 });
