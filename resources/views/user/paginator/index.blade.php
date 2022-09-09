@@ -26,8 +26,8 @@
                             <li class="active">
                                 <span>{{ $page }}</span>
                             </li>
-                        @elseif (($page == $paginator->currentPage() + 1 
-                                || $page == $paginator->currentPage() + 2) 
+                        @elseif (($page == $paginator->currentPage() + 1
+                                || $page == $paginator->currentPage() + 2)
                                 || $page == $paginator->lastPage())
                             <li>
                                 <a href="{{ $url }}">{{ $page }}</a>

@@ -15,9 +15,9 @@
                                value="" name="name">
                         <span class="material-input"></span>
                     </div>
-                    <button id="search-btn" class="btn btn-rose btn-raised btn-fab btn-fab-mini">
+                    <a id="search_btn" class="btn btn-rose btn-raised btn-fab btn-fab-mini">
                         <i class="material-icons">search</i>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -70,76 +70,50 @@
                         </div>
                         <div class="form-group">
                             <label class="label-control" style="font-weight: 600;">Chọn ngày</label>
-                            <input class="form-control datepicker" type="date" name="date"
-                                   value="{{ date('Y-m-d') }}">
+                            <input class="form-control datepicker" type="date" name="date">
                         </div>
                         <div class="form-group">
                             <label class="label-control" style="font-weight: 600;">Chọn giở</label>
                             <input class="form-control timepicker" name="time_start" type="time" value="08:00:00">
                             <input class="form-control timepicker" name="time_end" type="time" value="22:00:00">
                         </div>
-                        <button id="filter" class="btn-filter btn btn-square btn-rose col-md-12">Lọc</button>
+                        <a  id="filter" class="btn-filter btn btn-square btn-rose col-md-12">Lọc</a>
+                        <a  id="remove_filter" class="btn-filter btn btn-square btn-rose col-md-12">Bỏ lọc</a>
                     </div>
                 </div>
             </div>
             <div id="show_doctor" class="col-md-10">
-                @foreach ($doctors as $doctor)
-                    <div class="col-md-4">
-                        <div class="card card-blog">
-                            <div class="card-image" style="height: auto;">
-                                <a href="{{ route('user.appointment.create', $doctor) }}">
-                                    <img src="{{ $doctor->avatar }}"
-                                         style="width: 100%; height: 250px; object-fit: cover; object-position: center;">
-                                </a>
-                                <div class="colored-shadow"
-                                     style="
-                                             background-image: url('{{ $doctor->avatar }}');
-                                             opacity: 1;
-                                             width: 103%;
-                                             height: 255px;">
-                                </div>
-                            </div>
-                            <div class="card-content d-flex flex-column">
-                                <div class="">
-                                    <h6 class="category text-rose">{{ $doctor->specialist->name }}</h6>
-                                </div>
-                                <div class="">
-                                    <h4 class="card-title">
-                                        <a href="{{ route('user.appointment.create', $doctor) }}">{{ $doctor->name }}</a>
-                                    </h4>
-                                </div>
-                                <div class="" style="display: flex; align-items: center; margin-bottom: 12px;">
-                                    <i class="material-icons" style="font-size: 14px; color: #e91e63;">email</i>
-                                    {{ $doctor->email }}
-                                </div>
-                                <div class="" style="display: flex; align-items: center; margin-bottom: 12px;">
-                                    <i class="material-icons" style="font-size: 14px; color: #e91e63;">phone</i>
-                                    {{ $doctor->phone }}
-                                </div>
-                                <h3 class="card-title" style="margin: 0;">
-                                    <span class="text-rose">{{ $doctor->price }}</span> đ
-                                </h3>
-                                <div class="">
-                                    <a href="{{ route('user.appointment.create', $doctor) }}"
-                                       class="btn btn-rose btn-raised btn-square m-0 col-md-12"
-                                       style="margin-bottom: 20px;">
-                                        Đặt hẹn ngay
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-                <div class="pagination pull-right">
-                    {{ $doctors->links('user.paginator.index') }}
-                </div>
+                    @include('user.doctor.doctor-pagination');
             </div>
-            <div id="result"></div>
         </div>
         @endsection
         @push('js')
             <script src="{{ asset('js/nouislider.min.js') }}" type="text/javascript"></script>
             <script>
+                //Get more doctors function
+                function getMoreDoctors(
+                        page, date, time_start, time_end, orderValue, specialist, min_price, max_price, searchVal
+                ) {
+                    $.ajax({
+                        url: "{{ route('doctor.get_more_doctors') }}",
+                        type: 'GET',
+                        data: {
+                            'date': date,
+                            'time_start': time_start,
+                            'time_end': time_end,
+                            'orderValue': orderValue,
+                            'page': page,
+                            'specialist': specialist,
+                            'min_price': min_price,
+                            'max_price': max_price,
+                            'name': searchVal,
+                        },
+                        success: function (data) {
+                            $('#show_doctor').html(data);
+                        }
+                    });
+                }
+
                 $(document).ready(function () {
                     //get value from url send to input
                     var min_price = window.location.href.indexOf("min_price=") === -1 ? "1000" : window.location.href.split('min_price=').pop().split('&')[0];
@@ -152,103 +126,57 @@
                     var name = window.location.href.indexOf("name=") === -1 ? $('input[name="name"]').val() : window.location.href.split('name=').pop().split('&')[0];
 
                     $('.select-order-by-price').val(orderValue).change();
-                    $("#select-specialist").val(specialist).change();
+                    $('#select-specialist').val(specialist).change();
                     $('input[name="date"]').val(date).change();
                     $('input[name="time_start"]').val(time_start).change();
                     $('input[name="time_end"]').val(time_end).change();
                     $('input[name="min_price"]').val(min_price).change();
                     $('input[name="max_price"]').val(max_price).change();
                     $('input[name="name"]').val(name).change();
-                });
 
-                //======= Search Doctor =======
-                function searchDoctor(page) {
-                    let searchVal = $('input[name="name"]').val();
-                    $.ajax({
-                        url: "{{ route('doctor.search') }}",
-                        type: 'GET',
-                        dataType: 'json',
-                        data: {
-                            'name': searchVal,
-                        },
-                        complete: function (response) {
-                            var url = '{{url("user/doctor/search")}}';
-                            var append = url.indexOf("?") == -1 ? "?" : "&";
-                            var finalURL = url + append
-                                + $('input[name="name"]').serialize()
-                                + "&page=" + page;
-                            //set to current url
-                            window.history.pushState('', '', finalURL);
-                            // console.log(finalURL);
-                            $('#show_doctor').html(response.responseText);
-                        }
-                    });
-                }
+                    let dateVal;
+                    let time_startVal;
+                    let time_endVal;
+                    let orderValueVal;
+                    let specialistVal;
+                    let min_priceVal;
+                    let max_priceVal;
+                    let searchVal;
 
-                //======= Filter Doctor =======
-                function getFreeDoctors(page) {
-                    let date = $('input[name="date"]').val();
-                    let time_start = $('input[name="time_start"]').val();
-                    let time_end = $('input[name="time_end"]').val();
-                    let orderValue = $('.select-order-by-price').val();
-                    let specialist = $('#select-specialist').val();
-                    let min_price = $('input[name="min_price"]').val();
-                    let max_price = $('input[name="max_price"]').val();
-
-                    $.ajax({
-                        url: "{{ route('get_free_doctor') }}",
-                        type: 'GET',
-                        dataType: 'json',
-                        data: {
-                            'date': date,
-                            'time_start': time_start,
-                            'time_end': time_end,
-                            'orderValue': orderValue,
-                            'page': page,
-                            'specialist': specialist,
-                            'min_price': min_price,
-                            'max_price': max_price,
-                        },
-                        complete: function (response) {
-                            var url = '{{url("user/doctor/viewDoctor")}}';
-                            var append = url.indexOf("?") == -1 ? "?" : "&";
-                            var finalURL = url + append
-                                + $('.select-order-by-price').serialize()
-                                + "&" + $('#select-specialist').serialize()
-                                + "&" + $('input[name="min_price"]').serialize()
-                                + "&" + $('input[name="max_price"]').serialize()
-                                + "&" + $('input[name="date"]').serialize()
-                                + "&" + $('input[name="time_start"]').serialize()
-                                + "&" + $('input[name="time_end"]').serialize()
-                                + "&page=" + page;
-                            //set to current url
-                            window.history.pushState('', '', finalURL);
-                            // console.log(finalURL);
-                            $('#show_doctor').html(response.responseText);
-                        }
-                    });
-                }
-
-                $(document).ready(function () {
-                    $('#search-btn').click(function () {
-                        searchDoctor(1);
+                    //Listen event click on filter button
+                    $('#filter').click(function () {
+                        dateVal = $('input[name="date"]').val();
+                        time_startVal = $('input[name="time_start"]').val();
+                        time_endVal = $('input[name="time_end"]').val();
+                        orderValueVal = $('.select-order-by-price').val();
+                        specialistVal = $('#select-specialist').val();
+                        min_priceVal = $('input[name="min_price"]').val();
+                        max_priceVal = $('input[name="max_price"]').val();
+                        getMoreDoctors(1, dateVal, time_startVal, time_endVal, orderValueVal, specialistVal, min_priceVal, max_priceVal, searchVal);
                     })
 
-                    $('input[name="name"]').on('keypress',function(e) {
-                        if(e.which == 13) {
-                            searchDoctor(1);
-                        }
-                    });
-
-                    $('.btn-filter').click(function () {
-                        getFreeDoctors(1);
+                    //Listen event click on filter button
+                    $('#remove_filter').click(function () {
+                        dateVal = null;
+                        time_startVal = null;
+                        time_endVal = null;
+                        orderValueVal = null;
+                        specialistVal = null;
+                        min_priceVal = null;
+                        max_priceVal = null;
+                        getMoreDoctors(1, dateVal, time_startVal, time_endVal, orderValueVal, specialistVal, min_priceVal, max_priceVal, searchVal);
                     })
 
-                    $(document).on("click", ".pagination a", function (event) {
-                        event.preventDefault();
+                    //Listen event click on search button
+                    $('#search_btn').click(function () {
+                        searchVal = $('input[name="name"]').val();
+                        getMoreDoctors(1, dateVal, time_startVal, time_endVal, orderValueVal, specialistVal, min_priceVal, max_priceVal, searchVal);
+                    })
+
+                    $(document).on("click", ".pagination a", function (e) {
+                        e.preventDefault();
                         var page = $(this).attr('href').split('page=')[1];
-                        getFreeDoctors(page);
-                        searchDoctor(page);
+                        getMoreDoctors(page, dateVal, time_startVal, time_endVal, orderValueVal, specialistVal, min_priceVal, max_priceVal, searchVal);
                     });
 
                     //======= Price filter =======
